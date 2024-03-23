@@ -3,6 +3,8 @@ import { appRouter } from "@src/shared/routers/_app";
 import { createContext } from "@src/shared/context";
 import { createIPCHandler } from "electron-trpc/main";
 import { BrowserWindow, app } from "electron";
+import LCUConnector from "lcu-connector";
+import { LCUApi } from "./shared/lcuapi";
 
 // set the app name independent of package.json name
 app.setName("juu");
@@ -46,6 +48,21 @@ const createWindow = () => {
 
 app.whenReady().then(() => {
   createWindow();
+
+  process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = "0";
+
+
+  const connector = new LCUConnector()
+
+
+  connector.on("connect", async ({address, password, port}) => {
+    const lcu = new LCUApi(address, port, password)
+    console.log(lcu)
+
+    await lcu.request()
+  })
+
+  connector.start()
 });
 
 app.once("window-all-closed", () => app.quit());
