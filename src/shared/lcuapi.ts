@@ -23,18 +23,21 @@ export class LCUApi {
                 "Authorization": `Basic ${Buffer.from(`riot:${this.password}`).toString("base64")}`
             },
             body: JSON.stringify({
-                data: {
-                    "customGameLobby": {
-                        "configuration": {
-                            "gameMode": "CLASSIC",
-                            "mapId": 11,
-                            "mutators": {"id":1},
-                            "teamSize": 5
+                "isCustom" : true,
+                "customGameLobby": 
+                {
+                    "lobbyName": "test:D",
+                    "configuration": 
+                    {
+                        "mapId": 11,
+                        "gameMode" : "CLASSIC",
+                        "mutators" : 
+                        {
+                            "id":1
                         },
-                        "lobbyName": "test:D",
-                        "lobbyPassword": "123"
-                    },
-                    "isCustom": true
+                        "spectatorPolicy": "AllAllowed",
+                        "teamSize": 5
+                    }
                 }
             })
         })
