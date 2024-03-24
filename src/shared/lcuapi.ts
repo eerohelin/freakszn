@@ -94,19 +94,36 @@ export class LCUApi {
         })
     }
 
+    public async getPostScreenStats() {
+        const request = await fetch(`${this.url()}/lol-end-of-game/v1/eog-stats-block`, {
+            method: "GET",
+            headers: {
+                'Content-Type': 'application/json',
+                'accept' : "application/json",
+                "Authorization": `Basic ${Buffer.from(`riot:${this.password}`).toString("base64")}`
+            }
+            
+        })
+
+        return request.json()
+    }
+
     public request = async () => {
+
+
         
         const socket = new WebSocket(`wss://${this.address}:${this.port}/`, {headers: {"Authorization": `Basic ${Buffer.from(`riot:${this.password}`).toString("base64")}`}})
 
         socket.on("open", () => {
-            
+            // OnJsonApiEvent_lol-gameflow_v1_gameflow-phase <--- DETECTS END OF GAME EVENT
             const temp = "OnJsonApiEvent_lol-lobby_v2_lobby"
-            socket.send(JSON.stringify([5, "OnJsonApiEvent_lol-lobby_v1_lobby"]))
+            socket.send(JSON.stringify([5, "OnJsonApiEvent_lol-lobby_v2_lobby"]))
         })
 
         socket.on('message', (e) => {
             const xd = JSON.parse(JSON.stringify(e.toString(),null,2))
-            console.log(xd)
+            const today = new Date()
+            console.log(`${today.getHours()}:${today.getMinutes()}:${today.getSeconds()} => ${xd}`)
         })
     }
 }
