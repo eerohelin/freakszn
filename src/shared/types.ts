@@ -4,3 +4,6 @@
 export type GlobalState = {
   colorMode: "dark" | "light";
 };
+
+export type LobbyPosition = "one" | "two" | "spectator"
+export type DraftMode = 1 | 6

@@ -58,8 +58,6 @@ app.whenReady().then(() => {
   connector.on("connect", async ({address, password, port}) => {
     const lcu = new LCUApi(address, port, password)
     console.log(lcu)
-
-    await lcu.request()
   })
 
   connector.start()
