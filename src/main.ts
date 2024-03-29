@@ -7,7 +7,9 @@ import LCUConnector from "lcu-connector";
 import { LCUApi } from "./shared/lcuapi";
 
 // set the app name independent of package.json name
-app.setName("juu");
+app.setName("freakszn");
+
+let lcu: LCUApi | undefined
 
 const createWindow = () => {
   const mainWindow = new BrowserWindow({
@@ -54,11 +56,14 @@ app.whenReady().then(() => {
   const connector = new LCUConnector();
 
   connector.on("connect", async ({ address, password, port }) => {
-    const lcu = new LCUApi(address, port, password);
-    console.log(lcu);
-  });
+    lcu = new LCUApi(address, port, password)
+  }); 
 
   connector.start();
 });
 
 app.once("window-all-closed", () => app.quit());
+
+export function getLCU(){
+  return lcu
+}

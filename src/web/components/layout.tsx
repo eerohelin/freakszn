@@ -21,7 +21,7 @@ const CustomTopBar = () => {
     <div className="flex w-full h-10 items-center">
       <div id="drag-region" className="flex items-center px-3 w-full">
         <span className="font-bold">
-          Juu <span className="font-extralight text-sm">{appVer}</span>
+          😈Freakszn <span className="font-extralight text-sm">{appVer}</span>
         </span>
       </div>
       <div className="flex mr-2">
