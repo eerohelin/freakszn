@@ -13,7 +13,7 @@
   "main": "dist/main/main.js",
   "scripts": {
     "start": "electron-vite preview",
-    "dev": "concurrently \"cd .\\drizzle-helper && pnpm run db:studio\" \"electron-vite dev --watch\"",
+    "dev": "concurrently \"cd .\\drizzle-helper && pnpm run db:studio\" \"electron-vite dev\"",
     "makeroutes": "npx tsr generate",
     "prebuild": "electron-vite build",
     "build": "pnpm run prebuild && pnpm run makeroutes && electron-builder",
@@ -77,6 +77,7 @@
     "lcu-connector": "^2.1.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "socket.io-client": "^4.7.5",
     "sort-by": "^1.2.0",
     "tailwind-merge": "^2.2.1",
     "ws": "^8.16.0",
