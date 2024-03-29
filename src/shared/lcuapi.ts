@@ -94,6 +94,20 @@ export class LCUApi {
         })
     }
 
+    public async joinLobby(lobbyID:number, lobbyPass:string) {
+        const request = await fetch(`${this.url()}/lol-lobby/v1/custom-games/${lobbyID}/join`, {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+                'accept' : "application/json",
+                "Authorization": `Basic ${Buffer.from(`riot:${this.password}`).toString("base64")}`
+            }, body: JSON.stringify({
+                "password": lobbyPass
+            })
+            
+        })
+    } 
+
     public async getPostScreenStats() {
         const request = await fetch(`${this.url()}/lol-end-of-game/v1/eog-stats-block`, {
             method: "GET",
@@ -108,8 +122,21 @@ export class LCUApi {
         return request.json()
     }
 
-    public request = async () => {
+    public async getCurrentSummoner() {
+        const request = await fetch(`${this.url()}/lol-summoner/v1/current-summoner`, {
+            method: "GET",
+            headers: {
+                'Content-Type': 'application/json',
+                'accept' : "application/json",
+                "Authorization": `Basic ${Buffer.from(`riot:${this.password}`).toString("base64")}`
+            }
+            
+        })
 
+        return request.json()
+    }
+
+    public request = async () => {
 
         
         const socket = new WebSocket(`wss://${this.address}:${this.port}/`, {headers: {"Authorization": `Basic ${Buffer.from(`riot:${this.password}`).toString("base64")}`}})
