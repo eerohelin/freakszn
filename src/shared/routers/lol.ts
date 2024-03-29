@@ -1,9 +1,7 @@
 import { publicProcedure, router } from "@src/trpc";
 
 export const lolRouter = router({
-  loadAccount: publicProcedure.mutation(async ({ ctx }) => {
-    
-  })
+  loadAccount: publicProcedure.mutation(async ({ ctx }) => {}),
 });
 
 /**
