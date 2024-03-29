@@ -1,5 +1,5 @@
 {
-  "name": "juu",
+  "name": "freakszn",
   "description": "Starter template for electron apps with: Vite | TanStack Router+Query | tRPC | TailwindCSS | Better-sqlite3 | Drizzle",
   "version": "0.0.1",
   "author": {
@@ -25,8 +25,8 @@
     "postinstall": "electron-rebuild"
   },
   "build": {
-    "appId": "com.juu.app",
-    "productName": "juu.template",
+    "appId": "com.freakszn.app",
+    "productName": "freakszn.template",
     "buildDependenciesFromSource": true,
     "icon": "assets/icon.png",
     "files": [
