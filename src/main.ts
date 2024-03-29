@@ -51,16 +51,14 @@ app.whenReady().then(() => {
 
   process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
+  const connector = new LCUConnector();
 
-  const connector = new LCUConnector()
+  connector.on("connect", async ({ address, password, port }) => {
+    const lcu = new LCUApi(address, port, password);
+    console.log(lcu);
+  });
 
-
-  connector.on("connect", async ({address, password, port}) => {
-    const lcu = new LCUApi(address, port, password)
-    console.log(lcu)
-  })
-
-  connector.start()
+  connector.start();
 });
 
 app.once("window-all-closed", () => app.quit());
