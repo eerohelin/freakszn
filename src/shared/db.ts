@@ -8,13 +8,18 @@ const sqlite = new Database(`${app.getPath("userData")}/db.sqlite`);
 export const db = drizzle(sqlite, { schema });
 
 /** DB ACTIONS */
-export async function updateSummoner(summoner: Summoner): Promise<void> {
+export async function updateSummoner(summoner: Summoner, bannerData: string): Promise<void> {
   try {
+    const bd = JSON.parse(bannerData)
+    const { theme, level } = bd
+
     await db
       .insert(schema.summoners)
       .values({
         id: 1,
         ...summoner,
+        bannerTheme: theme || "",
+        bannerLevel: level || 0
       })
       .onConflictDoUpdate({
         target: schema.summoners.id,
@@ -28,7 +33,9 @@ export async function updateSummoner(summoner: Summoner): Promise<void> {
           summonerLevel: summoner.summonerLevel,
           puuid: summoner.puuid,
           tagLine: summoner.tagLine,
-          backgroundSkinId: summoner.backgroundSkinId
+          backgroundSkinId: summoner.backgroundSkinId,
+          bannerTheme: theme || "",
+          bannerLevel: level || 0
         },
       });
   } catch (error) {
@@ -58,5 +65,7 @@ export interface Summoner {
   summonerId: number;
   summonerLevel: number;
   tagLine: string;
-  backgroundSkinId: number
+  backgroundSkinId: number;
+  bannerTheme: string;
+  bannerLevel: number;
 }
