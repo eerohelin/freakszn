@@ -22,7 +22,6 @@ const createWindow = () => {
     },
   });
 
-  mainWindow.emit("asd")
   mainWindow.webContents.on("dom-ready", () => {
     mainWindow.show;
   });
