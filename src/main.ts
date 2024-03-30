@@ -56,12 +56,12 @@ app.whenReady().then(() => {
   const connector = new LCUConnector();
 
   connector.on("connect", async ({ address, password, port }) => {
-    mainWindow.webContents.send('lol-connected', true)
+    mainWindow.webContents.send("connection-change", true)
     lcu = new LCUApi(address, port, password)
   }); 
 
   connector.on("disconnect", async () => {
-    mainWindow.webContents.send('lol-connected', false)
+    mainWindow.webContents.send("connection-change", false)
     lcu = undefined
   })
 

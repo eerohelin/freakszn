@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import type { Theme } from "../lib/types";
 import { Minus, Square, X } from "@phosphor-icons/react";
 import { useRouter } from "@tanstack/react-router";
@@ -16,6 +16,12 @@ const CustomTopBar = () => {
   const { mutate: maximizeWindow } = t.window.maximize.useMutation();
   const { mutate: closeWindow } = t.window.closeWindow.useMutation();
   const { theme, setTheme } = useTheme();
+  const [isConnected, setIsConnected] = useState(false)
+
+  // @ts-ignore
+  window.electronAPI.onConnectionChange((value) => {
+    setIsConnected(value)
+  })
 
   return (
     <div className="flex w-full h-10 items-center">
@@ -24,8 +30,8 @@ const CustomTopBar = () => {
           😈Freakszn <span className="font-extralight text-sm">{appVer}</span>
         </span>
         <div className="flex gap-1 items-center ml-2">
-          <div className="w-3 h-3 rounded-full bg-green-500">&nbsp;</div>
-          Connected
+          <div className={`w-3 h-3 rounded-full ${isConnected ? "bg-green-500" : "bg-red-500"}`}>&nbsp;</div>
+          {isConnected ? "Connected" : "Disconnected"}
         </div>
       </div>
       <div className="flex mr-2">
