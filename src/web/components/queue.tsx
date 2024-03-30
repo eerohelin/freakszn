@@ -1,4 +1,4 @@
-import type { Socket } from "socket.io-client";
+import { io, type Socket } from "socket.io-client";
 import { Button } from "./buttons";
 
 interface QueueProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -13,10 +13,20 @@ export function Queue({ socket, state, className, ...props }: QueueProps) {
   function handleDeQueue(){
     socket?.emit("dequeue")
   }
+  function handleMockQue(){
+    const s = io("ws://localhost:3000", { autoConnect: true, secure: false });
+    s?.emit("set-name", `iirou.${crypto.randomUUID().substring(0,3)}`)
+    s?.emit("queue", "fill")
+  }
+  function handleMockAcce(){
+    socket?.emit("mock-accept-all")
+  }
 
   return (
     <div className={`${className} w-full flex`} {...props}>
       <div className="flex flex-col gap-2">
+        <Button onClick={() => handleMockQue()}>mockque</Button>
+        <Button onClick={() => handleMockAcce()}>mockacce</Button>
         <Button onClick={() => handleDeQueue()}>Leave</Button>
 
         {/** Map Queue buttons and queue members */}
