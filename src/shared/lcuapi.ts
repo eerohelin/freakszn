@@ -157,6 +157,25 @@ export class LCUApi {
     return request.json();
   }
 
+  public async getSummonerIcon(id: string | number) {
+    const response = await fetch(
+      `${this.url()}/lol-game-data/assets/v1/profile-icons/${id}.jpg`,
+      {
+        method: "GET",
+        headers: {
+          accept: "application/json",
+          Authorization: `Basic ${Buffer.from(`riot:${this.password}`).toString(
+            "base64",
+          )}`,
+        },
+      },
+    );
+
+    const blob = await response.blob();
+    const buffer = Buffer.from(await blob.arrayBuffer());
+    return buffer
+  }
+
   public async getCurrentSummoner() {
     const request = await fetch(
       `${this.url()}/lol-summoner/v1/current-summoner`,
