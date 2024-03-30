@@ -14,11 +14,13 @@ function Index() {
   console.log('State:', state)
 
   return (
-    <div className="container w-full h-full flex flex-col content-center">
+    <div className="container w-full h-full flex flex-col content-center text-text">
       <div className="flex h-screen">
         <div className="w-1/5">
           <div className="h-32 w-full bg-black relative saturate-[110%]">
-            <div className="absolute flex w-full content-center items-center h-full justify-center z-10">
+           <div className="absolute w-full h-full bg-gradient-to-r from-transparent from-[65%] to-background z-20" />
+            <div className="absolute w-full h-full bg-gradient-to-b from-transparent from-[65%] to-background z-20" />
+            <div className="absolute flex w-full content-center items-center h-full justify-center z-30">
               <div className="text-lg">
                 <div className="font-beaufort-bold ">{summoner?.displayName}</div>
                 <div className="-mt-2">#{summoner?.tagLine}</div>
