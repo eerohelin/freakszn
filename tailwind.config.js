@@ -11,7 +11,7 @@ export const theme = {
 
       league: {
         text: "#cdbe91",
-        border: "#c99c3e",
+        border: "#c9a14a",
         borderdarker: "#564624",
         button: "#1e2328",
       }
