@@ -1,14 +1,13 @@
-import { join } from "node:path";
+import LCUConnector from "lcu-connector";
 import { appRouter } from "@src/shared/routers/_app";
 import { createContext } from "@src/shared/context";
 import { createIPCHandler } from "electron-trpc/main";
 import { BrowserWindow, app } from "electron";
-import LCUConnector from "lcu-connector";
 import { LCUApi } from "./shared/lcuapi";
+import { join } from "node:path";
 
 // set the app name independent of package.json name
 app.setName("freakszn");
-
 let lcu: LCUApi | undefined
 
 const createWindow = () => {
@@ -23,16 +22,7 @@ const createWindow = () => {
     },
   });
 
-  // create and attach the ipc handler
-  // appRouter is defined in src/shared/routers/_app.ts
-  // this is the root and all routers will be attached
-  // to that
-  createIPCHandler({
-    router: appRouter,
-    windows: [mainWindow],
-    createContext,
-  });
-
+  mainWindow.emit("asd")
   mainWindow.webContents.on("dom-ready", () => {
     mainWindow.show;
   });
@@ -45,19 +35,35 @@ const createWindow = () => {
   }
 
   /** Devtools */
-  // mainWindow.webContents.openDevTools({ mode: "detach" });
+  mainWindow.webContents.openDevTools({ mode: "detach" });
+  return mainWindow
 };
 
 app.whenReady().then(() => {
-  createWindow();
+  const mainWindow = createWindow();
+
+  // create and attach the ipc handler
+  // appRouter is defined in src/shared/routers/_app.ts
+  // this is the root and all routers will be attached
+  // to that
+  createIPCHandler({
+    router: appRouter,
+    windows: [mainWindow],
+    createContext,
+  });
 
   process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
-
   const connector = new LCUConnector();
 
   connector.on("connect", async ({ address, password, port }) => {
+    mainWindow.webContents.send('lol-connected', true)
     lcu = new LCUApi(address, port, password)
   }); 
+
+  connector.on("disconnect", async () => {
+    mainWindow.webContents.send('lol-connected', false)
+    lcu = undefined
+  })
 
   connector.start();
 });

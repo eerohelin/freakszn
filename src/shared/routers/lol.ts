@@ -1,6 +1,7 @@
 import { getLCU } from "@src/main";
 import { publicProcedure, router } from "@src/trpc";
 import { deleteSummoners, getSummoner, updateSummoner } from "../db";
+import { observable } from "@trpc/server/observable";
 
 export const lolRouter = router({
   setSummoner: publicProcedure.mutation(async ({ ctx }) => {
@@ -15,7 +16,7 @@ export const lolRouter = router({
   }),
   deleteSummoners: publicProcedure.mutation(async () => {
     return await deleteSummoners()
-  })
+  }),
 });
 
 /**
