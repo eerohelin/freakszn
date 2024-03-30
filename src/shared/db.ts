@@ -2,6 +2,7 @@ import Database from "better-sqlite3";
 import { drizzle } from "drizzle-orm/better-sqlite3";
 import { app } from "electron";
 import * as schema from "./schema/index";
+import { eq } from "drizzle-orm";
 
 const sqlite = new Database(`${app.getPath("userData")}/db.sqlite`);
 export const db = drizzle(sqlite, { schema });
@@ -27,6 +28,7 @@ export async function updateSummoner(summoner: Summoner): Promise<void> {
           summonerLevel: summoner.summonerLevel,
           puuid: summoner.puuid,
           tagLine: summoner.tagLine,
+          backgroundSkinId: summoner.backgroundSkinId
         },
       });
   } catch (error) {
@@ -34,9 +36,11 @@ export async function updateSummoner(summoner: Summoner): Promise<void> {
   }
 }
 
-export async function getSummoner(): Promise<Summoner[]> {
-  const summoners = await db.select().from(schema.summoners);
-  return summoners;
+export async function getSummoner(): Promise<Summoner | undefined> {
+  const summoner = await db.query.summoners.findFirst({
+    where: eq(schema.summoners.id, 1)
+  })
+  return summoner;
 }
 
 export async function deleteSummoners(): Promise<void> {
@@ -54,4 +58,5 @@ export interface Summoner {
   summonerId: number;
   summonerLevel: number;
   tagLine: string;
+  backgroundSkinId: number
 }
