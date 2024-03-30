@@ -17,6 +17,8 @@ import { Route as rootRoute } from './routes/__root'
 // Create Virtual Routes
 
 const ProfileLazyImport = createFileRoute('/profile')()
+const MatchHistoryLazyImport = createFileRoute('/match-history')()
+const GameLazyImport = createFileRoute('/game')()
 const IndexLazyImport = createFileRoute('/')()
 
 // Create/Update Routes
@@ -25,6 +27,16 @@ const ProfileLazyRoute = ProfileLazyImport.update({
   path: '/profile',
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/profile.lazy').then((d) => d.Route))
+
+const MatchHistoryLazyRoute = MatchHistoryLazyImport.update({
+  path: '/match-history',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() => import('./routes/match-history.lazy').then((d) => d.Route))
+
+const GameLazyRoute = GameLazyImport.update({
+  path: '/game',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() => import('./routes/game.lazy').then((d) => d.Route))
 
 const IndexLazyRoute = IndexLazyImport.update({
   path: '/',
@@ -39,6 +51,14 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexLazyImport
       parentRoute: typeof rootRoute
     }
+    '/game': {
+      preLoaderRoute: typeof GameLazyImport
+      parentRoute: typeof rootRoute
+    }
+    '/match-history': {
+      preLoaderRoute: typeof MatchHistoryLazyImport
+      parentRoute: typeof rootRoute
+    }
     '/profile': {
       preLoaderRoute: typeof ProfileLazyImport
       parentRoute: typeof rootRoute
@@ -50,6 +70,8 @@ declare module '@tanstack/react-router' {
 
 export const routeTree = rootRoute.addChildren([
   IndexLazyRoute,
+  GameLazyRoute,
+  MatchHistoryLazyRoute,
   ProfileLazyRoute,
 ])
 
