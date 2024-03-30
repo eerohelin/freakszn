@@ -1,4 +1,5 @@
 import type { Socket } from "socket.io-client";
+import { Button } from "./buttons";
 
 interface QueueProps extends React.HTMLAttributes<HTMLDivElement> {
   socket: Socket | null;
@@ -12,12 +13,7 @@ export function Queue({ socket, state, className, ...props }: QueueProps) {
         {["top", "jungle", "mid", "adc", "support"].map(
           (role: string, idx: number) => (
             <div key={role} className="flex items-center gap-2">
-              <button
-                className="rounded px-3 py-2 border bg-card border-indigo-300 w-20"
-                type="button"
-              >
-                {role}
-              </button>
+              <Button className="text-xs">{role}</Button>
               <p>nimet</p>
             </div>
           ),
