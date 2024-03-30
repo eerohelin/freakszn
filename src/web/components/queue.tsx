@@ -7,14 +7,30 @@ interface QueueProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 export function Queue({ socket, state, className, ...props }: QueueProps) {
+  function handleQueue(role: string){
+    socket?.emit("queue", role)
+  }
+  function handleDeQueue(){
+    socket?.emit("dequeue")
+  }
+
   return (
     <div className={`${className} w-full flex`} {...props}>
       <div className="flex flex-col gap-2">
-        {["top", "jungle", "mid", "adc", "support"].map(
+        <Button onClick={() => handleDeQueue()}>Leave</Button>
+
+        {/** Map Queue buttons and queue members */}
+        {Object.keys((state.state)).map(
           (role: string, idx: number) => (
-            <div key={role} className="flex items-center gap-2">
-              <Button className="text-xs">{role}</Button>
-              <p>nimet</p>
+            <div key={role} className="flex items-center gap-2 w-[14rem]">
+              <Button onClick={() => handleQueue(role)} className="text-xs">
+                {role}
+              </Button>
+              <div className="w-full flex items-center gap-2">
+                {state.state[role].map((name: string) => 
+                  <div key={name}>{name}</div>
+                )}
+              </div>
             </div>
           ),
         )}
