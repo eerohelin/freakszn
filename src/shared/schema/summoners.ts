@@ -12,4 +12,6 @@ export const summoners = sqliteTable("summoners", {
   summonerLevel: integer("summonerLevel").notNull(),
   tagLine: text("tagLine").notNull(),
   backgroundSkinId: integer("backgroundSkinId").notNull(),
+  bannerTheme: text("bannerTheme").notNull(),
+  bannerLevel: integer("bannerLevel").notNull()
 });
