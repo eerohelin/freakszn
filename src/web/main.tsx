@@ -18,14 +18,14 @@ declare module "@tanstack/react-router" {
 /** Declare providers here. Can be moved to separate Providers.tsx later */
 createRoot(document.getElementById("app") as Element).render(
   <React.StrictMode>
-    <SocketProvider>
-      <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-        <t.Provider client={trpcClient} queryClient={queryClient}>
-          <QueryClientProvider client={queryClient}>
-            <RouterProvider router={router} />
-          </QueryClientProvider>
-        </t.Provider>
-      </ThemeProvider>
-    </SocketProvider>
+    <t.Provider client={trpcClient} queryClient={queryClient}>
+      <QueryClientProvider client={queryClient}>
+        <SocketProvider>
+          <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+                <RouterProvider router={router} />
+          </ThemeProvider>
+        </SocketProvider>
+      </QueryClientProvider>
+    </t.Provider>
   </React.StrictMode>,
 );

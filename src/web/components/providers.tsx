@@ -2,6 +2,8 @@ import React from "react";
 import { THEMES } from "../lib/constants";
 import { io, type Socket } from "socket.io-client";
 import type { Theme } from "../lib/types";
+import t from "@src/shared/config";
+import type { Summoner } from "@src/shared/db";
 
 type ThemeProviderProps = {
   children: React.ReactNode;
@@ -78,24 +80,33 @@ interface SocketProviderProps {
 type SocketProviderState = {
   socket: Socket | null;
   state: any;
+  summoner: Summoner | undefined
 };
 
 export const SocketProviderContext = React.createContext<SocketProviderState>({
   socket: null,
   state: {},
+  summoner: undefined,
 });
 
 const s = io("ws://localhost:3000", { autoConnect: true, secure: false });
 export function SocketProvider({ children }: SocketProviderProps) {
+  const { data: summoner } = t.lol.getSummoner.useQuery()
   const [socket, setSocket] = React.useState<Socket>(s);
   const [state, setState] = React.useState<any>();
+
+  React.useEffect(() => {
+    if(socket.connected){
+      socket.emit("set-name", summoner?.displayName)
+    }
+  }, [socket.connected, socket.emit, summoner?.displayName])
 
   socket.on("state", (s: any) => {
     setState(s);
   });
 
   return (
-    <SocketProviderContext.Provider value={{ socket, state }}>
+    <SocketProviderContext.Provider value={{ socket, state, summoner }}>
       {children}
     </SocketProviderContext.Provider>
   );
