@@ -172,7 +172,27 @@ export class LCUApi {
       },
     );
 
-    return request.json();
+    const request2 = await fetch(
+      `${this.url()}/lol-summoner/v1/current-summoner/summoner-profile`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          accept: "application/json",
+          Authorization: `Basic ${Buffer.from(`riot:${this.password}`).toString(
+            "base64",
+          )}`,
+        },
+      },
+    );
+    const data = await request.json()
+    const dataProfile = await request2.json()
+
+    return {
+      ...data,
+      ...dataProfile
+    }
+    
   }
 
   public request = async () => {
