@@ -23,6 +23,10 @@ const CustomTopBar = () => {
         <span className="font-bold">
           😈Freakszn <span className="font-extralight text-sm">{appVer}</span>
         </span>
+        <div className="flex gap-1 items-center ml-2">
+          <div className="w-3 h-3 rounded-full bg-green-500">&nbsp;</div>
+          Connected
+        </div>
       </div>
       <div className="flex mr-2">
         <div className="flex items-center bg-card rounded-md pl-2 hover:bg-bgHover px-1 mr-2">

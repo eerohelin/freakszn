@@ -1,5 +1,6 @@
 import React from "react";
 import { THEMES } from "../lib/constants";
+import { io, type Socket } from "socket.io-client";
 import type { Theme } from "../lib/types";
 
 type ThemeProviderProps = {
@@ -68,4 +69,34 @@ export function ThemeProvider({
       {children}
     </ThemeProviderContext.Provider>
   );
+}
+
+interface SocketProviderProps {
+  children: React.ReactNode
+}
+
+type SocketProviderState = {
+  socket: Socket | null;
+  state: any
+};
+
+export const SocketProviderContext = React.createContext<SocketProviderState>({
+  socket: null,
+  state: {}
+})
+
+const s = io("ws://localhost:3000", { autoConnect: true, secure: false })
+export function SocketProvider({ children }: SocketProviderProps){
+  const [socket, setSocket] = React.useState<Socket>(s)
+  const [state, setState] = React.useState<any>()
+
+  socket.on("state", (s: any) => {
+    setState(s)
+  })
+
+  return (
+    <SocketProviderContext.Provider value={{ socket, state }}>
+      {children}
+    </SocketProviderContext.Provider>
+  )
 }
