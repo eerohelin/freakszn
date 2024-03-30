@@ -8,7 +8,7 @@ import { join } from "node:path";
 
 // set the app name independent of package.json name
 app.setName("freakszn");
-let lcu: LCUApi | undefined
+let lcu: LCUApi | undefined;
 
 const createWindow = () => {
   const mainWindow = new BrowserWindow({
@@ -22,7 +22,7 @@ const createWindow = () => {
     },
   });
 
-  mainWindow.emit("asd")
+  mainWindow.emit("asd");
   mainWindow.webContents.on("dom-ready", () => {
     mainWindow.show;
   });
@@ -36,7 +36,7 @@ const createWindow = () => {
 
   /** Devtools */
   mainWindow.webContents.openDevTools({ mode: "detach" });
-  return mainWindow
+  return mainWindow;
 };
 
 app.whenReady().then(() => {
@@ -56,20 +56,20 @@ app.whenReady().then(() => {
   const connector = new LCUConnector();
 
   connector.on("connect", async ({ address, password, port }) => {
-    mainWindow.webContents.send('lol-connected', true)
-    lcu = new LCUApi(address, port, password)
-  }); 
+    mainWindow.webContents.send("lol-connected", true);
+    lcu = new LCUApi(address, port, password);
+  });
 
   connector.on("disconnect", async () => {
-    mainWindow.webContents.send('lol-connected', false)
-    lcu = undefined
-  })
+    mainWindow.webContents.send("lol-connected", false);
+    lcu = undefined;
+  });
 
   connector.start();
 });
 
 app.once("window-all-closed", () => app.quit());
 
-export function getLCU(){
-  return lcu
+export function getLCU() {
+  return lcu;
 }
