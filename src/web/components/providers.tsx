@@ -72,31 +72,31 @@ export function ThemeProvider({
 }
 
 interface SocketProviderProps {
-  children: React.ReactNode
+  children: React.ReactNode;
 }
 
 type SocketProviderState = {
   socket: Socket | null;
-  state: any
+  state: any;
 };
 
 export const SocketProviderContext = React.createContext<SocketProviderState>({
   socket: null,
-  state: {}
-})
+  state: {},
+});
 
-const s = io("ws://localhost:3000", { autoConnect: true, secure: false })
-export function SocketProvider({ children }: SocketProviderProps){
-  const [socket, setSocket] = React.useState<Socket>(s)
-  const [state, setState] = React.useState<any>()
+const s = io("ws://localhost:3000", { autoConnect: true, secure: false });
+export function SocketProvider({ children }: SocketProviderProps) {
+  const [socket, setSocket] = React.useState<Socket>(s);
+  const [state, setState] = React.useState<any>();
 
   socket.on("state", (s: any) => {
-    setState(s)
-  })
+    setState(s);
+  });
 
   return (
     <SocketProviderContext.Provider value={{ socket, state }}>
       {children}
     </SocketProviderContext.Provider>
-  )
+  );
 }

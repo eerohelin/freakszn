@@ -5,9 +5,7 @@ import Layout from "../components/layout";
 
 /** This is not needed but it's just one simple way to add margin to all pages for example */
 const PageWrapper = ({ children }: { children: React.ReactNode }) => (
-  <div className="m-4 w-full h-full overflow-y-scroll no-scrollbar">
-    {children}
-  </div>
+  <div className="w-full h-full overflow-y-scroll no-scrollbar">{children}</div>
 );
 
 export const Route = createRootRoute({

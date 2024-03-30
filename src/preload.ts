@@ -6,7 +6,8 @@ import { exposeElectronTRPC } from "electron-trpc/main";
 process.once("loaded", () => {
   exposeElectronTRPC();
   // @ts-ignore
-  contextBridge.exposeInMainWorld('electronAPI', {
-    onConnectionChange: (callback: any) => ipcRenderer.on('connection-change', (_event, value) => callback(value))
-  })
+  contextBridge.exposeInMainWorld("electronAPI", {
+    onConnectionChange: (callback: any) =>
+      ipcRenderer.on("connection-change", (_event, value) => callback(value)),
+  });
 });

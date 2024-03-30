@@ -1,36 +1,28 @@
 import React from "react";
 import { createLazyFileRoute } from "@tanstack/react-router";
 import { SocketProviderContext } from "../components/providers";
-import t from "@src/shared/config";
+import { Queue } from "../components/queue";
+import { Users } from "../components/users";
 
 export const Route = createLazyFileRoute("/" as never)({
   component: Index,
 });
 
 function Index() {
-  const { socket, state } = React.useContext(SocketProviderContext)
-  console.log('state:', state)
-
-  const utils = t.useUtils();
-  const { mutate: storeSummoner } = t.lol.setSummoner.useMutation({
-    onSuccess: () => { utils.lol.getSummoner.invalidate() }
-  })
-  const { mutate: deleteSummoners } = t.lol.deleteSummoners.useMutation({
-    onSuccess: () => { utils.lol.getSummoner.invalidate() }
-  })
-  const { data: summoner } = t.lol.getSummoner.useQuery()
+  const { socket, state } = React.useContext(SocketProviderContext);
 
   return (
-    <div className="container mx-auto w-full h-full flex flex-col gap-4">
-      <button type="button" onClick={() => storeSummoner()}>
-        test
-      </button>
-      <button type="button" onClick={() => deleteSummoners()}>
-        delete all summoners
-      </button>
-        {JSON.stringify(summoner)}
-
-      <div className="mt-20">
+    <div className="container w-full h-full flex flex-col content-center">
+      <div className="flex h-screen">
+        <div className="w-1/5">
+          <div className="h-32 w-full bg-black p-1">banner</div>
+          <div className="p-1">
+            <Users />
+          </div>
+        </div>
+        <div className="flex-1 p-2">
+          <Queue socket={socket} state={state} />
+        </div>
       </div>
     </div>
   );
