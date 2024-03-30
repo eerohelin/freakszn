@@ -1,9 +1,10 @@
 import React from "react";
 import { createLazyFileRoute } from "@tanstack/react-router";
 import { SocketProviderContext } from "../components/providers";
+import { getProfileSplashUrl } from "../lib/utils";
 import { Queue } from "../components/queue";
 import { Users } from "../components/users";
-import { getProfileSplashUrl } from "../lib/utils";
+import Game from "../components/game";
 
 export const Route = createLazyFileRoute("/" as never)({
   component: Index,
@@ -14,28 +15,43 @@ function Index() {
   console.log('State:', state)
 
   return (
-    <div className="container w-full h-full flex flex-col content-center text-text">
-      <div className="flex h-screen">
-        <div className="w-1/5">
-          <div className="h-32 w-full bg-black relative saturate-[110%]">
-           <div className="absolute w-full h-full bg-gradient-to-r from-transparent from-[65%] to-background z-20" />
-            <div className="absolute w-full h-full bg-gradient-to-b from-transparent from-[65%] to-background z-20" />
-            <div className="absolute flex w-full content-center items-center h-full justify-center z-30">
-              <div className="text-lg">
-                <div className="font-beaufort-bold ">{summoner?.displayName}</div>
-                <div className="-mt-2">#{summoner?.tagLine}</div>
-              </div>
-            </div>
-            <img className="absolute" alt="profile splash art" src={getProfileSplashUrl(summoner?.backgroundSkinId)} />
+    <div className="w-full flex h-screen content-center text-text">
+      {/** Top left parts (banner and users list) */}
+      <div className="w-[14rem] border-r border-border">
+        <div className="relative h-32 min-h-32 min-w-full saturate-[110%]">
+          <div className="absolute w-full h-full bg-gradient-to-r from-transparent from-[65%] to-background z-20" />
+          <div className="absolute w-full h-full bg-gradient-to-b from-transparent from-[65%] to-background z-20" />
+          <div className="absolute w-full flex flex-col items-center justify-center content-center h-full text-lg text-center z-20">
+            <div className="font-beaufort-bold" style={{ textShadow: "2px 2px black" }}>{summoner?.displayName}</div>
+            <div className="-mt-2" style={{ textShadow: "2px 2px black" }}>#{summoner?.tagLine}</div>
           </div>
-          <div className="p-1">
-            <Users />
-          </div>
+          <img className="absolute" alt="profile splash art" src={getProfileSplashUrl(summoner?.backgroundSkinId)} />
         </div>
-        <div className="flex-1 p-2">
-          <Queue socket={socket} state={state} />
+
+        <div>
+          <Users users={[]} />
         </div>
+      </div>
+
+      {/** Queue */}
+      <div className="flex-1 p-2">
+        <Queue socket={socket} state={state} />
+      </div>
+
+      {/** Game */}
+      <div>
+        <Game game={state.game} />
       </div>
     </div>
   );
 }
+
+// Clash banner...
+/**
+  <div className="">
+    <div className='relative'>
+      <div className='bg-gradient-to-t from-transparent to-background absolute z-10 w-full'>&nbsp;</div>
+      <img className='absolute' alt='banner' src={getProfileClashBannerUrl(summoner?.bannerTheme, summoner?.bannerLevel)} />
+    </div>
+  </div>
+*/
