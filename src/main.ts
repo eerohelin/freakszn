@@ -56,9 +56,14 @@ app.whenReady().then(() => {
 
   connector.on("connect", async ({ address, password, port }) => {
     lcu = new LCUApi(address, port, password);
+    let isLoaded: boolean = false
+
+    mainWindow.webContents.on('did-finish-load', function() {
+      isLoaded = true
+    });
 
     const connectionDelay = setInterval(() => {
-      if (!mainWindow.webContents.isLoading()) {
+      if (isLoaded) {
         mainWindow.webContents.send("connection-change", true);
         clearInterval(connectionDelay);
       }
