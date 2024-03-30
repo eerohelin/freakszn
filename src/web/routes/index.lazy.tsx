@@ -1,4 +1,6 @@
+import React from "react";
 import { createLazyFileRoute } from "@tanstack/react-router";
+import { SocketProviderContext } from "../components/providers";
 import t from "@src/shared/config";
 
 export const Route = createLazyFileRoute("/" as never)({
@@ -6,6 +8,9 @@ export const Route = createLazyFileRoute("/" as never)({
 });
 
 function Index() {
+  const { socket, state } = React.useContext(SocketProviderContext)
+  console.log('state:', state)
+
   const utils = t.useUtils();
   const { mutate: storeSummoner } = t.lol.setSummoner.useMutation({
     onSuccess: () => { utils.lol.getSummoner.invalidate() }
@@ -23,7 +28,10 @@ function Index() {
       <button type="button" onClick={() => deleteSummoners()}>
         delete all summoners
       </button>
-      {JSON.stringify(summoner)}
+        {JSON.stringify(summoner)}
+
+      <div className="mt-20">
+      </div>
     </div>
   );
 }
