@@ -8,6 +8,13 @@ export const theme = {
       card: "var(--color-card)",
       border: "var(--color-border)",
       bgHover: "var(--color-bg-hover)",
+
+      league: {
+        text: "#cdbe91",
+        border: "#c99c3e",
+        borderdarker: "#564624",
+        button: "#1e2328",
+      }
     },
   },
 };
