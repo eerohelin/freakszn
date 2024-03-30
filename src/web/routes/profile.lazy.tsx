@@ -1,11 +1,49 @@
+import t from "@src/shared/config";
 import { createLazyFileRoute } from "@tanstack/react-router";
 
 export const Route = createLazyFileRoute("/profile" as never)({
   component: Profile,
 });
 
-function Profile () {
+function Profile() {
+  const utils = t.useUtils();
+  const { mutate: storeSummoner } = t.lol.setSummoner.useMutation({
+    onSuccess: () => {
+      utils.lol.getSummoner.invalidate();
+    },
+  });
+  const { mutate: deleteSummoners } = t.lol.deleteSummoners.useMutation({
+    onSuccess: () => {
+      utils.lol.getSummoner.invalidate();
+    },
+  });
+  const { data: s } = t.lol.getSummoner.useQuery();
+
   return (
-    <div>Profile</div>
-  )
+    <div className="p-2">
+      <p className="text-4xl">Summoner</p>
+      <hr className="border-border my-2 w-full max-w-md" />
+      <div>
+        {s?.[0] && (
+          <p className="font-semibold text-3xl">
+            {s[0].displayName}#{s[0].tagLine}
+          </p>
+        )}
+      </div>
+      <button
+        className="px-3 py-2 mt-3 text-center bg-green-500 rounded-lg text-black"
+        type="button"
+        onClick={() => storeSummoner()}
+      >
+        Load Summoner
+      </button>
+
+      {/**
+       * 
+      <button type="button" onClick={() => deleteSummoners()}>
+        delete all summoners
+      </button>
+       */}
+    </div>
+  );
 }
