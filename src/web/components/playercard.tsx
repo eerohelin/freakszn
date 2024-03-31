@@ -35,7 +35,7 @@ const PlayerCard = ({
     <div
       {...props}
       onClick={onClick}
-      className={cn("w-full py-1 px-2 rounded-md", className)}
+      className={cn("w-full py-1 px-2 rounded-md flex", className)}
     >
       <div
         className={cn(
@@ -44,24 +44,30 @@ const PlayerCard = ({
         )}
       >
         {side === "blue" && (
-          <>
+          <div className="w-full h-full flex items-center gap-3">
             <img
               className="w-16 h-16"
               alt="summoner icon"
               src={i.length > 1000 ? i : placeholder}
             />
             <PlayerDetails side={side} player={player} />
-          </>
+            <div className="relative w-full h-full">
+              <div className="absolute bg-black w-4 h-4 right-0 bottom-0" />
+            </div>
+          </div>
         )}
         {side === "red" && (
-          <>
+          <div className="w-full h-full flex items-center gap-3">
+            <div className="relative w-full h-full">
+              <div className="absolute bg-black w-4 h-4 left-0 bottom-0" />
+            </div>
             <PlayerDetails side={side} player={player} />
             <img
               className="w-16 h-16"
               alt="summoner icon"
               src={i.length > 1000 ? i : placeholder}
             />
-          </>
+          </div>
         )}
       </div>
     </div>
@@ -70,7 +76,7 @@ const PlayerCard = ({
 
 function PlayerDetails({ player, side }: { player: Player, side: "blue" | "red" }){
   return (
-    <div className={cn(side === "red" && "text-right")}>
+    <div className={cn("w-full", side === "red" && "text-right")}>
       <p className="text-2xl font-beaufort">{player.name}</p>
       <div className="text-sm">
         <span>{player?.rankData?.rank} {player?.rankData?.division}</span>
