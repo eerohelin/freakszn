@@ -2,21 +2,23 @@ import type React from "react";
 import { cn } from "../lib/utils";
 import { useSummonerIcon } from "../hooks/useSummonerIcon";
 
+interface Player {
+name: string;
+iconId: number | string;
+summonerLevel: number;
+rankData: {
+  rank: string,
+  division: string
+  lp: number,
+}
+};
+
 interface PlayerCardProps
   extends React.DetailedHTMLProps<
     React.HTMLAttributes<HTMLDivElement>,
     HTMLDivElement
   > {
-  player: {
-    name: string;
-    iconId: number | string;
-    summonerLevel: number;
-    rankData: {
-      rank: string,
-      division: string
-      lp: number,
-    }
-  };
+  player: Player
   side: "blue" | "red";
 }
 
@@ -48,22 +50,12 @@ const PlayerCard = ({
               alt="summoner icon"
               src={i.length > 1000 ? i : placeholder}
             />
-            <div>
-              <p className="text-2xl font-beaufort">{player.name}</p>
-              <div className="text-sm">
-                <span>{player?.rankData?.rank} {player?.rankData?.division}</span>
-                <span className="ml-1 text-neutral-400">{player?.rankData?.lp} LP</span>
-              </div>
-              <p className="text-xs">level {player.summonerLevel}</p>
-            </div>
+            <PlayerDetails side={side} player={player} />
           </>
         )}
         {side === "red" && (
           <>
-            <div>
-              <p className="text-2xl font-beaufort text-end">{player.name}</p>
-              <span>{player?.rankData?.rank}</span>
-            </div>
+            <PlayerDetails side={side} player={player} />
             <img
               className="w-16 h-16"
               alt="summoner icon"
@@ -75,5 +67,18 @@ const PlayerCard = ({
     </div>
   );
 };
+
+function PlayerDetails({ player, side }: { player: Player, side: "blue" | "red" }){
+  return (
+    <div className={cn(side === "red" && "text-right")}>
+      <p className="text-2xl font-beaufort">{player.name}</p>
+      <div className="text-sm">
+        <span>{player?.rankData?.rank} {player?.rankData?.division}</span>
+        <span className="ml-1 text-neutral-400">{player?.rankData?.lp} LP</span>
+      </div>
+      <p className="text-xs">level {player.summonerLevel}</p>
+    </div>
+  )
+}
 
 export default PlayerCard;
