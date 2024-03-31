@@ -16,5 +16,7 @@ process.once("loaded", () => {
       ipcRenderer.on("send-lobby-id", (_event, value) => callback(value)),
     offSendLobbyId: (callback: any) =>
       ipcRenderer.removeAllListeners("send-lobby-id"),
+    onUpdateInLobby: (callback: any) => ipcRenderer.on("update-in-lobby", (_event, value) => callback(value)),
+    onCurrentLobbyName: (callback: any) => ipcRenderer.on("current-lobby-name", (_event, value) => callback(value)),
   });
 });

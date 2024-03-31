@@ -133,6 +133,17 @@ export function SocketProvider({ children }: SocketProviderProps) {
       socket?.emit("set-current-lobby-id", value);
       console.log("sent");
     });
+
+    // @ts-ignore
+    window.electronAPI.onUpdateInLobby((value) => {
+      socket.emit("update-in-lobby", value)
+    })
+
+    // @ts-ignore
+    window.electronAPI.onCurrentLobbyName((value) => {
+      socket.emit("current-lobby-name", value)
+    })
+
   }, [socket?.emit]);
 
   socket.on("state", (s: any) => {
@@ -140,6 +151,7 @@ export function SocketProvider({ children }: SocketProviderProps) {
   });
 
   socket.on("game-start", (game) => setGame(game));
+  socket.on("game-update", (game) => setGame(game))
 
   return (
     <SocketProviderContext.Provider

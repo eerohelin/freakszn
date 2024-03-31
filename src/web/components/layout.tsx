@@ -30,6 +30,7 @@ const CustomTopBar = () => {
       // @ts-ignore
       window.electronAPI.didReceive();
       setIsConnected(value);
+      socket?.emit("set-client-open", value)
       console.log("connected");
     });
   }, []);
