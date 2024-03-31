@@ -21,7 +21,7 @@ function Profile() {
       <div>
         {s && (
           <p className="font-semibold text-3xl">
-            {s.displayName}#{s.tagLine}
+            {s.gameName}#{s.tagLine}
           </p>
         )}
       </div>

@@ -106,7 +106,7 @@ export function SocketProvider({ children }: SocketProviderProps) {
 
   React.useEffect(() => {
     if (socket.connected) {
-      socket.emit("set-name", summoner?.displayName);
+      socket.emit("set-name", summoner?.gameName);
       socket.emit("set-icon-id", summoner?.profileIconId);
       socket.emit("set-summoner-level", summoner?.summonerLevel);
       socket.emit("set-summoner-rank", {
@@ -118,7 +118,7 @@ export function SocketProvider({ children }: SocketProviderProps) {
   }, [
     socket.connected,
     socket.emit,
-    summoner?.displayName,
+    summoner?.gameName,
     summoner?.profileIconId,
     summoner?.division,
     summoner?.lp,

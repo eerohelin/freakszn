@@ -28,7 +28,7 @@ function Index() {
               className="absolute w-full h-full flex flex-col items-center justify-center"
               style={{ textShadow: "2px 2px black" }}
             >
-              <p>{summoner?.displayName}</p>
+              <p>{summoner?.gameName}</p>
               <p className="-mt-2">#{summoner?.tagLine}</p>
             </div>
           </div>
