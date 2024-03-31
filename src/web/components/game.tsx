@@ -45,7 +45,7 @@ const Game = ({ className, ...props }: GameProps) => {
         <span className="font-beaufort-bold">Summoner's Rift 5v5</span>
       </div>
 
-      <div className="w-full flex justify-center" style={{ height: windowHeight - 150 }}>
+      <div className="w-full flex justify-center pt-6" style={{ height: windowHeight - 150 }}>
         <div className="w-full max-w-5xl">
           <div className="flex w-full px-1">
             <div className="w-full flex justify-start text-cyan-500 font-semibold">Blue Team</div>
