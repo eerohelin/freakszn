@@ -7,9 +7,30 @@ import { cn } from "../lib/utils"
 interface GameProps extends React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement> {
 }
 
+
+
 const Game = ({ className, ...props }: GameProps) => {
-  const { game, windowHeight } = React.useContext(SocketProviderContext)
-  console.log('game:', game)
+  const { game, state, windowHeight } = React.useContext(SocketProviderContext)
+  
+  function getHowManyNeeded(){
+    let howManyNeeded = 10;
+    for (const role of Object.keys(state.state)) {
+      const arr = state.state[role];
+      howManyNeeded -= role !== "fill" ? Math.min(arr.length, 2) : arr.length
+    }
+    return howManyNeeded
+  }
+
+  console.log('game:', game, state)
+  if(Object.keys(game).length < 1){
+    return (
+      <div className="flex flex-col flex-grow justify-center content-center h-full items-center">
+        <p className="font-beaufort text-2xl text-center">
+          You have no active game, <br /> go queue +{getHowManyNeeded()}
+        </p>
+      </div>
+    )
+  }
 
   return (
     <div style={{ height: windowHeight }} className={cn(className, "flex flex-col flex-grow")} {...props}>
