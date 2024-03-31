@@ -9,6 +9,7 @@ import { join } from "node:path";
 // set the app name independent of package.json name
 app.setName("freakszn");
 let lcu: LCUApi | undefined;
+let uiLoaded: boolean = false
 
 const createWindow = () => {
   const mainWindow = new BrowserWindow({
@@ -56,35 +57,48 @@ app.whenReady().then(() => {
 
   connector.on("connect", async ({ address, password, port }) => {
     lcu = new LCUApi(address, port, password, mainWindow);
-    lcu.request()
-    let isLoaded: boolean = false
-    let didReceive: boolean = false
+
 
     mainWindow.webContents.on('did-finish-load', function() {
-      isLoaded = true
+      uiLoaded = true
     });
+
+    const loadedCheck = setInterval(async (): Promise<any> => {
+      if (lcu && await lcu.isLoaded()) {
+        loaded(mainWindow)
+        lcu.startListener()
+        clearInterval(loadedCheck)
+        return
+      }
+    }, 1000)
+    
+  });
+
+  connector.on("disconnect", async () => {
+    mainWindow.webContents.send("connection-change", false);
+    lcu?.stopListener()
+    lcu = undefined;
+  });
+
+  connector.start();
+});
+
+function loaded(mainWindow: BrowserWindow) {
+    let didReceive: boolean = false
 
     ipcMain.on("did-receive-connection-change", () => {
       didReceive = true
     })
 
     const connectionDelay = setInterval(() => {
-      if (isLoaded) {
+      if (uiLoaded) {
         mainWindow.webContents.send("connection-change", true);
       }
       if (didReceive) {
         clearInterval(connectionDelay);
       }
     }, 1000);
-  });
-
-  connector.on("disconnect", async () => {
-    mainWindow.webContents.send("connection-change", false);
-    lcu = undefined;
-  });
-
-  connector.start();
-});
+}
 
 app.once("window-all-closed", () => app.quit());
 

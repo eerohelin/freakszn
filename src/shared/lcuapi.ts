@@ -9,6 +9,8 @@ export class LCUApi {
   private url = () => `https://${this.address}:${this.port}`;
   private mainWindow: BrowserWindow
   private lobbyIdOnCooldown: boolean = false
+  public loaded: boolean = false
+  private socket: WebSocket | undefined
 
   constructor(address: string, port: number, password: string, mainWindow: BrowserWindow) {
     this.address = address;
@@ -252,8 +254,35 @@ export class LCUApi {
     return request.json()
   }
 
-  public request = async () => {
-    const socket = new WebSocket(`wss://${this.address}:${this.port}/`, {
+  public isLoaded = async (): Promise<boolean> => {
+
+    try {
+      const request = await fetch(
+        `${this.url()}/lol-summoner/v1/current-summoner`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            accept: "application/json",
+            Authorization: `Basic ${Buffer.from(`riot:${this.password}`).toString(
+              "base64",
+            )}`,
+          },
+        },
+      );
+    if (request.status === 200) {return true}
+    return false
+    } catch (e) {
+      return false
+    }
+  }
+
+  public stopListener = async () => {
+    this.socket?.send(JSON.stringify([6, "OnJsonApiEvent_lol-lobby_v2_lobby"]));
+  }
+
+  public startListener = async () => {
+    this.socket = new WebSocket(`wss://${this.address}:${this.port}/`, {
       headers: {
         Authorization: `Basic ${Buffer.from(`riot:${this.password}`).toString(
           "base64",
@@ -261,13 +290,13 @@ export class LCUApi {
       },
     });
 
-    socket.on("open", () => {
+    this.socket.on("open", () => {
       // OnJsonApiEvent_lol-gameflow_v1_gameflow-phase <--- DETECTS END OF GAME EVENT
       const temp = "OnJsonApiEvent_lol-lobby_v2_lobby";
-      socket.send(JSON.stringify([5, "OnJsonApiEvent_lol-lobby_v2_lobby"]));
+      this.socket?.send(JSON.stringify([5, "OnJsonApiEvent_lol-lobby_v2_lobby"]));
     });
 
-    socket.on("message", async (e) => {
+    this.socket.on("message", async (e) => {
       const data = await this.getCurrentLobby()
       for(let i=0; i<data.length; i++) {
         if (Object.values(data[i]).includes("freakszn")) {

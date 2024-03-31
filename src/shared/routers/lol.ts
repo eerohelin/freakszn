@@ -38,6 +38,9 @@ export const lolRouter = router({
   createLobby: publicProcedure.query(async () => {
     const lcu = getLCU()
     await lcu?.createLobby("freakszn", "", 1)
+  }),
+  isClientOpen: publicProcedure.query(async () => {
+    return getLCU() !== undefined
   })
 });
 

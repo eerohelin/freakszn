@@ -13,11 +13,12 @@ type LayoutProps = {
 
 const CustomTopBar = () => {
   const { data: appVer } = t.version.useQuery();
+  const { data: lcuExists } = t.lol.isClientOpen.useQuery()
   const { mutate: minimizeWindow } = t.window.minimize.useMutation();
   const { mutate: maximizeWindow } = t.window.maximize.useMutation();
   const { mutate: closeWindow } = t.window.closeWindow.useMutation();
   const { theme, setTheme } = useTheme();
-  const [isConnected, setIsConnected] = useState(false);
+  const [isConnected, setIsConnected] = useState(lcuExists);
   const { socket } = React.useContext(SocketProviderContext)
 
 
