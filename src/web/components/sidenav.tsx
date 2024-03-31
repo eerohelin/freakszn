@@ -1,13 +1,8 @@
-import React from 'react'
-import { SocketProviderContext } from './providers'
-import { getProfileClashBannerUrl } from '../lib/utils'
 import { Link } from '@tanstack/react-router'
 
 const SideNav = () => {
-  const { summoner } = React.useContext(SocketProviderContext)
-
   return (
-    <div className="flex flex-col w-28 mt-3">
+    <div className="flex flex-col w-40 border-r border-border p-2 h-full">
       <Link to="/" className="[&.active]:font-bold">
         Queue
       </Link>

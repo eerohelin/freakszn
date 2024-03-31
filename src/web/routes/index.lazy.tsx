@@ -12,35 +12,26 @@ export const Route = createLazyFileRoute("/" as never)({
 
 function Index() {
   const { socket, state, summoner } = React.useContext(SocketProviderContext);
-  console.log('State:', state)
-
   return (
-    <div className="w-full flex h-screen content-center text-text">
-      {/** Top left parts (banner and users list) */}
-      <div className="w-[14rem] border-r border-border">
-        <div className="relative h-32 min-h-32 min-w-full saturate-[110%]">
-          <div className="absolute w-full h-full bg-gradient-to-r from-transparent from-[65%] to-background z-20" />
-          <div className="absolute w-full h-full bg-gradient-to-b from-transparent from-[65%] to-background z-20" />
-          <div className="absolute w-full flex flex-col items-center justify-center content-center h-full text-lg text-center z-20">
-            <div className="font-beaufort-bold" style={{ textShadow: "2px 2px black" }}>{summoner?.displayName}</div>
-            <div className="-mt-2" style={{ textShadow: "2px 2px black" }}>#{summoner?.tagLine}</div>
-          </div>
-          <img className="absolute" alt="profile splash art" src={getProfileSplashUrl(summoner?.backgroundSkinId)} />
-        </div>
+    <div className="w-full h-full absolute">
+      <div className="w-full h-full flex">
+        <div className="w-[14rem] h-full border-r border-border">
 
-        <div>
+          {/** User banner card + name */}
+          <div className="relative saturate-[110%] aspect-video">
+            <img className="absolute w-full h-full" alt="profile splash art" src={getProfileSplashUrl(summoner?.backgroundSkinId)} />
+            <div className="absolute w-full h-full bg-gradient-to-r from-transparent from-[65%] to-background z-20" />
+            <div className="absolute w-full h-full bg-gradient-to-b from-transparent from-[65%] to-background z-20" />
+            <div className="absolute w-full h-full flex flex-col items-center justify-center" style={{ textShadow: "2px 2px black" }}>
+              <p>{summoner?.displayName}</p>
+              <p className="-mt-2">#{summoner?.tagLine}</p>
+            </div>
+          </div>
+
           <Users users={[]} />
         </div>
-      </div>
 
-      {/** Queue */}
-      <div className="flex-1 p-2">
-        <Queue socket={socket} state={state} />
-      </div>
-
-      {/** Game */}
-      <div>
-        <Game game={state.game} />
+        <Queue className="p-4" socket={socket} state={state} />
       </div>
     </div>
   );

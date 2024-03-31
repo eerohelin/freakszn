@@ -5,6 +5,7 @@ import { useRouter } from "@tanstack/react-router";
 import { SocketProviderContext, useTheme } from "./providers";
 import { THEMES } from "../lib/constants";
 import t from "@shared/config";
+import SideNav from "./sidenav";
 
 type LayoutProps = {
   children?: React.ReactNode;
@@ -113,11 +114,12 @@ export default function Layout({ children }: LayoutProps) {
   }, [router.navigate, router.state.location.pathname]);
 
   return (
-    /** Using a layout is not a must. You can also disable the custom topbar
-     *  and enable "frame" property for the window in main.ts */
-    <div className="h-screen">
+    <>
       <CustomTopBar />
-      {children}
-    </div>
+      <div className="flex w-full h-full">
+        <SideNav />
+        {children}
+      </div>
+    </>
   );
 }

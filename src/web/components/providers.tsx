@@ -81,19 +81,26 @@ type SocketProviderState = {
   socket: Socket | null;
   state: any;
   summoner: Summoner | undefined
+  game: any;
+  windowHeight: number
 };
 
 export const SocketProviderContext = React.createContext<SocketProviderState>({
   socket: null,
   state: {},
   summoner: undefined,
+  game: {},
+  windowHeight: window.innerHeight - 40
 });
 
 const s = io("ws://localhost:3000", { autoConnect: true, secure: false });
 export function SocketProvider({ children }: SocketProviderProps) {
   const { data: summoner } = t.lol.getSummoner.useQuery()
+  const [windowHeight, setWindowHeight] = React.useState<number>(window.innerHeight - 40) 
   const [socket, setSocket] = React.useState<Socket>(s);
   const [state, setState] = React.useState<any>();
+  const [game, setGame] = React.useState({})
+
   React.useEffect(() => {
     if(socket.connected){
       socket.emit("set-name", summoner?.displayName)
@@ -105,6 +112,9 @@ export function SocketProvider({ children }: SocketProviderProps) {
   });
 
   React.useEffect(() => {
+    addEventListener("resize", () => {
+      setWindowHeight(window.innerHeight)
+    })
     // @ts-ignore
     // window.electronAPI.offSendLobbyId()
     // @ts-ignore
@@ -118,7 +128,7 @@ export function SocketProvider({ children }: SocketProviderProps) {
   
 
   return (
-    <SocketProviderContext.Provider value={{ socket, state, summoner }}>
+    <SocketProviderContext.Provider value={{ socket, state, summoner, game, windowHeight }}>
       {children}
     </SocketProviderContext.Provider>
   );

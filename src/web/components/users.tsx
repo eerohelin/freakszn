@@ -1,4 +1,6 @@
 import t from "@src/shared/config";
+import React from "react";
+import { SocketProviderContext } from "./providers";
 
 interface UsersProps {
   users: []
@@ -48,11 +50,18 @@ const mockUsers = [
 ];
 
 export function Users({ users }: UsersProps) {
+  const { windowHeight } = React.useContext(SocketProviderContext)
   return (
-    <div className="flex flex-col gap-1">
-      {mockUsers.map((u) =>
-        <UserCard key={u.name} user={u} />     
-      )}
+    <div>
+      <div className="font-beaufort-bold px-1">Freaks</div>
+      <div className="relative">
+        <div className="absolute w-full bg-gradient-to-t from-transparent from-[65%] to-background z-20 top-0 h-4" />
+        <div className="absolute overflow-y-scroll pb-28 w-full" style={{ height: windowHeight - 100 }}>
+          {mockUsers.map((u) => 
+            <UserCard key={u.name} user={u} />     
+          )}
+        </div>
+      </div>
     </div>
   )
 }
