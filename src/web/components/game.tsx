@@ -32,55 +32,59 @@ const Game = ({ className, ...props }: GameProps) => {
       </div>
     );
   }
+  console.log('windowhei:', windowHeight)
 
   return (
     <div
-      style={{ height: windowHeight }}
-      className={cn(className, "")}
       {...props}
+      className={cn(className, "")}
+      style={{ height: windowHeight }}
     >
-      <div className="w-full border-b border-border flex gap-1 h-[2rem] bg-red-500 text-lg px-2">
+      <div className="w-full flex gap-1 h-[2rem] text-lg px-2">
         <span className="font-beaufort-bold">Custom</span>
         <span className="font-beaufort-bold">Summoner's Rift 5v5</span>
       </div>
 
-      <div className="w-full max-w-5xl border-4">
-        <div className="flex w-full">
-          <div className="w-full flex justify-start">Blue Team</div>
-          <div className="w-full flex justify-end">Red Team</div>
-        </div>
-        <div className="w-full flex gap-10">
-          <div className="flex flex-col items-end gap-2 w-full">
-            {Object.keys(game.blue).map((key) => (
-              <PlayerCard
-                side="blue"
-                className="max-w-md bg-neutral-800 border border-border shadow rounded-none"
-                player={game.blue[key]}
-              />
-            ))}
+      <div className="w-full flex justify-center" style={{ height: windowHeight - 150 }}>
+        <div className="w-full max-w-5xl">
+          <div className="flex w-full px-1">
+            <div className="w-full flex justify-start text-cyan-500 font-semibold">Blue Team</div>
+            <div className="w-full flex justify-end text-red-500 font-semibold">Red Team</div>
           </div>
+          <div className="w-full flex gap-10">
+            <div className="flex flex-col items-end gap-2 w-full">
+              {Object.keys(game.blue).map((key) => (
+                <PlayerCard
+                  side="blue"
+                  className="max-w-md bg-neutral-800 border border-border shadow rounded-none"
+                  player={game.blue[key]}
+                />
+              ))}
+            </div>
 
-          <div className="text-4xl flex flex-col gap-3 justify-center items-center">
-            <div className="border-l block h-32" />
-            <div className="font-beaufort">VS</div>
-            <div className="border-l block h-32" />
-          </div>
+            <div className="text-4xl flex flex-col gap-3 justify-center items-center">
+              <div className="border-l block h-32" />
+              <div className="font-beaufort">VS</div>
+              <div className="border-l block h-32" />
+            </div>
 
-          <div className="flex flex-col gap-2 w-full">
-            {Object.keys(game.red).map((key) => (
-              <PlayerCard
-                side="red"
-                className="max-w-md bg-neutral-800 border border-border shadow rounded-none"
-                player={game.red[key]}
-              />
-            ))}
+            <div className="flex flex-col gap-2 w-full">
+              {Object.keys(game.red).map((key) => (
+                <PlayerCard
+                  side="red"
+                  className="max-w-md bg-neutral-800 border border-border shadow rounded-none"
+                  player={game.red[key]}
+                />
+              ))}
+            </div>
           </div>
         </div>
       </div>
 
-      <div className="w-full border-t border-border flex gap-2 justify-center items-center h-[5rem]">
-        <Button>Join Lobby</Button>
-        <Button>Draft Link</Button>
+      <div className="w-full flex gap-2 justify-center items-center h-[5rem]">
+        <Button className="w-44">Join Lobby</Button>
+        <Button className="w-64">Ready</Button>
+        <Button className="w-44">Draft Link</Button>
       </div>
     </div>
   );

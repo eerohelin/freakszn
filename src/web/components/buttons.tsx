@@ -15,17 +15,17 @@ export function Button({ children, className, type, onClick }: ButtonProps) {
       onClick={onClick}
       type={type || "button"}
       className={cn(
-        className,
         `flex items-center content-center w-full justify-center bg-gradient-to-b from-league-border 
         to-league-borderdarker p-[.125rem] uppercase tracking-widest  
-         first-letter:w-full hover:brightness-[175%] transition-all duration-150`,
+        first-letter:w-full hover:brightness-[175%] transition-all duration-150`,
+        className,
       )}
     >
       <span
         className={cn(
           "font-beaufort-bold",
           `flex w-full items-center justify-center content-center border-b border-x border-black
-       px-4 py-2 bg-league-button text-league-text text-center`,
+            px-4 py-2 bg-league-button text-league-text text-center`,
         )}
       >
         {children}

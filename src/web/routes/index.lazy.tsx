@@ -4,7 +4,6 @@ import { SocketProviderContext } from "../components/providers";
 import { getProfileSplashUrl } from "../lib/utils";
 import { Queue } from "../components/queue";
 import { Users } from "../components/users";
-import Game from "../components/game";
 
 export const Route = createLazyFileRoute("/" as never)({
   component: Index,
@@ -15,7 +14,7 @@ function Index() {
   return (
     <div className="w-full h-full absolute">
       <div className="w-full h-full flex">
-        <div className="w-[14rem] h-full border-r border-border">
+        <div className="w-[17rem] h-full border-r border-border">
           {/** User banner card + name */}
           <div className="relative saturate-[110%] aspect-video">
             <img
@@ -29,7 +28,7 @@ function Index() {
               className="absolute w-full h-full flex flex-col items-center justify-center"
               style={{ textShadow: "2px 2px black" }}
             >
-              <p>{summoner?.displayName}</p>
+              <p>{summoner?.gameName}</p>
               <p className="-mt-2">#{summoner?.tagLine}</p>
             </div>
           </div>
