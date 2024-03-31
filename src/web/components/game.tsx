@@ -45,9 +45,9 @@ const Game = ({ className, ...props }: GameProps) => {
       </div>
 
       <div className="w-full max-w-5xl">
-        <div className="flex w-full">
-          <div className="w-full flex justify-start">Blue Team</div>
-          <div className="w-full flex justify-end">Red Team</div>
+        <div className="flex w-full px-1">
+          <div className="w-full flex justify-start text-cyan-500 font-semibold">Blue Team</div>
+          <div className="w-full flex justify-end text-red-500 font-semibold">Red Team</div>
         </div>
         <div className="w-full flex gap-10">
           <div className="flex flex-col items-end gap-2 w-full">
