@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import type { Theme } from "../lib/types";
 import { Minus, Square, X } from "@phosphor-icons/react";
 import { useRouter } from "@tanstack/react-router";
-import { useTheme } from "./providers";
+import { SocketProviderContext, useTheme } from "./providers";
 import { THEMES } from "../lib/constants";
 import t from "@shared/config";
 
@@ -17,13 +17,23 @@ const CustomTopBar = () => {
   const { mutate: closeWindow } = t.window.closeWindow.useMutation();
   const { theme, setTheme } = useTheme();
   const [isConnected, setIsConnected] = useState(false);
+  const { socket } = React.useContext(SocketProviderContext)
 
-  // @ts-ignore
-  window.electronAPI.onConnectionChange((value) => {
+
+  React.useEffect(() => {
     // @ts-ignore
-    window.electronAPI.didReceive()
-    setIsConnected(value);
-  });
+    window.electronAPI.offConnectionChange()
+
+    // @ts-ignore
+    window.electronAPI.onConnectionChange((value) => {
+      // @ts-ignore
+      window.electronAPI.didReceive()
+      setIsConnected(value);
+      console.log("connected")
+    });
+  }, [])
+  
+  
 
   return (
     <div className="flex w-full h-10 items-center">

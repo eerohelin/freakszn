@@ -46,11 +46,6 @@ export function Queue({ socket, state, className, ...props }: QueueProps) {
     refetch()
   })
 
-  // @ts-ignore
-  window.electronAPI.onSendLobbyId((value) => {
-    socket?.emit("set-current-lobby-id", value)
-  })
-
   return (
     <div className={`${className} w-full flex`} {...props}>
       <div className="flex flex-col gap-2">

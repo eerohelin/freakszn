@@ -8,6 +8,7 @@ export class LCUApi {
   private password: string | undefined = undefined;
   private url = () => `https://${this.address}:${this.port}`;
   private mainWindow: BrowserWindow
+  private lobbyIdOnCooldown: boolean = false
 
   constructor(address: string, port: number, password: string, mainWindow: BrowserWindow) {
     this.address = address;
@@ -270,7 +271,12 @@ export class LCUApi {
       const data = await this.getCurrentLobby()
       for(let i=0; i<data.length; i++) {
         if (Object.values(data[i]).includes("freakszn")) {
+          if (this.lobbyIdOnCooldown) { return }
           this.mainWindow.webContents.send("send-lobby-id", data[i]["id"])
+          this.lobbyIdOnCooldown = true
+          setTimeout(() => {
+            this.lobbyIdOnCooldown = false
+          }, 3000);
         }
       }
       return

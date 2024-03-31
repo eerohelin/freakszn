@@ -94,17 +94,28 @@ export function SocketProvider({ children }: SocketProviderProps) {
   const { data: summoner } = t.lol.getSummoner.useQuery()
   const [socket, setSocket] = React.useState<Socket>(s);
   const [state, setState] = React.useState<any>();
-
   React.useEffect(() => {
     if(socket.connected){
       socket.emit("set-name", summoner?.displayName)
       socket.emit("set-icon-id", summoner?.profileIconId)
     }
   }, [socket.connected, socket.emit, summoner?.displayName])
-
   socket.on("state", (s: any) => {
     setState(s);
   });
+
+  React.useEffect(() => {
+    // @ts-ignore
+    // window.electronAPI.offSendLobbyId()
+    // @ts-ignore
+    window.electronAPI.onSendLobbyId((value) => {
+      socket?.emit("set-current-lobby-id", value)
+      console.log("sent")
+
+    })
+  }, [])
+
+  
 
   return (
     <SocketProviderContext.Provider value={{ socket, state, summoner }}>
