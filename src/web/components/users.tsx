@@ -1,9 +1,10 @@
 import t from "@src/shared/config";
 import React from "react";
 import { SocketProviderContext } from "./providers";
+import { useSummonerIcon } from "../hooks/useSummonerIcon";
 
 interface UsersProps {
-  users: []
+  users: { name: string, iconId: number }[]
 }
 
 const mockUsers = [
@@ -57,7 +58,7 @@ export function Users({ users }: UsersProps) {
       <div className="relative">
         <div className="absolute w-full bg-gradient-to-t from-transparent from-[65%] to-background z-20 top-0 h-4" />
         <div className="absolute overflow-y-scroll pb-28 w-full" style={{ height: windowHeight - 100 }}>
-          {mockUsers.map((u) => 
+          {users.map((u) => 
             <UserCard key={u.name} user={u} />     
           )}
         </div>
@@ -67,21 +68,20 @@ export function Users({ users }: UsersProps) {
 }
 
 interface UserCard {
-  user: { name: string, profileIconId: string | number }
+  user: { name: string, iconId: string | number }
 }
 
 function UserCard({ user }: UserCard) {
-  const { data: icon } = t.lol.getSummonerIcon.useQuery({ id: user.profileIconId })
+  const { i } = useSummonerIcon(Number(user.iconId))
+  const { i: placeholder } = useSummonerIcon(29)
+
   return (
     <div className="flex gap-2 items-center border-b border-border py-1 px-2">
       <div className="flex items-center">
-          <div className="bg-gradient-to-b from-league-border 
-          to-league-borderdarker p-[0.125rem] rounded-full">
-            <img className="w-10 rounded-full" src={`data:image/png;base64,${btoa(String.fromCharCode.apply(null, 
-              // @ts-ignore
-              icon
-            ))}`} alt="avatar" />
-          </div>
+        <div className="bg-gradient-to-b from-league-border 
+        to-league-borderdarker p-[0.125rem] rounded-full">
+          <img className="w-10 rounded-full" src={i.length > 1000 ? i : placeholder} alt="avatar" />
+        </div>
       </div>
       <div>
         <p className="text-[#9f9a8b]">{user.name}</p>
