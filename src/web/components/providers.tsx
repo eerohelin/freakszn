@@ -98,6 +98,7 @@ export function SocketProvider({ children }: SocketProviderProps) {
   React.useEffect(() => {
     if(socket.connected){
       socket.emit("set-name", summoner?.displayName)
+      socket.emit("set-icon-id", summoner?.profileIconId)
     }
   }, [socket.connected, socket.emit, summoner?.displayName])
 
