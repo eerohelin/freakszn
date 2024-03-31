@@ -1,7 +1,6 @@
 import { getLCU } from "@src/main";
 import { publicProcedure, router } from "@src/trpc";
 import { deleteSummoners, getSummoner, updateSummoner } from "../db";
-import { observable } from "@trpc/server/observable";
 import { z } from "zod";
 
 export const lolRouter = router({
@@ -10,7 +9,13 @@ export const lolRouter = router({
     if (!lcu) {
       return;
     }
-    const summoner = await lcu.getCurrentSummoner();
+    let summoner = await lcu.getCurrentSummoner();
+    const rankData = await lcu.getCurrentSummonerRank()
+
+    summoner = {
+      ...summoner,
+      ...rankData
+    }
     console.log("updating summoner with:", summoner);
     await updateSummoner({ ...summoner }, summoner.equippedBannerFlag);
   }),

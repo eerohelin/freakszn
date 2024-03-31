@@ -71,4 +71,7 @@ export interface Summoner {
   backgroundSkinId: number;
   bannerTheme: string;
   bannerLevel: number;
+  rank: string;
+  division: string;
+  lp: number;
 }

@@ -2,9 +2,8 @@ import React from "react";
 import { THEMES } from "../lib/constants";
 import { io, type Socket } from "socket.io-client";
 import type { Theme } from "../lib/types";
-import t from "@src/shared/config";
 import type { Summoner } from "@src/shared/db";
-import { useRouter } from "@tanstack/react-router";
+import t from "@src/shared/config";
 
 type ThemeProviderProps = {
   children: React.ReactNode;
@@ -104,11 +103,17 @@ export function SocketProvider({ children }: SocketProviderProps) {
   const [state, setState] = React.useState<any>();
   const [game, setGame] = React.useState({});
 
+
   React.useEffect(() => {
     if (socket.connected) {
       socket.emit("set-name", summoner?.displayName);
       socket.emit("set-icon-id", summoner?.profileIconId);
       socket.emit("set-summoner-level", summoner?.summonerLevel);
+      socket.emit("set-summoner-rank", {
+        rank: summoner?.rank,
+        division: summoner?.division,
+        lp: summoner?.lp
+      })
     }
   }, [
     socket.connected,
