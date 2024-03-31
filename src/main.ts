@@ -55,7 +55,8 @@ app.whenReady().then(() => {
   const connector = new LCUConnector();
 
   connector.on("connect", async ({ address, password, port }) => {
-    lcu = new LCUApi(address, port, password);
+    lcu = new LCUApi(address, port, password, mainWindow);
+    lcu.request()
     let isLoaded: boolean = false
     let didReceive: boolean = false
 

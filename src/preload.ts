@@ -9,6 +9,7 @@ process.once("loaded", () => {
   contextBridge.exposeInMainWorld("electronAPI", {
     onConnectionChange: (callback: any) =>
       ipcRenderer.on("connection-change", (_event, value) => callback(value)),
-    didReceive: () => ipcRenderer.send("did-receive-connection-change")
+    didReceive: () => ipcRenderer.send("did-receive-connection-change"),
+    onSendLobbyId: (callback: any) => ipcRenderer.on("send-lobby-id", (_event, value) => callback(value))
   });
 });

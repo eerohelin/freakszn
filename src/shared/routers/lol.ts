@@ -31,6 +31,14 @@ export const lolRouter = router({
     const buffer = await lcu.getSummonerIcon(id)
     return buffer
   }),
+  joinLobby: publicProcedure.input(z.object({id: z.string()})).query(async ({input}) => {
+    const lcu = getLCU()
+    await lcu?.joinLobby(Number(input.id), "")
+  }),
+  createLobby: publicProcedure.query(async () => {
+    const lcu = getLCU()
+    await lcu?.createLobby("freakszn", "", 1)
+  })
 });
 
 /**

@@ -1,16 +1,19 @@
 import { WebSocket } from "ws";
 import type { DraftMode, LobbyPosition } from "./types";
+import { BrowserWindow } from "electron";
 
 export class LCUApi {
   private address: string | undefined = undefined;
   private port: number | undefined = undefined;
   private password: string | undefined = undefined;
   private url = () => `https://${this.address}:${this.port}`;
+  private mainWindow: BrowserWindow
 
-  constructor(address: string, port: number, password: string) {
+  constructor(address: string, port: number, password: string, mainWindow: BrowserWindow) {
     this.address = address;
     this.port = port;
     this.password = password;
+    this.mainWindow = mainWindow
   }
 
   public getSummonerId = async (summonerName: string, tagLine: string) => {
@@ -214,6 +217,40 @@ export class LCUApi {
     
   }
 
+  public getCurrentLobby = async () => {
+    const request2 = await fetch(
+      `${this.url()}/lol-lobby/v1/custom-games/refresh`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          accept: "application/json",
+          Authorization: `Basic ${Buffer.from(`riot:${this.password}`).toString(
+            "base64",
+          )}`,
+        },
+      },
+    );
+
+    const request = await fetch(
+      `${this.url()}/lol-lobby/v1/custom-games`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          accept: "application/json",
+          Authorization: `Basic ${Buffer.from(`riot:${this.password}`).toString(
+            "base64",
+          )}`,
+        },
+      },
+    );
+
+    
+
+    return request.json()
+  }
+
   public request = async () => {
     const socket = new WebSocket(`wss://${this.address}:${this.port}/`, {
       headers: {
@@ -229,7 +266,14 @@ export class LCUApi {
       socket.send(JSON.stringify([5, "OnJsonApiEvent_lol-lobby_v2_lobby"]));
     });
 
-    socket.on("message", (e) => {
+    socket.on("message", async (e) => {
+      const data = await this.getCurrentLobby()
+      for(let i=0; i<data.length; i++) {
+        if (Object.values(data[i]).includes("freakszn")) {
+          this.mainWindow.webContents.send("send-lobby-id", data[i]["id"])
+        }
+      }
+      return
       const xd = JSON.parse(JSON.stringify(e.toString(), null, 2));
       const today = new Date();
       console.log(
