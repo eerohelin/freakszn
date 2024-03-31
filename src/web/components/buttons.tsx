@@ -21,9 +21,13 @@ export function Button({ children, className, type, onClick }: ButtonProps) {
          first-letter:w-full hover:brightness-[175%] transition-all duration-150`,
       )}
     >
-      <span className={cn("font-beaufort-bold",
-      `flex w-full items-center justify-center content-center border-b border-x border-black
-       px-4 py-2 bg-league-button text-league-text text-center`)}>
+      <span
+        className={cn(
+          "font-beaufort-bold",
+          `flex w-full items-center justify-center content-center border-b border-x border-black
+       px-4 py-2 bg-league-button text-league-text text-center`,
+        )}
+      >
         {children}
       </span>
     </button>

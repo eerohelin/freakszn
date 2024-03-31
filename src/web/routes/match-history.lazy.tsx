@@ -4,6 +4,6 @@ export const Route = createLazyFileRoute("/" as never)({
   component: Component,
 });
 
-function Component(){
-  <div>Match history</div>
+function Component() {
+  <div>Match history</div>;
 }

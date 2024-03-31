@@ -13,29 +13,26 @@ type LayoutProps = {
 
 const CustomTopBar = () => {
   const { data: appVer } = t.version.useQuery();
-  const { data: lcuExists } = t.lol.isClientOpen.useQuery()
+  const { data: lcuExists } = t.lol.isClientOpen.useQuery();
   const { mutate: minimizeWindow } = t.window.minimize.useMutation();
   const { mutate: maximizeWindow } = t.window.maximize.useMutation();
   const { mutate: closeWindow } = t.window.closeWindow.useMutation();
   const { theme, setTheme } = useTheme();
   const [isConnected, setIsConnected] = useState(lcuExists);
-  const { socket } = React.useContext(SocketProviderContext)
-
+  const { socket } = React.useContext(SocketProviderContext);
 
   React.useEffect(() => {
     // @ts-ignore
-    window.electronAPI.offConnectionChange()
+    window.electronAPI.offConnectionChange();
 
     // @ts-ignore
     window.electronAPI.onConnectionChange((value) => {
       // @ts-ignore
-      window.electronAPI.didReceive()
+      window.electronAPI.didReceive();
       setIsConnected(value);
-      console.log("connected")
+      console.log("connected");
     });
-  }, [])
-  
-  
+  }, []);
 
   return (
     <div className="flex w-full h-10 items-center">
@@ -104,13 +101,13 @@ const CustomTopBar = () => {
 
 export default function Layout({ children }: LayoutProps) {
   const router = useRouter();
-  const { socket } = React.useContext(SocketProviderContext)
+  const { socket } = React.useContext(SocketProviderContext);
 
   socket?.on("game-start", (game) => {
     router.navigate({
-      to: "/game"
-    })
-  })
+      to: "/game",
+    });
+  });
 
   React.useEffect(() => {
     /** Navigate to default route on first launch (production) 

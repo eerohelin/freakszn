@@ -1,22 +1,27 @@
 import { WebSocket } from "ws";
 import type { DraftMode, LobbyPosition } from "./types";
-import { BrowserWindow } from "electron";
+import type { BrowserWindow } from "electron";
 
 export class LCUApi {
   private address: string | undefined = undefined;
   private port: number | undefined = undefined;
   private password: string | undefined = undefined;
   private url = () => `https://${this.address}:${this.port}`;
-  private mainWindow: BrowserWindow
-  private lobbyIdOnCooldown: boolean = false
-  public loaded: boolean = false
-  private socket: WebSocket | undefined
+  private mainWindow: BrowserWindow;
+  private lobbyIdOnCooldown = false;
+  public loaded = false;
+  private socket: WebSocket | undefined;
 
-  constructor(address: string, port: number, password: string, mainWindow: BrowserWindow) {
+  constructor(
+    address: string,
+    port: number,
+    password: string,
+    mainWindow: BrowserWindow,
+  ) {
     this.address = address;
     this.port = port;
     this.password = password;
-    this.mainWindow = mainWindow
+    this.mainWindow = mainWindow;
   }
 
   public getSummonerId = async (summonerName: string, tagLine: string) => {
@@ -179,7 +184,7 @@ export class LCUApi {
 
     const blob = await response.blob();
     const buffer = Buffer.from(await blob.arrayBuffer());
-    return buffer
+    return buffer;
   }
 
   public async getCurrentSummoner() {
@@ -210,14 +215,13 @@ export class LCUApi {
         },
       },
     );
-    const data = await request.json()
-    const dataProfile = await request2.json()
+    const data = await request.json();
+    const dataProfile = await request2.json();
 
     return {
       ...data,
-      ...dataProfile
-    }
-    
+      ...dataProfile,
+    };
   }
 
   public getCurrentLobby = async () => {
@@ -235,27 +239,21 @@ export class LCUApi {
       },
     );
 
-    const request = await fetch(
-      `${this.url()}/lol-lobby/v1/custom-games`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          accept: "application/json",
-          Authorization: `Basic ${Buffer.from(`riot:${this.password}`).toString(
-            "base64",
-          )}`,
-        },
+    const request = await fetch(`${this.url()}/lol-lobby/v1/custom-games`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        accept: "application/json",
+        Authorization: `Basic ${Buffer.from(`riot:${this.password}`).toString(
+          "base64",
+        )}`,
       },
-    );
+    });
 
-    
-
-    return request.json()
-  }
+    return request.json();
+  };
 
   public isLoaded = async (): Promise<boolean> => {
-
     try {
       const request = await fetch(
         `${this.url()}/lol-summoner/v1/current-summoner`,
@@ -264,22 +262,24 @@ export class LCUApi {
           headers: {
             "Content-Type": "application/json",
             accept: "application/json",
-            Authorization: `Basic ${Buffer.from(`riot:${this.password}`).toString(
-              "base64",
-            )}`,
+            Authorization: `Basic ${Buffer.from(
+              `riot:${this.password}`,
+            ).toString("base64")}`,
           },
         },
       );
-    if (request.status === 200) {return true}
-    return false
+      if (request.status === 200) {
+        return true;
+      }
+      return false;
     } catch (e) {
-      return false
+      return false;
     }
-  }
+  };
 
   public stopListener = async () => {
     this.socket?.send(JSON.stringify([6, "OnJsonApiEvent_lol-lobby_v2_lobby"]));
-  }
+  };
 
   public startListener = async () => {
     this.socket = new WebSocket(`wss://${this.address}:${this.port}/`, {
@@ -293,22 +293,26 @@ export class LCUApi {
     this.socket.on("open", () => {
       // OnJsonApiEvent_lol-gameflow_v1_gameflow-phase <--- DETECTS END OF GAME EVENT
       const temp = "OnJsonApiEvent_lol-lobby_v2_lobby";
-      this.socket?.send(JSON.stringify([5, "OnJsonApiEvent_lol-lobby_v2_lobby"]));
+      this.socket?.send(
+        JSON.stringify([5, "OnJsonApiEvent_lol-lobby_v2_lobby"]),
+      );
     });
 
     this.socket.on("message", async (e) => {
-      const data = await this.getCurrentLobby()
-      for(let i=0; i<data.length; i++) {
+      const data = await this.getCurrentLobby();
+      for (let i = 0; i < data.length; i++) {
         if (Object.values(data[i]).includes("freakszn")) {
-          if (this.lobbyIdOnCooldown) { return }
-          this.mainWindow.webContents.send("send-lobby-id", data[i]["id"])
-          this.lobbyIdOnCooldown = true
+          if (this.lobbyIdOnCooldown) {
+            return;
+          }
+          this.mainWindow.webContents.send("send-lobby-id", data[i]["id"]);
+          this.lobbyIdOnCooldown = true;
           setTimeout(() => {
-            this.lobbyIdOnCooldown = false
+            this.lobbyIdOnCooldown = false;
           }, 3000);
         }
       }
-      return
+      return;
       const xd = JSON.parse(JSON.stringify(e.toString(), null, 2));
       const today = new Date();
       console.log(

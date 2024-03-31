@@ -20,28 +20,34 @@ export const lolRouter = router({
   deleteSummoners: publicProcedure.mutation(async () => {
     return await deleteSummoners();
   }),
-  getSummonerIcon: publicProcedure.input(z.object({
-    id: z.string().or(z.number())
-  })).query(async ({ ctx, input }) => {
-    const { id } = input
-    const lcu = getLCU();
-    if (!lcu) {
-      return;
-    }
-    const buffer = await lcu.getSummonerIcon(id)
-    return buffer
-  }),
-  joinLobby: publicProcedure.input(z.object({id: z.string()})).query(async ({input}) => {
-    const lcu = getLCU()
-    await lcu?.joinLobby(Number(input.id), "")
-  }),
+  getSummonerIcon: publicProcedure
+    .input(
+      z.object({
+        id: z.string().or(z.number()),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      const { id } = input;
+      const lcu = getLCU();
+      if (!lcu) {
+        return;
+      }
+      const buffer = await lcu.getSummonerIcon(id);
+      return buffer;
+    }),
+  joinLobby: publicProcedure
+    .input(z.object({ id: z.string() }))
+    .query(async ({ input }) => {
+      const lcu = getLCU();
+      await lcu?.joinLobby(Number(input.id), "");
+    }),
   createLobby: publicProcedure.query(async () => {
-    const lcu = getLCU()
-    await lcu?.createLobby("freakszn", "", 1)
+    const lcu = getLCU();
+    await lcu?.createLobby("freakszn", "", 1);
   }),
   isClientOpen: publicProcedure.query(async () => {
-    return getLCU() !== undefined
-  })
+    return getLCU() !== undefined;
+  }),
 });
 
 /**

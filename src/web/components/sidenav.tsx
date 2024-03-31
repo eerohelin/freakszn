@@ -1,4 +1,4 @@
-import { Link } from '@tanstack/react-router'
+import { Link } from "@tanstack/react-router";
 
 const SideNav = () => {
   return (
@@ -16,7 +16,7 @@ const SideNav = () => {
         Match History
       </Link>
     </div>
-  )
-}
+  );
+};
 
-export default SideNav
+export default SideNav;
