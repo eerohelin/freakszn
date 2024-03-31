@@ -2,7 +2,7 @@ import LCUConnector from "lcu-connector";
 import { appRouter } from "@src/shared/routers/_app";
 import { createContext } from "@src/shared/context";
 import { createIPCHandler } from "electron-trpc/main";
-import { BrowserWindow, app } from "electron";
+import { BrowserWindow, app, ipcMain } from "electron";
 import { LCUApi } from "./shared/lcuapi";
 import { join } from "node:path";
 
@@ -57,14 +57,21 @@ app.whenReady().then(() => {
   connector.on("connect", async ({ address, password, port }) => {
     lcu = new LCUApi(address, port, password);
     let isLoaded: boolean = false
+    let didReceive: boolean = false
 
     mainWindow.webContents.on('did-finish-load', function() {
       isLoaded = true
     });
 
+    ipcMain.on("did-receive-connection-change", () => {
+      didReceive = true
+    })
+
     const connectionDelay = setInterval(() => {
       if (isLoaded) {
         mainWindow.webContents.send("connection-change", true);
+      }
+      if (didReceive) {
         clearInterval(connectionDelay);
       }
     }, 1000);

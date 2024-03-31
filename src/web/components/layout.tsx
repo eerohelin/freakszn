@@ -20,6 +20,8 @@ const CustomTopBar = () => {
 
   // @ts-ignore
   window.electronAPI.onConnectionChange((value) => {
+    // @ts-ignore
+    window.electronAPI.didReceive()
     setIsConnected(value);
   });
 
