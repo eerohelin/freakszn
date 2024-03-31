@@ -254,6 +254,29 @@ export class LCUApi {
     return request.json()
   }
 
+  public getCurrentSummonerRank = async () => {
+    const request = await fetch(
+      `${this.url()}/lol-ranked/v1/current-ranked-stats`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          accept: "application/json",
+          Authorization: `Basic ${Buffer.from(`riot:${this.password}`).toString(
+            "base64",
+          )}`,
+        },
+      },
+    );
+
+    const data = await request.json()
+    return {
+      "rank": data["highestRankedEntrySR"]["highestTier"],
+      "division": data["highestRankedEntrySR"]["division"],
+      "lp": data["highestRankedEntrySR"]["leaguePoints"]
+    }
+  }
+
   public isLoaded = async (): Promise<boolean> => {
 
     try {
