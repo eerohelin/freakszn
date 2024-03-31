@@ -34,7 +34,7 @@ const CustomTopBar = () => {
   }, []);
 
   return (
-    <div className="flex w-full h-10 items-center border-b border-border">
+    <div className="flex w-full min-h-10 h-10 items-center border-b border-border">
       <div id="drag-region" className="flex items-center px-3 w-full">
         <span className="font-bold">
           😈Freakszn <span className="font-extralight text-sm">{appVer}</span>
@@ -121,7 +121,7 @@ export default function Layout({ children }: LayoutProps) {
   return (
     <>
       <CustomTopBar />
-      <div className="flex w-full h-full">
+      <div className="flex w-full">
         <SideNav />
         {children}
       </div>
