@@ -28,7 +28,7 @@ function Index() {
             </div>
           </div>
 
-          <Users users={[]} />
+          <Users users={state.onlinePlayers} />
         </div>
 
         <Queue className="p-4" socket={socket} state={state} />
