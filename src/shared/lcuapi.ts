@@ -276,6 +276,42 @@ export class LCUApi {
     }
   }
 
+  public getCurrentLobbyName = async () => {
+    const request = await fetch(
+      `${this.url()}/lol-lobby/v2/lobby`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          accept: "application/json",
+          Authorization: `Basic ${Buffer.from(
+            `riot:${this.password}`,
+          ).toString("base64")}`,
+        },
+      },
+    );
+    const data = await request.json()
+    console.log(data["gameConfig"]["customLobbyName"])
+    console.log(await request.status)
+  }
+
+  public isCurrentlyInLobby = async () => {
+    const request = await fetch(
+      `${this.url()}/lol-lobby/v2/lobby`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          accept: "application/json",
+          Authorization: `Basic ${Buffer.from(
+            `riot:${this.password}`,
+          ).toString("base64")}`,
+        },
+      },
+    );
+    return await request.status === 200 ? true : false
+  }
+
   public isLoaded = async (): Promise<boolean> => {
     try {
       const request = await fetch(
@@ -305,6 +341,8 @@ export class LCUApi {
   };
 
   public startListener = async () => {
+
+
     this.socket = new WebSocket(`wss://${this.address}:${this.port}/`, {
       headers: {
         Authorization: `Basic ${Buffer.from(`riot:${this.password}`).toString(
@@ -322,6 +360,13 @@ export class LCUApi {
     });
 
     this.socket.on("message", async (e) => {
+      if (await this.isCurrentlyInLobby()) {
+        this.mainWindow.webContents.send("update-in-lobby", true)
+        this.mainWindow.webContents.send("current-lobby-name", await this.getCurrentLobbyName())
+      } else {
+        this.mainWindow.webContents.send("update-in-lobby", false)
+      }
+
       const data = await this.getCurrentLobby();
       for (let i = 0; i < data.length; i++) {
         if (Object.values(data[i]).includes("freakszn")) {
