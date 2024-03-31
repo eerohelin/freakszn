@@ -11,6 +11,11 @@ interface PlayerCardProps
     name: string;
     iconId: number | string;
     summonerLevel: number;
+    rankData: {
+      rank: string,
+      division: string
+      lp: number,
+    }
   };
   side: "blue" | "red";
 }
@@ -45,13 +50,20 @@ const PlayerCard = ({
             />
             <div>
               <p className="text-2xl font-beaufort">{player.name}</p>
-              <p>level {player.summonerLevel}</p>
+              <div className="text-sm">
+                <span>{player?.rankData?.rank} {player?.rankData?.division}</span>
+                <span className="ml-1 text-neutral-400">{player?.rankData?.lp} LP</span>
+              </div>
+              <p className="text-xs">level {player.summonerLevel}</p>
             </div>
           </>
         )}
         {side === "red" && (
           <>
-            <p className="text-2xl font-beaufort text-end">{player.name}</p>
+            <div>
+              <p className="text-2xl font-beaufort text-end">{player.name}</p>
+              <span>{player?.rankData?.rank}</span>
+            </div>
             <img
               className="w-16 h-16"
               alt="summoner icon"
