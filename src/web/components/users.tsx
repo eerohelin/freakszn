@@ -58,7 +58,7 @@ export function Users({ users }: UsersProps) {
       <div className="relative">
         <div className="absolute w-full bg-gradient-to-t from-transparent from-[65%] to-background z-20 top-0 h-4" />
         <div
-          className="absolute overflow-y-scroll pb-28 w-full"
+          className="absolute overflow-y-scroll pb-28 w-full mt-1"
           style={{ height: windowHeight - 100 }}
         >
           {users.map((u) => (
@@ -79,10 +79,11 @@ function UserCard({ user }: UserCard) {
   const { i: placeholder } = useSummonerIcon(29);
 
   return (
-    <div className="flex gap-2 items-center border-b border-border py-1 px-2">
+    <div className="flex gap-2 items-center px-[0.53rem] hover:bg-league-button py-2">
       <div className="flex items-center">
         <div
-          className="bg-gradient-to-b from-league-border 
+          className="bg-gradient-to-b from-league-border 
+
         to-league-borderdarker p-[0.125rem] rounded-full"
         >
           <img
@@ -94,7 +95,7 @@ function UserCard({ user }: UserCard) {
       </div>
       <div>
         <p className="text-[#9f9a8b]">{user.name}</p>
-        <div className="text-[#029f3f] text-sm">Online</div>
+        <div className="text-[#029f3f] text-sm -mt-[0.25rem]">Online</div>
       </div>
     </div>
   );
