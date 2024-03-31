@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import type { Theme } from "../lib/types";
 import { Minus, Square, X } from "@phosphor-icons/react";
 import { useRouter } from "@tanstack/react-router";
 import { SocketProviderContext, useTheme } from "./providers";
 import { THEMES } from "../lib/constants";
-import t from "@shared/config";
 import SideNav from "./sidenav";
+import t from "@shared/config";
 
 type LayoutProps = {
   children?: React.ReactNode;
@@ -17,9 +17,8 @@ const CustomTopBar = () => {
   const { mutate: minimizeWindow } = t.window.minimize.useMutation();
   const { mutate: maximizeWindow } = t.window.maximize.useMutation();
   const { mutate: closeWindow } = t.window.closeWindow.useMutation();
-  const { theme, setTheme } = useTheme();
   const [isConnected, setIsConnected] = useState(lcuExists);
-  const { socket } = React.useContext(SocketProviderContext);
+  const { theme, setTheme } = useTheme();
 
   React.useEffect(() => {
     // @ts-ignore
@@ -35,7 +34,7 @@ const CustomTopBar = () => {
   }, []);
 
   return (
-    <div className="flex w-full h-10 items-center">
+    <div className="flex w-full h-10 items-center border-b border-border">
       <div id="drag-region" className="flex items-center px-3 w-full">
         <span className="font-bold">
           😈Freakszn <span className="font-extralight text-sm">{appVer}</span>

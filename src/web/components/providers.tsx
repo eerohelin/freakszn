@@ -120,6 +120,10 @@ export function SocketProvider({ children }: SocketProviderProps) {
     socket.emit,
     summoner?.displayName,
     summoner?.profileIconId,
+    summoner?.division,
+    summoner?.lp,
+    summoner?.rank,
+    summoner?.summonerLevel
   ]);
 
   React.useEffect(() => {
@@ -135,7 +139,7 @@ export function SocketProvider({ children }: SocketProviderProps) {
     });
   }, [socket?.emit]);
 
-  socket.on("state", (s: any) => {
+  socket.on("state", (s) => {
     setState(s);
   });
 
