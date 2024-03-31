@@ -1,13 +1,12 @@
 <!doctype html>
 <html lang="en">
-  <!-- TODO: change connect-src 'self' http://localhost:3000; to support prod websocet server url in the future!! -->
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title></title>
   </head>
-  <body>
-    <div id="app" class="bg-background text-text fill-text transition-colors duration-300 ease-in-out"></div>
+  <body class="h-screen max-h-screen min-h-screen flex flex-col flex-grow bg-background text-text fill-text transition-colors duration-300 ease-in-out">
+    <div id="app" class="h-[46%] flex flex-col flex-grow"></div>
     <script type="module" src="main.tsx"></script>
   </body>
 </html>
