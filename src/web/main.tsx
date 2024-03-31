@@ -21,8 +21,8 @@ createRoot(document.getElementById("app") as Element).render(
     <t.Provider client={trpcClient} queryClient={queryClient}>
       <QueryClientProvider client={queryClient}>
         <SocketProvider>
-          <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-                <RouterProvider router={router} />
+          <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">  
+            <RouterProvider router={router} />
           </ThemeProvider>
         </SocketProvider>
       </QueryClientProvider>

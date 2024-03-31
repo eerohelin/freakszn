@@ -4,6 +4,7 @@ import { io, type Socket } from "socket.io-client";
 import type { Theme } from "../lib/types";
 import t from "@src/shared/config";
 import type { Summoner } from "@src/shared/db";
+import { useRouter } from "@tanstack/react-router";
 
 type ThemeProviderProps = {
   children: React.ReactNode;
@@ -106,26 +107,27 @@ export function SocketProvider({ children }: SocketProviderProps) {
       socket.emit("set-name", summoner?.displayName)
       socket.emit("set-icon-id", summoner?.profileIconId)
     }
-  }, [socket.connected, socket.emit, summoner?.displayName])
-  socket.on("state", (s: any) => {
-    setState(s);
-  });
+  }, [socket.connected, socket.emit, summoner?.displayName, summoner?.profileIconId])
 
   React.useEffect(() => {
     addEventListener("resize", () => {
       setWindowHeight(window.innerHeight)
     })
     // @ts-ignore
-    // window.electronAPI.offSendLobbyId()
+    window.electronAPI.offSendLobbyId()
     // @ts-ignore
     window.electronAPI.onSendLobbyId((value) => {
       socket?.emit("set-current-lobby-id", value)
       console.log("sent")
 
     })
-  }, [])
+  }, [socket?.emit])
 
-  
+  socket.on("state", (s: any) => {
+    setState(s);
+  });
+
+  socket.on("game-start", (game) => setGame(game))
 
   return (
     <SocketProviderContext.Provider value={{ socket, state, summoner, game, windowHeight }}>

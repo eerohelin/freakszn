@@ -103,6 +103,14 @@ const CustomTopBar = () => {
 
 export default function Layout({ children }: LayoutProps) {
   const router = useRouter();
+  const { socket } = React.useContext(SocketProviderContext)
+
+  socket?.on("game-start", (game) => {
+    router.navigate({
+      to: "/game"
+    })
+  })
+
   React.useEffect(() => {
     /** Navigate to default route on first launch (production) 
     TODO: Find a better solution than this... */
