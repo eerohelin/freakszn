@@ -16,13 +16,19 @@ function Index() {
     <div className="w-full h-full absolute">
       <div className="w-full h-full flex">
         <div className="w-[14rem] h-full border-r border-border">
-
           {/** User banner card + name */}
           <div className="relative saturate-[110%] aspect-video">
-            <img className="absolute w-full h-full" alt="profile splash art" src={getProfileSplashUrl(summoner?.backgroundSkinId)} />
+            <img
+              className="absolute w-full h-full"
+              alt="profile splash art"
+              src={getProfileSplashUrl(summoner?.backgroundSkinId)}
+            />
             <div className="absolute w-full h-full bg-gradient-to-r from-transparent from-[65%] to-background z-20" />
             <div className="absolute w-full h-full bg-gradient-to-b from-transparent from-[65%] to-background z-20" />
-            <div className="absolute w-full h-full flex flex-col items-center justify-center" style={{ textShadow: "2px 2px black" }}>
+            <div
+              className="absolute w-full h-full flex flex-col items-center justify-center"
+              style={{ textShadow: "2px 2px black" }}
+            >
               <p>{summoner?.displayName}</p>
               <p className="-mt-2">#{summoner?.tagLine}</p>
             </div>

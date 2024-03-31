@@ -9,32 +9,37 @@ interface QueueProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 export function Queue({ socket, state, className, ...props }: QueueProps) {
+  const [lobbyId, setLobbyId] = useState<number>(0);
 
-  const [lobbyId, setLobbyId] = useState<number>(0)
+  const { data: id } = t.lol.joinLobby.useQuery(
+    { id: lobbyId?.toString() },
+    { enabled: lobbyId !== 0 },
+  );
+  const { refetch } = t.lol.createLobby.useQuery(undefined, { enabled: false });
 
-  const { data: id } = t.lol.joinLobby.useQuery({id: lobbyId?.toString()}, {enabled: lobbyId !== 0});
-  const { refetch } = t.lol.createLobby.useQuery(undefined, {enabled: false});
-
-  function handleQueue(role: string){
-    socket?.emit("queue", role)
+  function handleQueue(role: string) {
+    socket?.emit("queue", role);
   }
-  function handleDeQueue(){
-    socket?.emit("dequeue")
+  function handleDeQueue() {
+    socket?.emit("dequeue");
   }
-  function handleMockQue(){
+  function handleMockQue() {
     const s = io("ws://localhost:3000", { autoConnect: true, secure: false });
-    s?.emit("set-name", `iirou.${crypto.randomUUID().substring(0,3)}`)
-    s?.emit("set-icon-id", Math.floor(Math.random() * (5000 - 3000 + 1)) + 3000)
+    s?.emit("set-name", `iirou.${crypto.randomUUID().substring(0, 3)}`);
+    s?.emit(
+      "set-icon-id",
+      Math.floor(Math.random() * (5000 - 3000 + 1)) + 3000,
+    );
     s?.emit("set-summoner-level", 300)
     s?.emit("set-summoner-rank", {rank: "Diamond", division: "1", lp: 80})
-    s?.emit("queue", "fill")
+    s?.emit("queue", "fill");
   }
-  function handleMockAcce(){
-    socket?.emit("mock-accept-all")
+  function handleMockAcce() {
+    socket?.emit("mock-accept-all");
   }
 
   function handleJoin() {
-    socket?.emit("join-lobby")
+    socket?.emit("join-lobby");
   }
 
   function handleAutoJOin() {
@@ -42,12 +47,12 @@ export function Queue({ socket, state, className, ...props }: QueueProps) {
   }
 
   socket?.on("join-lobby", (data) => {
-    setLobbyId(data)
-  })
+    setLobbyId(data);
+  });
 
   socket?.on("create-lobby", () => {
-    refetch()
-  })
+    refetch();
+  });
 
   return (
     <div className={`${className} w-full flex`} {...props}>
@@ -58,20 +63,18 @@ export function Queue({ socket, state, className, ...props }: QueueProps) {
         <Button onClick={() => handleJoin()}>join c:</Button>
 
         {/** Map Queue buttons and queue members */}
-        {Object.keys((state.state)).map(
-          (role: string, idx: number) => (
-            <div key={role} className="flex items-center gap-2 w-[14rem]">
-              <Button onClick={() => handleQueue(role)} className="text-xs">
-                {role}
-              </Button>
-              <div className="w-full flex items-center gap-2">
-                {state.state[role].map((name: string) => 
-                  <div key={name}>{name}</div>
-                )}
-              </div>
+        {Object.keys(state.state).map((role: string, idx: number) => (
+          <div key={role} className="flex items-center gap-2 w-[14rem]">
+            <Button onClick={() => handleQueue(role)} className="text-xs">
+              {role}
+            </Button>
+            <div className="w-full flex items-center gap-2">
+              {state.state[role].map((name: string) => (
+                <div key={name}>{name}</div>
+              ))}
             </div>
-          ),
-        )}
+          </div>
+        ))}
       </div>
     </div>
   );

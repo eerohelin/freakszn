@@ -8,10 +8,13 @@ const sqlite = new Database(`${app.getPath("userData")}/db.sqlite`);
 export const db = drizzle(sqlite, { schema });
 
 /** DB ACTIONS */
-export async function updateSummoner(summoner: Summoner, bannerData: string): Promise<void> {
+export async function updateSummoner(
+  summoner: Summoner,
+  bannerData: string,
+): Promise<void> {
   try {
-    const bd = JSON.parse(bannerData)
-    const { theme, level } = bd
+    const bd = JSON.parse(bannerData);
+    const { theme, level } = bd;
 
     await db
       .insert(schema.summoners)
@@ -19,7 +22,7 @@ export async function updateSummoner(summoner: Summoner, bannerData: string): Pr
         id: 1,
         ...summoner,
         bannerTheme: theme || "",
-        bannerLevel: level || 0
+        bannerLevel: level || 0,
       })
       .onConflictDoUpdate({
         target: schema.summoners.id,
@@ -35,7 +38,7 @@ export async function updateSummoner(summoner: Summoner, bannerData: string): Pr
           tagLine: summoner.tagLine,
           backgroundSkinId: summoner.backgroundSkinId,
           bannerTheme: theme || "",
-          bannerLevel: level || 0
+          bannerLevel: level || 0,
         },
       });
   } catch (error) {
@@ -45,8 +48,8 @@ export async function updateSummoner(summoner: Summoner, bannerData: string): Pr
 
 export async function getSummoner(): Promise<Summoner | undefined> {
   const summoner = await db.query.summoners.findFirst({
-    where: eq(schema.summoners.id, 1)
-  })
+    where: eq(schema.summoners.id, 1),
+  });
   return summoner;
 }
 
@@ -68,4 +71,7 @@ export interface Summoner {
   backgroundSkinId: number;
   bannerTheme: string;
   bannerLevel: number;
+  rank: string;
+  division: string;
+  lp: number;
 }

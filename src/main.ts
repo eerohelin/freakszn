@@ -9,7 +9,7 @@ import { join } from "node:path";
 // set the app name independent of package.json name
 app.setName("freakszn");
 let lcu: LCUApi | undefined;
-let uiLoaded: boolean = false
+let uiLoaded = false;
 
 const createWindow = () => {
   const mainWindow = new BrowserWindow({
@@ -58,25 +58,23 @@ app.whenReady().then(() => {
   connector.on("connect", async ({ address, password, port }) => {
     lcu = new LCUApi(address, port, password, mainWindow);
 
-
-    mainWindow.webContents.on('did-finish-load', function() {
-      uiLoaded = true
+    mainWindow.webContents.on("did-finish-load", () => {
+      uiLoaded = true;
     });
 
     const loadedCheck = setInterval(async (): Promise<any> => {
-      if (lcu && await lcu.isLoaded()) {
-        loaded(mainWindow)
-        lcu.startListener()
-        clearInterval(loadedCheck)
-        return
+      if (lcu && (await lcu.isLoaded())) {
+        loaded(mainWindow);
+        lcu.startListener();
+        clearInterval(loadedCheck);
+        return;
       }
-    }, 1000)
-    
+    }, 1000);
   });
 
   connector.on("disconnect", async () => {
     mainWindow.webContents.send("connection-change", false);
-    lcu?.stopListener()
+    lcu?.stopListener();
     lcu = undefined;
   });
 
@@ -84,20 +82,20 @@ app.whenReady().then(() => {
 });
 
 function loaded(mainWindow: BrowserWindow) {
-    let didReceive: boolean = false
+  let didReceive = false;
 
-    ipcMain.on("did-receive-connection-change", () => {
-      didReceive = true
-    })
+  ipcMain.on("did-receive-connection-change", () => {
+    didReceive = true;
+  });
 
-    const connectionDelay = setInterval(() => {
-      if (uiLoaded) {
-        mainWindow.webContents.send("connection-change", true);
-      }
-      if (didReceive) {
-        clearInterval(connectionDelay);
-      }
-    }, 1000);
+  const connectionDelay = setInterval(() => {
+    if (uiLoaded) {
+      mainWindow.webContents.send("connection-change", true);
+    }
+    if (didReceive) {
+      clearInterval(connectionDelay);
+    }
+  }, 1000);
 }
 
 app.once("window-all-closed", () => app.quit());

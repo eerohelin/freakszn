@@ -9,9 +9,12 @@ process.once("loaded", () => {
   contextBridge.exposeInMainWorld("electronAPI", {
     onConnectionChange: (callback: any) =>
       ipcRenderer.on("connection-change", (_event, value) => callback(value)),
-    offConnectionChange: (callback: any) => ipcRenderer.removeAllListeners("connection-change"),
+    offConnectionChange: (callback: any) =>
+      ipcRenderer.removeAllListeners("connection-change"),
     didReceive: () => ipcRenderer.send("did-receive-connection-change"),
-    onSendLobbyId: (callback: any) => ipcRenderer.on("send-lobby-id", (_event, value) => callback(value)),
-    offSendLobbyId: (callback: any) => ipcRenderer.removeAllListeners("send-lobby-id")
+    onSendLobbyId: (callback: any) =>
+      ipcRenderer.on("send-lobby-id", (_event, value) => callback(value)),
+    offSendLobbyId: (callback: any) =>
+      ipcRenderer.removeAllListeners("send-lobby-id"),
   });
 });

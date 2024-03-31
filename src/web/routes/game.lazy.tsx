@@ -5,8 +5,6 @@ export const Route = createLazyFileRoute("/game" as never)({
   component: Component,
 });
 
-function Component(){
-  return (
-    <Game />
-  )
+function Component() {
+  return <Game />;
 }
