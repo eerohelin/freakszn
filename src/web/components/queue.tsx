@@ -25,6 +25,8 @@ export function Queue({ socket, state, className, ...props }: QueueProps) {
     const s = io("ws://localhost:3000", { autoConnect: true, secure: false });
     s?.emit("set-name", `iirou.${crypto.randomUUID().substring(0,3)}`)
     s?.emit("set-icon-id", Math.floor(Math.random() * (5000 - 3000 + 1)) + 3000)
+    s?.emit("set-summoner-level", 300)
+    s?.emit("set-summoner-rank", {rank: "Diamond", division: "1", lp: 80})
     s?.emit("queue", "fill")
   }
   function handleMockAcce(){
