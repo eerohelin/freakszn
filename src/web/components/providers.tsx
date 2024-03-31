@@ -106,6 +106,7 @@ export function SocketProvider({ children }: SocketProviderProps) {
     if(socket.connected){
       socket.emit("set-name", summoner?.displayName)
       socket.emit("set-icon-id", summoner?.profileIconId)
+      socket.emit("set-summoner-level", summoner?.summonerLevel)
     }
   }, [socket.connected, socket.emit, summoner?.displayName, summoner?.profileIconId])
 
