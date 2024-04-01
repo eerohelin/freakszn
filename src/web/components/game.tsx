@@ -12,11 +12,13 @@ interface GameProps
 
 const Game = ({ className, ...props }: GameProps) => {
   const { game, state, windowHeight, socket } = React.useContext(SocketProviderContext);
-  const [ready, setReady] = React.useState<boolean>(game.me.ready)
+  const [ready, setReady] = React.useState<boolean>(game?.me?.ready)
 
   React.useEffect(() => {
-    setReady(game.me.ready)
-  }, [game.me.ready])
+    if(game !== undefined){
+      setReady(game?.me?.ready)
+    }
+  }, [game])
 
   function getHowManyNeeded(){
     let howManyNeeded = 10;
@@ -33,8 +35,7 @@ const Game = ({ className, ...props }: GameProps) => {
     socket?.emit("join-lobby");
   }
 
-  console.log("game:", game);
-  if (Object.keys(game).length < 1) {
+  if (game === undefined || Object.keys(game).length < 1) {
     return (
       <div className="flex flex-col flex-grow justify-center content-center h-full items-center">
         <p className="font-beaufort text-2xl text-center">
@@ -65,6 +66,7 @@ const Game = ({ className, ...props }: GameProps) => {
             <div className="flex flex-col items-end gap-2 w-full">
               {Object.keys(game.blue).map((key) => (
                 <PlayerCard
+                  key={key}
                   side="blue"
                   className="max-w-md bg-neutral-800 border border-border shadow rounded-none"
                   player={game.blue[key]}
@@ -81,6 +83,7 @@ const Game = ({ className, ...props }: GameProps) => {
             <div className="flex flex-col gap-2 w-full">
               {Object.keys(game.red).map((key) => (
                 <PlayerCard
+                  key={key}
                   side="red"
                   className="max-w-md bg-neutral-800 border border-border shadow rounded-none"
                   player={game.red[key]}

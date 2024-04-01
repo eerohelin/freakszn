@@ -28,7 +28,7 @@ export const lolRouter = router({
   getSummonerIcon: publicProcedure
     .input(
       z.object({
-        id: z.string().or(z.number()),
+        id: z.number()
       }),
     )
     .query(async ({ ctx, input }) => {
@@ -45,10 +45,12 @@ export const lolRouter = router({
     .query(async ({ input }) => {
       const lcu = getLCU();
       await lcu?.joinLobby(Number(input.id), "");
+      return true
     }),
   createLobby: publicProcedure.query(async () => {
     const lcu = getLCU();
     await lcu?.createLobby("freakszn", "", 1);
+    return true
   }),
   isClientOpen: publicProcedure.query(async () => {
     return getLCU() !== undefined;
