@@ -1,6 +1,7 @@
 import type React from "react";
 import { cn } from "../lib/utils";
 import { useSummonerIcon } from "../hooks/useSummonerIcon";
+import { Tag } from "./tag";
 
 interface Player {
 name: string;
@@ -10,7 +11,8 @@ rankData: {
   rank: string,
   division: string
   lp: number,
-}
+},
+availability: boolean
 };
 
 interface PlayerCardProps
@@ -35,7 +37,7 @@ const PlayerCard = ({
     <div
       {...props}
       onClick={onClick}
-      className={cn("w-full py-1 px-2 rounded-md flex", className)}
+      className={cn("w-full py-1 px-1 rounded-md flex", className)}
     >
       <div
         className={cn(
@@ -51,16 +53,61 @@ const PlayerCard = ({
               src={i.length > 1000 ? i : placeholder}
             />
             <PlayerDetails side={side} player={player} />
+
             <div className="relative w-full h-full">
-              <div className="absolute bg-black w-4 h-4 right-0 bottom-0" />
+              <div className="absolute flex gap-1 items-center right-0 bottom-0 h-4">
+                <Tag className={cn(
+                  "",
+                  "text-xs bg-black/30 border border-border w-[5.5rem] text-center truncate shadow", 
+                  player?.availability === true ? 'text-text' : "text-stone-500")}
+                >
+                  {player?.availability === true ? 'Available' : 'Unavailable'}
+                </Tag>
+                <div className="relative w-4 h-4 flex flex-col items-center justify-center content-center">
+                  { player.ready &&
+                    <svg className="absolute w-3 h-3 z-10 fill-green-500" xmlns="http://www.w3.org/2000/svg" height="800px" width="800px" viewBox="0 0 512 512">
+                      <title>check</title>
+                      <style type="text/css">
+                      </style>
+                      <g>
+                        <polygon points="440.469,73.413 218.357,295.525 71.531,148.709 0,220.229 146.826,367.055 218.357,438.587 289.878,367.055 512,144.945"/>
+                      </g>
+                    </svg>
+                  }
+                  <div className="absolute bg-black/60 border border-black/50 h-full w-4" />
+                </div>
+              </div>
             </div>
+
           </div>
         )}
         {side === "red" && (
           <div className="w-full h-full flex items-center gap-3">
             <div className="relative w-full h-full">
-              <div className="absolute bg-black w-4 h-4 left-0 bottom-0" />
+              <div className="absolute flex gap-1 items-center left-0 bottom-0 h-4">
+                <div className="relative w-4 h-4 flex flex-col items-center justify-center content-center">
+                  { player.ready &&
+                    <svg className="absolute w-3 h-3 z-10 fill-green-500" xmlns="http://www.w3.org/2000/svg" height="800px" width="800px" viewBox="0 0 512 512">
+                      <title>check</title>
+                      <style type="text/css">
+                      </style>
+                      <g>
+                        <polygon points="440.469,73.413 218.357,295.525 71.531,148.709 0,220.229 146.826,367.055 218.357,438.587 289.878,367.055 512,144.945"/>
+                      </g>
+                    </svg>
+                  }
+                  <div className="absolute bg-black/60 border border-black/50 h-full w-4" />
+                </div>
+                <Tag className={cn(
+                  "",
+                  "text-xs bg-black/30 border border-border w-[5.5rem] text-center truncate shadow", 
+                  player?.availability === true ? 'text-text' : "text-stone-500")}
+                >
+                  {player?.availability === true ? 'Available' : 'Unavailable'}
+                </Tag>
+              </div>
             </div>
+
             <PlayerDetails side={side} player={player} />
             <img
               className="w-16 h-16"

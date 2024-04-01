@@ -11,9 +11,14 @@ interface GameProps
   > {}
 
 const Game = ({ className, ...props }: GameProps) => {
-  const { game, state, windowHeight } = React.useContext(SocketProviderContext);
+  const { game, state, windowHeight, socket } = React.useContext(SocketProviderContext);
+  const [ready, setReady] = React.useState<boolean>(game.me.ready)
 
-  function getHowManyNeeded() {
+  React.useEffect(() => {
+    setReady(game.me.ready)
+  }, [game.me.ready])
+
+  function getHowManyNeeded(){
     let howManyNeeded = 10;
     for (const role of Object.keys(state.state)) {
       const arr = state.state[role];
@@ -21,8 +26,14 @@ const Game = ({ className, ...props }: GameProps) => {
     }
     return howManyNeeded;
   }
+  function handleReady(){
+    socket?.emit("set-ready", !ready)
+  }
+  function handleJoin() {
+    socket?.emit("join-lobby");
+  }
 
-  console.log("game:", game, state);
+  console.log("game:", game);
   if (Object.keys(game).length < 1) {
     return (
       <div className="flex flex-col flex-grow justify-center content-center h-full items-center">
@@ -32,7 +43,6 @@ const Game = ({ className, ...props }: GameProps) => {
       </div>
     );
   }
-  console.log('windowhei:', windowHeight)
 
   return (
     <div
@@ -80,10 +90,13 @@ const Game = ({ className, ...props }: GameProps) => {
           </div>
         </div>
       </div>
-
+      
       <div className="w-full flex gap-2 justify-center items-center h-[5rem]">
-        <Button className="w-44">Join Lobby</Button>
-        <Button className="w-64">Ready</Button>
+        <Button onClick={() => handleJoin()} className={cn("w-44", (game.me.availability === false || game.me.autoJoining === true) && 'grayscale pointer-events-none')} disabled={game.me.availability === false || game.me.autoJoining === true}>Join Lobby</Button>
+        <Button onClick={() => handleReady()} className={cn("w-64", 
+          (game.me.availability === false || game.me.autoJoining === true) && 'grayscale pointer-events-none',
+          game.me.ready && 'bg-gradient-to-b from-green-500 to-green-900'
+        )} disabled={game.me.availability === false || game.me.autoJoining === true}>Ready</Button>
         <Button className="w-44">Draft Link</Button>
       </div>
     </div>
