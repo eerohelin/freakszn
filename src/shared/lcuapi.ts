@@ -132,6 +132,7 @@ export class LCUApi {
   }
 
   public async joinLobby(lobbyID: number, lobbyPass: string) {
+    if (!this.doesLobbyExist(lobbyID)) { this.mainWindow.webContents.send("lobby-did-not-exist"); return; }
     const request = await fetch(
       `${this.url()}/lol-lobby/v1/custom-games/${lobbyID}/join`,
       {
@@ -224,7 +225,7 @@ export class LCUApi {
     };
   }
 
-  public getCurrentLobby = async () => {
+  public getCustomGames = async () => {
     const request2 = await fetch(
       `${this.url()}/lol-lobby/v1/custom-games/refresh`,
       {
@@ -291,6 +292,7 @@ export class LCUApi {
       },
     );
     const data = await request.json()
+    return data["gameConfig"]["customLobbyName"]
   }
 
   public isCurrentlyInLobby = async () => {
@@ -308,6 +310,17 @@ export class LCUApi {
       },
     );
     return await request.status === 200 ? true : false
+  }
+
+  public doesLobbyExist = async (lobbyId: number) => {
+    const data = await this.getCustomGames()
+
+    for (let i = 0; i < data.length; i++) {
+      if (Object.values(data[i]).includes(lobbyId)) {
+        return true
+      }
+    }
+    return false
   }
 
   public isLoaded = async (): Promise<boolean> => {
@@ -365,7 +378,7 @@ export class LCUApi {
         this.mainWindow.webContents.send("update-in-lobby", false)
       }
 
-      const data = await this.getCurrentLobby();
+      const data = await this.getCustomGames();
       for (let i = 0; i < data.length; i++) {
         if (Object.values(data[i]).includes("freakszn")) {
           if (this.lobbyIdOnCooldown) {

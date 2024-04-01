@@ -20,6 +20,21 @@ const CustomTopBar = () => {
   const [isConnected, setIsConnected] = useState(lcuExists);
   const { theme, setTheme } = useTheme();
   const { socket } = React.useContext(SocketProviderContext);
+  const [lobbyId, setLobbyId] = useState<number>(0);
+
+  const { data: id } = t.lol.joinLobby.useQuery(
+    { id: lobbyId?.toString() },
+    { enabled: lobbyId !== 0 },
+  );
+  const { refetch } = t.lol.createLobby.useQuery(undefined, { enabled: false });
+
+  socket?.on("join-lobby", (data) => {
+    setLobbyId(data);
+  });
+
+  socket?.on("create-lobby", () => {
+    refetch();
+  });
 
   React.useEffect(() => {
     // @ts-ignore

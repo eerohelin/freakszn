@@ -148,6 +148,11 @@ export function SocketProvider({ children }: SocketProviderProps) {
       socket.emit("current-lobby-name", value)
     })
 
+    // @ts-ignore
+    window.electronAPI.onLobbyDidNotExist((value) => {
+      socket.emit("lobby-did-not-exist")
+    })
+
   }, [socket?.emit]);
 
   socket.on("state", (s) => {

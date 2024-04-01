@@ -9,13 +9,6 @@ interface QueueProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 export function Queue({ socket, state, className, ...props }: QueueProps) {
-  const [lobbyId, setLobbyId] = useState<number>(0);
-
-  const { data: id } = t.lol.joinLobby.useQuery(
-    { id: lobbyId?.toString() },
-    { enabled: lobbyId !== 0 },
-  );
-  const { refetch } = t.lol.createLobby.useQuery(undefined, { enabled: false });
 
   function handleQueue(role: string) {
     socket?.emit("queue", role);
@@ -45,14 +38,6 @@ export function Queue({ socket, state, className, ...props }: QueueProps) {
   function handleAutoJOin() {
     // TODO
   }
-
-  socket?.on("join-lobby", (data) => {
-    setLobbyId(data);
-  });
-
-  socket?.on("create-lobby", () => {
-    refetch();
-  });
 
   return (
     <div className={`${className} w-full flex`} {...props}>
