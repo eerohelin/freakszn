@@ -58,7 +58,7 @@ const PlayerCard = ({
               <div className="absolute flex gap-1 items-center right-0 bottom-0 h-4">
                 <Tag className={cn(
                   "",
-                  "text-xs bg-black/30 border border-border w-[5.5rem] truncate shadow", 
+                  "text-xs bg-black/30 border border-border w-[5.5rem] text-center truncate shadow", 
                   player?.availability === true ? 'text-text' : "text-stone-500")}
                 >
                   {player?.availability === true ? 'Available' : 'Unavailable'}
