@@ -28,15 +28,16 @@ const CustomTopBar = () => {
   );
   const { refetch } = t.lol.createLobby.useQuery(undefined, { enabled: false });
 
-  socket?.on("join-lobby", (data) => {
-    setLobbyId(data);
-  });
-
-  socket?.on("create-lobby", () => {
-    refetch();
-  });
-
   React.useEffect(() => {
+
+    socket?.on("join-lobby", (data) => {
+      setLobbyId(data);
+    });
+  
+    socket?.on("create-lobby", () => {
+      refetch();
+    });
+
     // @ts-ignore
     window.electronAPI.offConnectionChange();
 

@@ -1,6 +1,6 @@
 import { WebSocket } from "ws";
 import type { DraftMode, LobbyPosition } from "./types";
-import type { BrowserWindow } from "electron";
+import { ipcMain, type BrowserWindow } from "electron";
 
 export class LCUApi {
   private address: string | undefined = undefined;
@@ -132,7 +132,8 @@ export class LCUApi {
   }
 
   public async joinLobby(lobbyID: number, lobbyPass: string) {
-    if (!this.doesLobbyExist(lobbyID)) { this.mainWindow.webContents.send("lobby-did-not-exist"); return; }
+    const doesLobbyExist = await this.doesLobbyExist(lobbyID)
+    if (!doesLobbyExist) { this.mainWindow.webContents.send("lobby-did-not-exist", true); console.log("AAAAAAAAAAAAAA"); return; }
     const request = await fetch(
       `${this.url()}/lol-lobby/v1/custom-games/${lobbyID}/join`,
       {
@@ -312,14 +313,16 @@ export class LCUApi {
     return await request.status === 200 ? true : false
   }
 
-  public doesLobbyExist = async (lobbyId: number) => {
+  public doesLobbyExist = async (lobbyId: number): Promise<boolean> => {
     const data = await this.getCustomGames()
 
     for (let i = 0; i < data.length; i++) {
       if (Object.values(data[i]).includes(lobbyId)) {
+        console.log("exists")
         return true
       }
     }
+    console.log("doesnt")
     return false
   }
 
@@ -384,11 +387,22 @@ export class LCUApi {
           if (this.lobbyIdOnCooldown) {
             return;
           }
-          this.mainWindow.webContents.send("send-lobby-id", data[i]["id"]);
-          this.lobbyIdOnCooldown = true;
-          setTimeout(() => {
-            this.lobbyIdOnCooldown = false;
-          }, 3000);
+          let didReceive = false
+          ipcMain.on("did-receive-lobby-id", () => {didReceive = true})
+          const interval = setInterval(() => {
+            if (didReceive) {
+              clearInterval(interval)
+              console.log("sent")
+              this.lobbyIdOnCooldown = true;
+              setTimeout(() => {
+                this.lobbyIdOnCooldown = false;
+              }, 3000);
+              return;
+            }
+            if (this.lobbyIdOnCooldown) { return }
+            this.mainWindow.webContents.send("send-lobby-id", data[i]["id"]);
+          }, 1000)
+          
         }
       }
       return;

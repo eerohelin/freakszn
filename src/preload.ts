@@ -14,6 +14,7 @@ process.once("loaded", () => {
     didReceive: () => ipcRenderer.send("did-receive-connection-change"),
     onSendLobbyId: (callback: any) =>
       ipcRenderer.on("send-lobby-id", (_event, value) => callback(value)),
+    onDidReceiveLobbyId: () => ipcRenderer.send("did-receive-lobby-id"),
     offSendLobbyId: (callback: any) =>
       ipcRenderer.removeAllListeners("send-lobby-id"),
     onUpdateInLobby: (callback: any) => ipcRenderer.on("update-in-lobby", (_event, value) => callback(value)),

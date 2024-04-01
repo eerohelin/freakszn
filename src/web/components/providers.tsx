@@ -135,7 +135,9 @@ export function SocketProvider({ children }: SocketProviderProps) {
     // @ts-ignore
     window.electronAPI.onSendLobbyId((value) => {
       socket?.emit("set-current-lobby-id", value);
-      console.log("sent");
+      // @ts-ignore
+      window.electronAPI.onDidReceiveLobbyId()
+      console.log("sent from provider");
     });
 
     // @ts-ignore
