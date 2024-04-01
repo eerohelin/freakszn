@@ -9,7 +9,7 @@ export function Tag({ children, className, ...props }: TagProps){
   return (
     <div
       {...props}
-      className={cn("rounded-md px-1", className)} 
+      className={cn("px-2", className)} 
     >
       {children}
     </div>
