@@ -291,8 +291,6 @@ export class LCUApi {
       },
     );
     const data = await request.json()
-    console.log(data["gameConfig"]["customLobbyName"])
-    console.log(await request.status)
   }
 
   public isCurrentlyInLobby = async () => {
