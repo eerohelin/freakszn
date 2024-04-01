@@ -19,6 +19,7 @@ const CustomTopBar = () => {
   const { mutate: closeWindow } = t.window.closeWindow.useMutation();
   const [isConnected, setIsConnected] = useState(lcuExists);
   const { theme, setTheme } = useTheme();
+  const { socket } = React.useContext(SocketProviderContext);
 
   React.useEffect(() => {
     // @ts-ignore
