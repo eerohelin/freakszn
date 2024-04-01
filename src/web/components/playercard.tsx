@@ -1,6 +1,7 @@
 import type React from "react";
 import { cn } from "../lib/utils";
 import { useSummonerIcon } from "../hooks/useSummonerIcon";
+import { Tag } from "./tag";
 
 interface Player {
 name: string;
@@ -35,7 +36,7 @@ const PlayerCard = ({
     <div
       {...props}
       onClick={onClick}
-      className={cn("w-full py-1 px-2 rounded-md flex", className)}
+      className={cn("w-full py-1 px-1 rounded-md flex", className)}
     >
       <div
         className={cn(
@@ -52,14 +53,15 @@ const PlayerCard = ({
             />
             <PlayerDetails side={side} player={player} />
             <div className="relative w-full h-full">
-              <div className="absolute bg-black w-4 h-4 right-0 bottom-0" />
+              <div className="absolute bg-black/50 border border-black w-4 h-4 right-0 bottom-0" />
             </div>
           </div>
         )}
         {side === "red" && (
           <div className="w-full h-full flex items-center gap-3">
             <div className="relative w-full h-full">
-              <div className="absolute bg-black w-4 h-4 left-0 bottom-0" />
+              <Tag>asd</Tag>
+              <div className="absolute bg-black/50 border border-black w-4 h-4 left-0 bottom-0" />
             </div>
             <PlayerDetails side={side} player={player} />
             <img
