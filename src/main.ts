@@ -16,6 +16,7 @@ const createWindow = () => {
     frame: false, // Set to true if you want to use the default frame
     width: 1280,
     height: 720,
+    resizable: false,
     webPreferences: {
       devTools: true,
       sandbox: false,
