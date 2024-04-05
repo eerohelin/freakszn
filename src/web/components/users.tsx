@@ -1,4 +1,3 @@
-import t from "@src/shared/config";
 import React from "react";
 import { SocketProviderContext } from "./providers";
 import { useSummonerIcon } from "../hooks/useSummonerIcon";
@@ -6,49 +5,6 @@ import { useSummonerIcon } from "../hooks/useSummonerIcon";
 interface UsersProps {
   users: { name: string; iconId: number }[];
 }
-
-const mockUsers = [
-  {
-    name: "H0laa",
-    profileIconId: 1,
-  },
-  {
-    name: "User1",
-    profileIconId: 2,
-  },
-  {
-    name: "User2",
-    profileIconId: 3,
-  },
-  {
-    name: "User3",
-    profileIconId: 4,
-  },
-  {
-    name: "User4",
-    profileIconId: 5,
-  },
-  {
-    name: "User5",
-    profileIconId: 6,
-  },
-  {
-    name: "User6",
-    profileIconId: 7,
-  },
-  {
-    name: "User7",
-    profileIconId: 8,
-  },
-  {
-    name: "User8",
-    profileIconId: 9,
-  },
-  {
-    name: "User9",
-    profileIconId: 10,
-  },
-];
 
 export function Users({ users }: UsersProps) {
   const { windowHeight } = React.useContext(SocketProviderContext);
@@ -61,7 +17,7 @@ export function Users({ users }: UsersProps) {
           className="absolute overflow-y-scroll pb-28 w-full mt-1"
           style={{ height: windowHeight - 100 }}
         >
-          {users.map((u) => (
+          {users.length > 0 && users?.map((u) => (
             <UserCard key={u.name} user={u} />
           ))}
         </div>
