@@ -51,12 +51,16 @@ const Game = ({ className, ...props }: GameProps) => {
       className={cn(className, "")}
       style={{ height: windowHeight }}
     >
-      <div className="w-full flex gap-1 h-[2rem] text-lg px-2">
-        <span className="font-beaufort-bold">Custom</span>
-        <span className="font-beaufort-bold">Summoner's Rift 5v5</span>
+      <div className="w-full flex flex-col content-center items-center justify-center gap-1 h-[4rem] text-lg px-2">
+        <div className="bg-card w-full flex justify-center max-w-xl">
+          {game?.statusMessages 
+            ? game?.statusMessages?.map((message: string) => <p className="font-beaufort">{message}</p>)
+            : <p className="font-beaufort">Waiting</p>
+          }
+        </div>
       </div>
 
-      <div className="w-full flex justify-center pt-6" style={{ height: windowHeight - 150 }}>
+      <div className="w-full flex justify-center" style={{ height: windowHeight - 150 }}>
         <div className="w-full max-w-5xl">
           <div className="flex w-full px-1">
             <div className="w-full flex justify-start text-cyan-500 font-semibold">Blue Team</div>
