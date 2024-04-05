@@ -11,6 +11,7 @@ export class LCUApi {
   private lobbyIdOnCooldown = false;
   public loaded = false;
   private socket: WebSocket | undefined;
+  private isInLobby = false
 
   constructor(
     address: string,
@@ -129,11 +130,13 @@ export class LCUApi {
         },
       }),
     });
+
+    this.getCurrentLobbyId(lobbyName)
   }
 
   public async joinLobby(lobbyID: number, lobbyPass: string) {
     const doesLobbyExist = await this.doesLobbyExist(lobbyID)
-    if (!doesLobbyExist) { this.mainWindow.webContents.send("lobby-did-not-exist", true); console.log("AAAAAAAAAAAAAA"); return; }
+    if (!doesLobbyExist) { this.mainWindow.webContents.send("lobby-did-not-exist", true); return; }
     const request = await fetch(
       `${this.url()}/lol-lobby/v1/custom-games/${lobbyID}/join`,
       {
@@ -318,12 +321,35 @@ export class LCUApi {
 
     for (let i = 0; i < data.length; i++) {
       if (Object.values(data[i]).includes(lobbyId)) {
-        console.log("exists")
         return true
       }
     }
-    console.log("doesnt")
     return false
+  }
+
+  public getCurrentLobbyId = async (lobbyName: string) => {
+    const lobbyIdInterval = setInterval(async(): Promise<any> => {
+      if (!this.isInLobby) { clearInterval(lobbyIdInterval); return; }
+      const data = await this.getCustomGames();
+      for (let i = 0; i < data.length; i++) {
+        if (!Object.values(data[i]).includes(lobbyName)) { continue; }
+        
+        if (this.lobbyIdOnCooldown) {
+          return;
+        }
+
+        if (this.lobbyIdOnCooldown) { return }
+        this.mainWindow.webContents.send("send-lobby-id", data[i]["id"]);
+        this.lobbyIdOnCooldown = true;
+        setTimeout(() => {
+          this.lobbyIdOnCooldown = false;
+        }, 3000);
+
+        clearInterval(lobbyIdInterval)
+
+      }
+    }, 2000)
+    
   }
 
   public isLoaded = async (): Promise<boolean> => {
@@ -373,38 +399,18 @@ export class LCUApi {
       );
     });
 
+
+
     this.socket.on("message", async (e) => {
       if (await this.isCurrentlyInLobby()) {
         this.mainWindow.webContents.send("update-in-lobby", true)
         this.mainWindow.webContents.send("current-lobby-name", await this.getCurrentLobbyName())
+        this.isInLobby = true
       } else {
         this.mainWindow.webContents.send("update-in-lobby", false)
+        this.isInLobby = false
       }
 
-      const data = await this.getCustomGames();
-      for (let i = 0; i < data.length; i++) {
-        if (Object.values(data[i]).includes("freakszn")) {
-          if (this.lobbyIdOnCooldown) {
-            return;
-          }
-          let didReceive = false
-          ipcMain.on("did-receive-lobby-id", () => {didReceive = true})
-          const interval = setInterval(() => {
-            if (didReceive) {
-              clearInterval(interval)
-              console.log("sent")
-              this.lobbyIdOnCooldown = true;
-              setTimeout(() => {
-                this.lobbyIdOnCooldown = false;
-              }, 3000);
-              return;
-            }
-            if (this.lobbyIdOnCooldown) { return }
-            this.mainWindow.webContents.send("send-lobby-id", data[i]["id"]);
-          }, 1000)
-          
-        }
-      }
       return;
       const xd = JSON.parse(JSON.stringify(e.toString(), null, 2));
       const today = new Date();

@@ -137,7 +137,6 @@ export function SocketProvider({ children }: SocketProviderProps) {
       socket?.emit("set-current-lobby-id", value);
       // @ts-ignore
       window.electronAPI.onDidReceiveLobbyId()
-      console.log("sent from provider");
     });
 
     // @ts-ignore
