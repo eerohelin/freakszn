@@ -89,6 +89,18 @@ function loaded(mainWindow: BrowserWindow) {
     didReceive = true;
   });
 
+  ipcMain.on("create-lobby", () => {
+    const lcu = getLCU()
+    if (!lcu) { return }
+    lcu.createLobby("freakszn", "", 1)
+  })
+
+  ipcMain.on("join-lobby", (_, data) => {
+    const lcu = getLCU()
+    if (!lcu) { return }
+    lcu.joinLobby(data, "")
+  })
+
   const connectionDelay = setInterval(() => {
     if (uiLoaded) {
       mainWindow.webContents.send("connection-change", true);

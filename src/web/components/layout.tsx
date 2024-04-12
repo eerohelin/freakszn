@@ -30,12 +30,18 @@ const CustomTopBar = () => {
 
   React.useEffect(() => {
 
-    socket?.on("join-lobby", (data) => {
-      setLobbyId(data);
+    socket?.off("create-lobby")
+
+    socket?.off("join-lobby")
+
+    socket?.on("join-lobby", (data): any => {
+      // @ts-ignore
+      window.electronAPI.joinLobby(data);
     });
   
     socket?.on("create-lobby", () => {
-      refetch();
+      // @ts-ignore
+      window.electronAPI.createLobby();
     });
 
     // @ts-ignore

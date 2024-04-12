@@ -20,5 +20,7 @@ process.once("loaded", () => {
     onUpdateInLobby: (callback: any) => ipcRenderer.on("update-in-lobby", (_event, value) => callback(value)),
     onCurrentLobbyName: (callback: any) => ipcRenderer.on("current-lobby-name", (_event, value) => callback(value)),
     onLobbyDidNotExist: (callback: any) => ipcRenderer.on("lobby-did-not-exist", (_event, value) => callback(value)),
+    createLobby: () => ipcRenderer.send("create-lobby"),
+    joinLobby: (value: any) => ipcRenderer.send("join-lobby", value)
   });
 });
