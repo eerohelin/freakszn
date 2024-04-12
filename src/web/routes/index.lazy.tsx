@@ -4,13 +4,14 @@ import { SocketProviderContext } from "../components/providers";
 import { getProfileSplashUrl } from "../lib/utils";
 import { Queue } from "../components/queue";
 import { Users } from "../components/users";
+import QueuePop from "../components/queuePop";
 
 export const Route = createLazyFileRoute("/" as never)({
   component: Index,
 });
 
 function Index() {
-  const { socket, state, summoner } = React.useContext(SocketProviderContext);
+  const { socket, state, queuePop, summoner } = React.useContext(SocketProviderContext);
   return (
     <div className="w-full h-full absolute">
       <div className="w-full h-full flex">

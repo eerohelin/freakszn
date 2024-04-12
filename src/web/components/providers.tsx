@@ -82,6 +82,7 @@ type SocketProviderState = {
   state: any;
   summoner: Summoner | undefined;
   game: any;
+  queuePop: any;
   windowHeight: number;
 };
 
@@ -90,6 +91,7 @@ export const SocketProviderContext = React.createContext<SocketProviderState>({
   state: {},
   summoner: undefined,
   game: {},
+  queuePop: {},
   windowHeight: window.innerHeight - 40,
 });
 
@@ -102,6 +104,7 @@ export function SocketProvider({ children }: SocketProviderProps) {
   const [socket, setSocket] = React.useState<Socket>(s);
   const [state, setState] = React.useState<any>();
   const [game, setGame] = React.useState({});
+  const [queuePop, SetQueuePop] = React.useState()
 
 
   React.useEffect(() => {
@@ -160,12 +163,16 @@ export function SocketProvider({ children }: SocketProviderProps) {
     setState(s);
   });
 
+  socket.on("queue-pop", (qp) => {
+    SetQueuePop(qp)
+  })
+
   socket.on("game-start", (game) => setGame(game));
   socket.on("game-update", (game) => setGame(game))
 
   return (
     <SocketProviderContext.Provider
-      value={{ socket, state, summoner, game, windowHeight }}
+      value={{ socket, state, queuePop, summoner, game, windowHeight }}
     >
       {children}
     </SocketProviderContext.Provider>

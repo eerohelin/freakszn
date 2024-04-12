@@ -1,7 +1,5 @@
 import { io, type Socket } from "socket.io-client";
 import { Button } from "./buttons";
-import t from "@src/shared/config";
-import { useState } from "react";
 
 interface QueueProps extends React.HTMLAttributes<HTMLDivElement> {
   socket: Socket | null;
@@ -33,10 +31,6 @@ export function Queue({ socket, state, className, ...props }: QueueProps) {
 
   function handleJoin() {
     socket?.emit("join-lobby");
-  }
-
-  function handleAutoJOin() {
-    // TODO
   }
 
   return (
