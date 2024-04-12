@@ -6,6 +6,7 @@ import { SocketProviderContext, useTheme } from "./providers";
 import { THEMES } from "../lib/constants";
 import SideNav from "./sidenav";
 import t from "@shared/config";
+import QueuePop from "./queuePop";
 
 type LayoutProps = {
   children?: React.ReactNode;
@@ -145,6 +146,7 @@ export default function Layout({ children }: LayoutProps) {
   return (
     <>
       <CustomTopBar />
+      <QueuePop />
       <div className="flex w-full">
         <SideNav />
         {children}
