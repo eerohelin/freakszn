@@ -7,6 +7,8 @@ interface Player {
 name: string;
 iconId: number | string;
 summonerLevel: number;
+ready: boolean;
+inGameLobby: boolean;
 rankData: {
   rank: string,
   division: string
@@ -61,7 +63,7 @@ const PlayerCard = ({
                   "text-xs bg-black/30 border border-border w-[5.5rem] text-center truncate shadow", 
                   player?.availability === true ? 'text-text' : "text-stone-500")}
                 >
-                  {player?.availability === true ? 'Available' : 'Unavailable'}
+                  {player.inGameLobby ? 'In lobby' : player?.availability === true ? 'Available' : 'Unavailable'}
                 </Tag>
                 <div className="relative w-4 h-4 flex flex-col items-center justify-center content-center">
                   { player.ready &&
@@ -103,7 +105,7 @@ const PlayerCard = ({
                   "text-xs bg-black/30 border border-border w-[5.5rem] text-center truncate shadow", 
                   player?.availability === true ? 'text-text' : "text-stone-500")}
                 >
-                  {player?.availability === true ? 'Available' : 'Unavailable'}
+                  {player.inGameLobby ? 'In lobby' : player?.availability === true ? 'Available' : 'Unavailable'}
                 </Tag>
               </div>
             </div>
