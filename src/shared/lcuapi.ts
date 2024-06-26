@@ -192,6 +192,45 @@ export class LCUApi {
     return buffer;
   }
 
+  public async getSummonerSplash(backgroundSkinId: string | number) {
+
+    const championId = backgroundSkinId.toString().slice(0, -3);
+    
+    const dataRequest = await fetch(
+      `${this.url()}/lol-game-data/assets/v1/champions/${championId}.json`,
+      {
+        method: "GET",
+        headers: {
+          accept: "application/json",
+          Authorization: `Basic ${Buffer.from(`riot:${this.password}`).toString(
+            "base64",
+          )}`,
+        },
+      },
+    );
+
+    const data = await dataRequest.json();
+    const splashPath = data["skins"].find((skin: any) => skin["id"] == backgroundSkinId)["splashPath"]
+
+
+    const response = await fetch(
+      `${this.url()}${splashPath}`,
+      {
+        method: "GET",
+        headers: {
+          accept: "application/json",
+          Authorization: `Basic ${Buffer.from(`riot:${this.password}`).toString(
+            "base64",
+          )}`,
+        },
+      },
+    );
+
+    const blob = await response.blob();
+    const buffer = Buffer.from(await blob.arrayBuffer());
+    return buffer;
+  }
+
   public async getCurrentSummoner() {
     const request = await fetch(
       `${this.url()}/lol-summoner/v1/current-summoner`,

@@ -40,6 +40,21 @@ export const lolRouter = router({
       const buffer = await lcu.getSummonerIcon(id);
       return buffer;
     }),
+    getSummonerSplash: publicProcedure
+    .input(
+      z.object({
+        id: z.number()
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      const { id } = input;
+      const lcu = getLCU();
+      if (!lcu) {
+        return;
+      }
+      const buffer = await lcu.getSummonerSplash(id);
+      return buffer;
+    }),
   joinLobby: publicProcedure
     .input(z.object({ id: z.string() }))
     .query(async ({ input }) => {

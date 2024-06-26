@@ -1,10 +1,10 @@
 import React from "react";
 import { createLazyFileRoute } from "@tanstack/react-router";
 import { SocketProviderContext } from "../components/providers";
-import { getProfileSplashUrl } from "../lib/utils";
 import { Queue } from "../components/queue";
 import { Users } from "../components/users";
 import QueuePop from "../components/queuePop";
+import { useSummonerSplash } from "../hooks/useSummonerSplash";
 
 export const Route = createLazyFileRoute("/" as never)({
   component: Index,
@@ -12,6 +12,9 @@ export const Route = createLazyFileRoute("/" as never)({
 
 function Index() {
   const { socket, state, queuePop, summoner } = React.useContext(SocketProviderContext);
+
+  const { i } = useSummonerSplash(Number(summoner?.backgroundSkinId));
+
   return (
     <div className="w-full h-full absolute">
       <div className="w-full h-full flex">
@@ -21,7 +24,7 @@ function Index() {
             <img
               className="absolute w-full h-full"
               alt="profile splash art"
-              src={getProfileSplashUrl(summoner?.backgroundSkinId)}
+              src={i}
             />
             <div className="absolute w-full h-full bg-gradient-to-r from-transparent from-[65%] to-background z-20" />
             <div className="absolute w-full h-full bg-gradient-to-b from-transparent from-[65%] to-background z-20" />
