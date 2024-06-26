@@ -17,7 +17,7 @@ export const lolRouter = router({
       ...rankData
     }
     console.log("updating summoner with:", summoner);
-    await updateSummoner({ ...summoner }, summoner.equippedBannerFlag);
+    await updateSummoner({ ...summoner });
   }),
   getSummoner: publicProcedure.query(async () => {
     return await getSummoner();
