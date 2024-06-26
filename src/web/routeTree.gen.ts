@@ -48,18 +48,30 @@ const IndexLazyRoute = IndexLazyImport.update({
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
     '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
       preLoaderRoute: typeof IndexLazyImport
       parentRoute: typeof rootRoute
     }
     '/game': {
+      id: '/game'
+      path: '/game'
+      fullPath: '/game'
       preLoaderRoute: typeof GameLazyImport
       parentRoute: typeof rootRoute
     }
     '/match-history': {
+      id: '/match-history'
+      path: '/match-history'
+      fullPath: '/match-history'
       preLoaderRoute: typeof MatchHistoryLazyImport
       parentRoute: typeof rootRoute
     }
     '/profile': {
+      id: '/profile'
+      path: '/profile'
+      fullPath: '/profile'
       preLoaderRoute: typeof ProfileLazyImport
       parentRoute: typeof rootRoute
     }
@@ -68,11 +80,39 @@ declare module '@tanstack/react-router' {
 
 // Create and export the route tree
 
-export const routeTree = rootRoute.addChildren([
+export const routeTree = rootRoute.addChildren({
   IndexLazyRoute,
   GameLazyRoute,
   MatchHistoryLazyRoute,
   ProfileLazyRoute,
-])
+})
 
 /* prettier-ignore-end */
+
+/* ROUTE_MANIFEST_START
+{
+  "routes": {
+    "__root__": {
+      "filePath": "__root.tsx",
+      "children": [
+        "/",
+        "/game",
+        "/match-history",
+        "/profile"
+      ]
+    },
+    "/": {
+      "filePath": "index.lazy.tsx"
+    },
+    "/game": {
+      "filePath": "game.lazy.tsx"
+    },
+    "/match-history": {
+      "filePath": "match-history.lazy.tsx"
+    },
+    "/profile": {
+      "filePath": "profile.lazy.tsx"
+    }
+  }
+}
+ROUTE_MANIFEST_END */
