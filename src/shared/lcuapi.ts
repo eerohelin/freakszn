@@ -412,11 +412,6 @@ export class LCUApi {
       }
 
       return;
-      const xd = JSON.parse(JSON.stringify(e.toString(), null, 2));
-      const today = new Date();
-      console.log(
-        `${today.getHours()}:${today.getMinutes()}:${today.getSeconds()} => ${xd}`,
-      );
     });
   };
 }
