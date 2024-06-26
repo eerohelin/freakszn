@@ -40,9 +40,9 @@ const CustomTopBar = () => {
       window.electronAPI.joinLobby(data);
     });
   
-    socket?.on("create-lobby", () => {
+    socket?.on("create-lobby", (data) => {
       // @ts-ignore
-      window.electronAPI.createLobby();
+      window.electronAPI.createLobby(data);
     });
 
     // @ts-ignore
@@ -146,7 +146,7 @@ export default function Layout({ children }: LayoutProps) {
   return (
     <>
       <CustomTopBar />
-      <QueuePop />
+      {/* <QueuePop /> */}
       <div className="flex w-full">
         <SideNav />
         {children}

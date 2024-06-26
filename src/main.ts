@@ -89,10 +89,10 @@ function loaded(mainWindow: BrowserWindow) {
     didReceive = true;
   });
 
-  ipcMain.on("create-lobby", () => {
+  ipcMain.on("create-lobby", (_, data) => {
     const lcu = getLCU()
     if (!lcu) { return }
-    lcu.createLobby("freakszn", "", 1)
+    lcu.createLobby(data as string, "freakszn", 1)
   })
 
   ipcMain.on("join-lobby", (_, data) => {
