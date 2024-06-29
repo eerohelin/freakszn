@@ -2,7 +2,7 @@ import LCUConnector from "lcu-connector";
 import { appRouter } from "@src/shared/routers/_app";
 import { createContext } from "@src/shared/context";
 import { createIPCHandler } from "electron-trpc/main";
-import { BrowserWindow, app, ipcMain } from "electron";
+import { BrowserWindow, app, ipcMain, shell } from "electron";
 import { LCUApi } from "./shared/lcuapi";
 import { join } from "node:path";
 
@@ -99,6 +99,10 @@ function loaded(mainWindow: BrowserWindow) {
     const lcu = getLCU()
     if (!lcu) { return }
     lcu.joinLobby(data, "")
+  })
+
+  ipcMain.on("open-draft", (_, draft) => {
+    shell.openExternal(draft)
   })
 
   const connectionDelay = setInterval(() => {

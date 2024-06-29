@@ -169,6 +169,10 @@ export function SocketProvider({ children }: SocketProviderProps) {
 
   socket.on("game-start", (game) => setGame(game));
   socket.on("game-update", (game) => setGame(game))
+  socket.off("open-draft")
+  // @ts-ignore
+  socket.on("open-draft", (draft) => {window.electronAPI.openDraft(draft)})
+
 
   return (
     <SocketProviderContext.Provider

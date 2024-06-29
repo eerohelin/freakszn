@@ -34,6 +34,9 @@ const Game = ({ className, ...props }: GameProps) => {
   function handleJoin() {
     socket?.emit("join-lobby");
   }
+  function handleOpenDraft() {
+    socket?.emit("open-draft");
+  }
 
   if (game === undefined || Object.keys(game).length < 1) {
     return (
@@ -105,7 +108,7 @@ const Game = ({ className, ...props }: GameProps) => {
           (game.me.availability === false || game.me.autoJoining === true) && 'grayscale pointer-events-none',
           game.me.ready && 'bg-gradient-to-b from-green-500 to-green-900'
         )} disabled={game.me.availability === false || game.me.autoJoining === true}>Ready</Button>
-        <Button className="w-44">Draft Link</Button>
+        <Button onClick={() => handleOpenDraft()}className="w-44">Draft Link</Button>
       </div>
     </div>
   );
