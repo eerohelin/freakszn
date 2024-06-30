@@ -139,6 +139,10 @@ export function SocketProvider({ children }: SocketProviderProps) {
     // @ts-ignore
     window.electronAPI.offLobbyDidNotExist();
     // @ts-ignore
+    window.electronAPI.offCurrentLobbyName();
+    // @ts-ignore
+    window.electronAPI.offUpdateInLobby();
+    // @ts-ignore
     window.electronAPI.onSendLobbyId((value) => {
       socket?.emit("set-current-lobby-id", value);
       // @ts-ignore
