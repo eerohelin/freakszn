@@ -1,40 +1,46 @@
 import React from 'react'
-import { motion } from "framer-motion";
+import { AnimatePresence, motion, useIsPresent } from "framer-motion";
 
 interface StatusBarProps {
     statusMessages?: string[]
 }
 
-const CARD_OFFSET = 10;
-const SCALE_FACTOR = 0.06;
+interface ItemProps {
+    children: any
+}
+
+const Item = ({ children }: ItemProps) => {
+    const isPresent = useIsPresent();
+    const animations = {
+      style: {
+        position: isPresent ? "static" as any : "absolute" as any
+      },
+      initial: { opacity: 0 },
+      animate: { opacity: 1 },
+      exit: { opacity: 0 },
+      transition: { type: "spring", stiffness: 3000, damping: 100 }
+    };
+    return (
+      <motion.h1 {...animations} layout className='text-sm'>
+        {children}
+      </motion.h1>
+    );
+  };
+  
 
 const StatusBar = ({ statusMessages }: StatusBarProps) => {
+    console.log(statusMessages)
+
     return (
-    <>
-        {statusMessages 
-        ?   
-            <div className='relative flex items-center justify-center h-full'>
-                <ul className='relative h-10 w-full'>
-                    {statusMessages?.map((m, index) => 
-                        <motion.li
-                            layoutId={m}
-                            // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
-                            key={m+index} 
-                            className="font-beaufort text-xs text-indigo-300 border border-border px-[0.1rem] py-[0.05rem] mx-2 truncate"
-                            animate={{
-                                top: index * -CARD_OFFSET,
-                                scale: 1 - index * SCALE_FACTOR,
-                                zIndex: statusMessages.length - index
-                              }}
-                        >
-                            {m}{index < 2 ? "" : ""}
-                        </motion.li>
-                    )}
-                </ul>
-            </div>
-        :   <p className="font-beaufort">Waiting</p>
-        }
-    </>
+        <div className='relative flex flex-col items-center content-center justify-center h-full'>
+            <AnimatePresence>
+                {statusMessages?.slice(-3).map((statusMessage, index) => (
+                    <Item key={statusMessage.split(";")[1]}>
+                        {statusMessage.split(";")[0]}
+                    </Item>
+                ))}
+            </AnimatePresence>
+        </div>
     )
 }
 
