@@ -2,7 +2,7 @@ import { Link } from "@tanstack/react-router";
 
 const SideNav = () => {
   return (
-    <div className="flex flex-col w-44 border-r border-border pl-3 pt-2 h-full">
+    <div className="flex w-full gap-2 pl-[0.81rem] pt-[0.15rem] pb-1">
       <Link to="/" className="[&.active]:font-bold">
         Queue
       </Link>

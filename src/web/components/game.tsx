@@ -2,8 +2,9 @@ import React from "react";
 import PlayerCard from "./playercard";
 import { SocketProviderContext } from "./providers";
 import { Button } from "./buttons";
-import { cn } from "../lib/utils";
+import { cn, getMulti } from "../lib/utils";
 import StatusBar from "./statusBar";
+import { ArrowSquareOut } from "@phosphor-icons/react";
 
 interface GameProps
   extends React.DetailedHTMLProps<
@@ -49,24 +50,46 @@ const Game = ({ className, ...props }: GameProps) => {
     );
   }
 
+  console.log('game:', game);
+
   return (
     <div
       {...props}
-      className={cn(className, "")}
-      style={{ height: windowHeight }}
+      className={cn(className, "h-full")}
     >
-      <div className="w-full flex flex-col content-center items-center justify-center gap-1 h-[4rem] text-lg px-2 bg-card mb-3">
+      <div className="w-full flex flex-col content-center items-center justify-center h-[4rem] px-2">
         <div className="w-full flex justify-center max-w-xl">
           <StatusBar statusMessages={game?.statusMessages} />
         </div>
       </div>
 
-      <div className="w-full flex justify-center" style={{ height: windowHeight - 200 }}>
+      <div className="w-full flex justify-center">
         <div className="w-full max-w-5xl">
-          <div className="flex w-full px-1">
-            <div className="w-full flex justify-start text-cyan-500 font-semibold">Blue Team</div>
-            <div className="w-full flex justify-end text-red-500 font-semibold">Red Team</div>
+
+          <div className="flex justify-between w-full px-1">
+            {/* biome-ignore lint/a11y/useKeyWithClickEvents: <explanation> */}
+            <div
+              // @ts-ignore
+              onClick={() => window.electronAPI.openLink(getMulti(game.blue))}
+              className="w-min truncate flex justify-start text-cyan-500 font-semibold items-center cursor-pointer hover:underline">
+              Blue Team 
+              <span className="text-xs font-beaufort font-light ml-1 flex items-center">
+                multi <ArrowSquareOut size={12} />
+              </span>
+            </div>
+
+            {/* biome-ignore lint/a11y/useKeyWithClickEvents: <explanation> */}
+            <div
+              // @ts-ignore
+              onClick={() => window.electronAPI.openLink(getMulti(game.red))}
+              className="w-min truncate flex justify-end text-red-500 font-semibold items-center cursor-pointer hover:underline">
+              <span className="text-xs font-beaufort font-light mr-1 flex items-center">
+                multi <ArrowSquareOut size={12} />
+              </span> 
+              Red Team
+            </div>
           </div>
+
           <div className="w-full flex gap-10">
             <div className="flex flex-col items-end gap-2 w-full">
               {Object.keys(game.blue).map((key) => (
@@ -99,7 +122,7 @@ const Game = ({ className, ...props }: GameProps) => {
         </div>
       </div>
       
-      <div className="w-full flex gap-2 justify-center items-center h-[5rem]">
+      <div className="w-full flex gap-2 justify-center items-center mt-6">
         {/* <Button onClick={() => handleJoin()} className={cn("w-44", (game.me.availability === false || game.me.autoJoining === true) && 'grayscale pointer-events-none')} disabled={game.me.availability === false || game.me.autoJoining === true}>
           Join Lobby
         </Button> */}

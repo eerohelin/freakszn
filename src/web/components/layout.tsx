@@ -147,7 +147,7 @@ export default function Layout({ children }: LayoutProps) {
     <>
       <CustomTopBar />
       {/* <QueuePop /> */}
-      <div className="flex w-full">
+      <div className="w-full">
         <SideNav />
         {children}
       </div>

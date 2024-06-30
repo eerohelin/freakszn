@@ -22,8 +22,6 @@ const QueuePopCard = ({ p }: QueuePopCardProps) => {
 
 const QueuePop = () => {
   const { queuePop, socket } = React.useContext(SocketProviderContext)
-  console.log('quarterpou:', queuePop)
-
   function handleAccept(){
     socket?.emit("accept")
   }

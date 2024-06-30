@@ -18,7 +18,7 @@ function Index() {
   return (
     <div className="w-full h-full absolute">
       <div className="w-full h-full flex">
-        <div className="w-[17rem] h-full border-r border-border">
+        <div className="w-[24rem] h-full border-r border-border">
           {/** User banner card + name */}
           <div className="relative saturate-[110%] aspect-video">
             <img

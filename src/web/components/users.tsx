@@ -9,12 +9,12 @@ interface UsersProps {
 export function Users({ users }: UsersProps) {
   const { windowHeight } = React.useContext(SocketProviderContext);
   return (
-    <div>
-      <div className="font-beaufort-bold px-1">Freaks</div>
+    <div className="mt-1">
+      <div className="font-beaufort-bold px-[0.9rem] text-lg -mb-1">Freaks</div>
       <div className="relative">
         <div className="absolute w-full bg-gradient-to-t from-transparent from-[65%] to-background z-20 top-0 h-4" />
         <div
-          className="absolute overflow-y-scroll pb-28 w-full mt-1"
+          className="absolute overflow-y-scroll pb-28 px-2 w-full mt-1"
           style={{ height: windowHeight - 100 }}
         >
           {users.length > 0 && users?.map((u) => (

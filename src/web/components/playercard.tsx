@@ -1,5 +1,5 @@
 import type React from "react";
-import { cn } from "../lib/utils";
+import { cn, getOPGG } from "../lib/utils";
 import { useSummonerIcon } from "../hooks/useSummonerIcon";
 import { Tag } from "./tag";
 
@@ -39,7 +39,7 @@ const PlayerCard = ({
     <div
       {...props}
       onClick={onClick}
-      className={cn("w-full py-1 px-1 rounded-md flex", className)}
+      className={cn("w-full py-1 px-1 rounded-md flex shadow-sm shadow-black/80", className)}
     >
       <div
         className={cn(
@@ -59,9 +59,10 @@ const PlayerCard = ({
             <div className="relative w-full h-full">
               <div className="absolute flex gap-1 items-center right-0 bottom-0 h-4">
                 <Tag className={cn(
-                  "",
-                  "text-xs bg-black/30 border border-border w-[5.5rem] text-center truncate shadow", 
-                  player?.availability === true ? 'text-text' : "text-stone-500")}
+                    "text-xs bg-black/30 border border-border w-[5.5rem] text-center truncate shadow",
+                    player?.availability === true ? 'text-text' : "text-stone-500",
+                    player?.inGameLobby && "text-text",
+                  )}
                 >
                   {player.inGameLobby ? 'In lobby' : player?.availability === true ? 'Available' : 'Unavailable'}
                 </Tag>
@@ -101,11 +102,12 @@ const PlayerCard = ({
                   <div className="absolute bg-black/60 border border-black/50 h-full w-4" />
                 </div>
                 <Tag className={cn(
-                  "",
-                  "text-xs bg-black/30 border border-border w-[5.5rem] text-center truncate shadow", 
-                  player?.availability === true ? 'text-text' : "text-stone-500")}
+                    "text-xs bg-black/30 border border-border w-[5.5rem] text-center truncate shadow",
+                    player?.availability === true ? 'text-text' : "text-stone-500",
+                    player?.inGameLobby && "text-purple-400",
+                  )}
                 >
-                  {player.inGameLobby ? 'In lobby' : player?.availability === true ? 'Available' : 'Unavailable'}
+                  {player.inGameLobby ? 'In Lobby 😈' : player?.availability === true ? 'Available' : 'Unavailable'}
                 </Tag>
               </div>
             </div>
@@ -126,7 +128,12 @@ const PlayerCard = ({
 function PlayerDetails({ player, side }: { player: Player, side: "blue" | "red" }){
   return (
     <div className={cn("w-full", side === "red" && "text-right")}>
-      <p className="text-2xl font-beaufort">{player.name}</p>
+      {/* biome-ignore lint/a11y/useKeyWithClickEvents: <explanation> */}
+      <p 
+        className="text-2xl font-beaufort cursor-pointer hover:underline" 
+        // @ts-ignore
+        onClick={() => window.electronAPI.openLink(getOPGG(player))}>{player.name}
+      </p>
       <div className="text-sm w-full">
         <div className="truncate">{player?.rankData?.rank} {player?.rankData?.division}
           <span className="truncate text-neutral-400 ml-1">{player?.rankData?.lp} LP</span>

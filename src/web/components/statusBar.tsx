@@ -29,8 +29,6 @@ const Item = ({ children }: ItemProps) => {
   
 
 const StatusBar = ({ statusMessages }: StatusBarProps) => {
-    console.log(statusMessages)
-
     return (
         <div className='relative h-full'>
             <AnimatePresence>
