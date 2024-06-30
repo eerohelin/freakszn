@@ -101,8 +101,8 @@ function loaded(mainWindow: BrowserWindow) {
     lcu.joinLobby(data, "")
   })
 
-  ipcMain.on("open-draft", (_, draft) => {
-    shell.openExternal(draft)
+  ipcMain.on("open-link", (_, link) => {
+    shell.openExternal(link)
   })
 
   const connectionDelay = setInterval(() => {

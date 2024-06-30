@@ -24,6 +24,6 @@ process.once("loaded", () => {
       ipcRenderer.removeAllListeners("lobby-did-not-exist"),
     createLobby: (value: any) => ipcRenderer.send("create-lobby", value),
     joinLobby: (value: any) => ipcRenderer.send("join-lobby", value),
-    openDraft: (value: any) => ipcRenderer.send("open-draft", value),
+    openLink: (value: any) => ipcRenderer.send("open-link", value),
   });
 });

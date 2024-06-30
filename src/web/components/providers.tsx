@@ -110,6 +110,7 @@ export function SocketProvider({ children }: SocketProviderProps) {
   React.useEffect(() => {
     if (socket.connected) {
       socket.emit("set-name", summoner?.gameName);
+      socket.emit("set-tagline", summoner?.tagLine);
       socket.emit("set-icon-id", summoner?.profileIconId);
       socket.emit("set-summoner-level", summoner?.summonerLevel);
       socket.emit("set-summoner-rank", {
@@ -173,7 +174,7 @@ export function SocketProvider({ children }: SocketProviderProps) {
   socket.on("game-update", (game) => setGame(game))
   socket.off("open-draft")
   // @ts-ignore
-  socket.on("open-draft", (draft) => {window.electronAPI.openDraft(draft)})
+  socket.on("open-draft", (draft) => {window.electronAPI.openLink(draft)})
 
 
   return (
