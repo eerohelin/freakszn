@@ -1,6 +1,7 @@
 import { twMerge } from "tailwind-merge";
 import type { ClassValue } from "clsx";
 import { clsx } from "clsx";
+import { NAV_ITEMS_ORDER } from "./constants";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -39,4 +40,14 @@ export function getMulti(team: any) {
 // biome-ignore lint/suspicious/noExplicitAny: <explanation>
 export function getOPGG(player: any) {
   return `https://www.op.gg/summoners/euw/${player.name}-${player.tagline}`
+}
+
+export function getPageTransitionDirection(prevPathname?: string, pathname?: string): "left" | "right" {
+  if(!prevPathname || !pathname) {
+    return "right";
+  }
+  if(NAV_ITEMS_ORDER.indexOf(prevPathname) > NAV_ITEMS_ORDER.indexOf(pathname)) {
+    return "right"
+  }
+  return "left"
 }
