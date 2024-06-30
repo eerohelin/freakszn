@@ -142,7 +142,7 @@ const PlayerModal = ({ player, show, setShow }: PlayerModalProps) => {
                       setShowMyRolePicker(false);
                     }}
                     className={cn(
-                    hisRole === r && "pointer-events-none grayscale",
+                    hisRole?.toLowerCase() === r.toLowerCase() && "pointer-events-none grayscale",
                     "bg-league-button text-league-text border border-league-border px-2 cursor-pointer w-full text-center"
                   )}>
                     {r}
@@ -172,7 +172,7 @@ const PlayerModal = ({ player, show, setShow }: PlayerModalProps) => {
                       setShowHisRolePicker(false);
                     }}
                     className={cn(
-                    myRole === r && "pointer-events-none grayscale",
+                    myRole?.toLowerCase() === r.toLowerCase() && "pointer-events-none grayscale",
                     "bg-league-button text-league-text border border-league-border px-2 cursor-pointer w-full text-center"
                   )}>
                     {r}
