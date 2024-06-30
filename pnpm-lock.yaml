@@ -53,9 +53,6 @@ dependencies:
   lcu-connector:
     specifier: ^2.1.4
     version: 2.1.4
-  lodash-move:
-    specifier: ^1.1.1
-    version: 1.1.1
   react:
     specifier: ^18.2.0
     version: 18.3.1
@@ -4534,12 +4531,6 @@ packages:
       phin: 2.9.3
       xhr: 2.6.0
       xtend: 4.0.2
-    dev: false
-
-  /lodash-move@1.1.1:
-    resolution: {integrity: sha512-Gm8/lC16NXv2tweIiX7pYhgAQdoSwXzO/WsSmNX/un8rBQUIC7YkauFK2Sdt4NBqWV28BW25P8eDkHWPt91YqQ==}
-    dependencies:
-      lodash: 4.17.21
     dev: false
 
   /lodash.defaults@4.2.0:
