@@ -25,6 +25,10 @@ export function Queue({ socket, state, className, ...props }: QueueProps) {
     s?.emit("set-summoner-level", 300)
     s?.emit("set-summoner-rank", {rank: "Diamond", division: "1", lp: 80})
     s?.emit("queue", "fill");
+    s?.on("duo-request", (data) => {
+      console.log('dataaa :D', data)
+      s?.emit("duo-accept")
+    })
   }
   function handleMockAcce() {
     socket?.emit("mock-accept-all");
@@ -49,7 +53,7 @@ export function Queue({ socket, state, className, ...props }: QueueProps) {
               {role}
             </Button>
             <div className="w-full flex items-center gap-2">
-              {state.state[role].map((name: string) => (
+              {(state.state[role as any] as any).map((name: string) => (
                 <div key={name}>{name}</div>
               ))}
             </div>
