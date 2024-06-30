@@ -55,13 +55,13 @@ const Game = ({ className, ...props }: GameProps) => {
       className={cn(className, "")}
       style={{ height: windowHeight }}
     >
-      <div className="w-full flex flex-col content-center items-center justify-center gap-1 h-[4rem] text-lg px-2">
-        <div className="bg-card w-full flex justify-center max-w-xl">
+      <div className="w-full flex flex-col content-center items-center justify-center gap-1 h-[4rem] text-lg px-2 bg-card mb-3">
+        <div className="w-full flex justify-center max-w-xl">
           <StatusBar statusMessages={game?.statusMessages} />
         </div>
       </div>
 
-      <div className="w-full flex justify-center" style={{ height: windowHeight - 150 }}>
+      <div className="w-full flex justify-center" style={{ height: windowHeight - 200 }}>
         <div className="w-full max-w-5xl">
           <div className="flex w-full px-1">
             <div className="w-full flex justify-start text-cyan-500 font-semibold">Blue Team</div>
@@ -100,12 +100,16 @@ const Game = ({ className, ...props }: GameProps) => {
       </div>
       
       <div className="w-full flex gap-2 justify-center items-center h-[5rem]">
-        <Button onClick={() => handleJoin()} className={cn("w-44", (game.me.availability === false || game.me.autoJoining === true) && 'grayscale pointer-events-none')} disabled={game.me.availability === false || game.me.autoJoining === true}>Join Lobby</Button>
-        <Button onClick={() => handleReady()} className={cn("w-64", 
-          (game.me.availability === false || game.me.autoJoining === true) && 'grayscale pointer-events-none',
-          game.me.ready && 'bg-gradient-to-b from-green-500 to-green-900'
-        )} disabled={game.me.availability === false || game.me.autoJoining === true}>Ready</Button>
-        <Button onClick={() => handleOpenDraft()}className="w-44">Draft Link</Button>
+        {/* <Button onClick={() => handleJoin()} className={cn("w-44", (game.me.availability === false || game.me.autoJoining === true) && 'grayscale pointer-events-none')} disabled={game.me.availability === false || game.me.autoJoining === true}>
+          Join Lobby
+        </Button> */}
+        <div className="w-64 flex flex-col gap-2">
+          <Button onClick={() => handleReady()} className={cn("", 
+            (game.me.availability === false || game.me.autoJoining === true) && 'grayscale pointer-events-none',
+            game.me.ready && 'bg-gradient-to-b from-green-500 to-green-900'
+          )} disabled={game.me.availability === false || game.me.autoJoining === true}>Ready</Button>
+          <Button onClick={() => handleOpenDraft()}className="">Draft Link</Button>
+        </div>
       </div>
     </div>
   );

@@ -32,7 +32,7 @@ const StatusBar = ({ statusMessages }: StatusBarProps) => {
     console.log(statusMessages)
 
     return (
-        <div className='relative flex flex-col items-center content-center justify-center h-full'>
+        <div className='relative h-full'>
             <AnimatePresence>
                 {statusMessages?.slice(-3).map((statusMessage, index) => (
                     <Item key={statusMessage.split(";")[1]}>
