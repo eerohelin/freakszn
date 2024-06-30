@@ -174,7 +174,7 @@ export function SocketProvider({ children }: SocketProviderProps) {
   socket.on("game-update", (game) => setGame(game))
   socket.off("open-draft")
   // @ts-ignore
-  socket.on("open-draft", (draft) => {window.electronAPI.openDraft(draft)})
+  socket.on("open-draft", (draft) => {window.electronAPI.openLink(draft)})
 
 
   return (
