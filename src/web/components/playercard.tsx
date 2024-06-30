@@ -127,11 +127,14 @@ function PlayerDetails({ player, side }: { player: Player, side: "blue" | "red" 
   return (
     <div className={cn("w-full", side === "red" && "text-right")}>
       <p className="text-2xl font-beaufort">{player.name}</p>
-      <div className="text-sm">
-        <span>{player?.rankData?.rank} {player?.rankData?.division}</span>
-        <span className="ml-1 text-neutral-400">{player?.rankData?.lp} LP</span>
+      <div className="text-sm w-full">
+        <div className="truncate">{player?.rankData?.rank} {player?.rankData?.division}
+          <span className="truncate text-neutral-400 ml-1">{player?.rankData?.lp} LP</span>
+        </div>
       </div>
-      <p className="text-xs">level {player.summonerLevel}</p>
+      <p className="text-xs">
+        level {player.summonerLevel}
+      </p>
     </div>
   )
 }
