@@ -3,6 +3,7 @@ import PlayerCard from "./playercard";
 import { SocketProviderContext } from "./providers";
 import { Button } from "./buttons";
 import { cn } from "../lib/utils";
+import StatusBar from "./statusBar";
 
 interface GameProps
   extends React.DetailedHTMLProps<
@@ -56,11 +57,7 @@ const Game = ({ className, ...props }: GameProps) => {
     >
       <div className="w-full flex flex-col content-center items-center justify-center gap-1 h-[4rem] text-lg px-2">
         <div className="bg-card w-full flex justify-center max-w-xl">
-          {game?.statusMessages 
-            // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
-            ? game?.statusMessages?.map((message: string, idx: number) => <p key={idx} className="font-beaufort">{message}</p>)
-            : <p className="font-beaufort">Waiting</p>
-          }
+          <StatusBar statusMessages={game?.statusMessages} />
         </div>
       </div>
 
