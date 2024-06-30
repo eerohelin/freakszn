@@ -1,10 +1,10 @@
 import React from "react";
+import StatusBar from "./statusBar";
 import PlayerCard from "./playercard";
 import { SocketProviderContext } from "./providers";
-import { Button } from "./buttons";
-import { cn, getMulti } from "../lib/utils";
-import StatusBar from "./statusBar";
 import { ArrowSquareOut } from "@phosphor-icons/react";
+import { cn, getMulti } from "../lib/utils";
+import { Button } from "./buttons";
 
 interface GameProps
   extends React.DetailedHTMLProps<
@@ -13,7 +13,7 @@ interface GameProps
   > {}
 
 const Game = ({ className, ...props }: GameProps) => {
-  const { game, state, windowHeight, socket } = React.useContext(SocketProviderContext);
+  const { game, state, socket } = React.useContext(SocketProviderContext);
   const [ready, setReady] = React.useState<boolean>(game?.me?.ready)
 
   React.useEffect(() => {
