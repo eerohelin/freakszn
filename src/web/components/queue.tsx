@@ -59,10 +59,10 @@ export function Queue({ socket, state, className, ...props }: QueueProps) {
               {role}
             </ButtonFszn>
             <div className="flex items-center gap-3">
-              {(state.state[role as any] as any).map((name: string) => (
+              {(state.state[role as any] as any).map((player: { name: string, duoTag: string }) => (
                 <QueueMemberCard
-                  playerName={name}
-                  key={name}
+                  player={player}
+                  key={JSON.stringify(player)}
                 />
               ))}
             </div>

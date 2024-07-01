@@ -1,10 +1,10 @@
 import { cn } from '../lib/utils'
 
 interface QueueMemberCardProps extends React.HTMLAttributes<HTMLDivElement> {
-    playerName: string
+    player: { name: string, duoTag: string }
 }
 
-const QueueMemberCard = ({ className, playerName }: QueueMemberCardProps) => {
+const QueueMemberCard = ({ className, player }: QueueMemberCardProps) => {
   return (
     <div 
         className={cn(
@@ -12,7 +12,9 @@ const QueueMemberCard = ({ className, playerName }: QueueMemberCardProps) => {
             className
         )}>
         <div className='w-full h-full bg-card px-3 rounded-[0.23rem]'>
-            <span className='truncate text-gray-50 font-thin text-lg font-beaufort'>{playerName}</span>
+            <span className='truncate text-gray-50 font-thin text-lg font-beaufort'>
+              {player.name} {player?.duoTag && <span>[Team {player.duoTag}]</span>}
+            </span>
         </div>
     </div>
   )
