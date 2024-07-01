@@ -30,15 +30,9 @@ const Game = ({ className, ...props }: GameProps) => {
     }
     return howManyNeeded;
   }
-  function handleReady(){
-    socket?.emit("set-ready", !ready)
-  }
-  function handleJoin() {
-    socket?.emit("join-lobby");
-  }
-  function handleOpenDraft() {
-    socket?.emit("open-draft");
-  }
+  function handleReady(){ socket?.emit("set-ready", !ready)}
+  function handleOpenDraft() { socket?.emit("open-draft");}
+  function handleJoin() { socket?.emit("join-lobby");}
 
   if (game === undefined || Object.keys(game).length < 1) {
     return (
@@ -49,8 +43,6 @@ const Game = ({ className, ...props }: GameProps) => {
       </div>
     );
   }
-
-  console.log('game:', game);
 
   return (
     <div
@@ -65,7 +57,6 @@ const Game = ({ className, ...props }: GameProps) => {
 
       <div className="w-full flex justify-center">
         <div className="w-full max-w-5xl">
-
           <div className="flex justify-between w-full px-1">
             {/* biome-ignore lint/a11y/useKeyWithClickEvents: <explanation> */}
             <div
