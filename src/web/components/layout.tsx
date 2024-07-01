@@ -10,6 +10,7 @@ import { UserCard } from "./userCard";
 import QueuePop from "./queuePop";
 import SideNav from "./sidenav";
 import t from "@shared/config";
+import LoadingDots from "./loadingDots";
 
 type LayoutProps = {
   children?: React.ReactNode;
@@ -24,13 +25,6 @@ const CustomTopBar = () => {
   const { mutate: closeWindow } = t.window.closeWindow.useMutation();
   const { socket } = React.useContext(SocketProviderContext);
   const [isConnected, setIsConnected] = useState(lcuExists);
-
-  // const [lobbyId, setLobbyId] = useState<number>(0);
-  // const { data: id } = t.lol.joinLobby.useQuery(
-  //   { id: lobbyId?.toString() },
-  //   { enabled: lobbyId !== 0 },
-  // );
-  // const { refetch } = t.lol.createLobby.useQuery(undefined, { enabled: false });
 
   React.useEffect(() => {
     socket?.off("create-lobby")
@@ -129,9 +123,23 @@ interface DuoRequest {
   }
 }
 
+interface PendingDuoRequest {
+  duoPlayer: {
+    iconId: number,
+    name: string,
+    rankData: { rank: string, division: string, lp: number },
+    summonerLevel: number,
+    tagline: string
+  },
+  duoRole: string,
+  myRole: string,
+}
+
 export default function Layout({ children }: LayoutProps) {
   const router = useRouter();
   const { socket } = React.useContext(SocketProviderContext);
+  const [pendingDuoRequest, setPendingDuoRequest] = React.useState<PendingDuoRequest>()
+  const [showPendingDuoRequest, setShowPendingDuoRequest] = React.useState<boolean>(false)
   const [showDuoInvite, setShowDuoInvite] = React.useState<boolean>(false);
   const [duoRequest, setDuoRequest] = React.useState<DuoRequest>({
     requester: {
@@ -147,16 +155,20 @@ export default function Layout({ children }: LayoutProps) {
     },
     requesterRole: "top",
     yourRole: "jungle"
-})
+  })
 
   socket?.on("duo-request", (duoRequest: DuoRequest) => {
     setDuoRequest(duoRequest)
     setShowDuoInvite(true)
   })
+  socket?.on("duo-request-sent", (pendingDuoRequest: PendingDuoRequest) => {
+    setPendingDuoRequest(pendingDuoRequest)
+    setShowPendingDuoRequest(true)
+  })
   socket?.on("game-start", (game) => {
     router.navigate({
       to: "/game",
-    });
+    }); 
   });
 
   React.useEffect(() => {
@@ -181,6 +193,7 @@ export default function Layout({ children }: LayoutProps) {
         </ButtonFszn>
         <SideNav />
         <DuoInvitePopup showDuoInvite={showDuoInvite} setShowDuoInvite={setShowDuoInvite} duoRequest={duoRequest} />
+        <PendingDuoRequestPopup pendingDuoRequest={pendingDuoRequest} showPendingDuoRequest={showPendingDuoRequest} setShowPendingDuoRequest={setShowPendingDuoRequest} />
         {children}
       </div>
     </>
@@ -188,9 +201,67 @@ export default function Layout({ children }: LayoutProps) {
 }
 
 interface DuoInviteModalProps {
-  duoRequest: DuoRequest
+  duoRequest: DuoRequest 
   showDuoInvite: boolean
   setShowDuoInvite: React.Dispatch<React.SetStateAction<boolean>>
+}
+
+const PendingDuoRequestPopup = ({ pendingDuoRequest, showPendingDuoRequest, setShowPendingDuoRequest }: { pendingDuoRequest?: PendingDuoRequest, showPendingDuoRequest: boolean, setShowPendingDuoRequest: React.Dispatch<React.SetStateAction<boolean>> }) => {
+  return (
+    <AnimatePresence>
+      {showPendingDuoRequest && pendingDuoRequest && <PendingDuoRequestPopupMotionDiv pendingDuoRequest={pendingDuoRequest} setShowPendingDuoRequest={setShowPendingDuoRequest} />}
+    </AnimatePresence>
+  )
+}
+
+function PendingDuoRequestPopupMotionDiv (props: { pendingDuoRequest: PendingDuoRequest, setShowPendingDuoRequest: React.Dispatch<React.SetStateAction<boolean>> }) {
+  const { pendingDuoRequest, setShowPendingDuoRequest } = props;
+  const { socket } = useContext(SocketProviderContext)
+  const isPresent = useIsPresent();
+
+  return (
+    <motion.div
+      style={{ position: isPresent ? "absolute" : "absolute" }}
+      key={"duo-request-card"}
+      initial={{ opacity: 0, bottom: -12 }}
+      animate={{ opacity: 1, bottom: 0 }}
+      exit={{ opacity: 0, bottom: -12 }}
+      transition={{ ease: "easeInOut" }}
+      className="flex items-center right-0 bg-gradient-to-tr from-gray-600 to-gray-500 p-[0.055rem] m-3 rounded-[0.3rem] z-50 w-full max-w-xs"
+    >
+      <div className="w-full h-full bg-card p-5 rounded-[0.15rem]">
+        <div className="h-full w-full">
+          <p className="text-2xl font-beaufort flex items-center">Duo request pending <LoadingDots className="mt-1 ml-1" /></p>
+          <UserCard
+            className="pointer-events-none"
+            roundedIcon={false}
+            user={pendingDuoRequest.duoPlayer}
+            iconStyles={"from-purple-400 to-purple-500 p-[0.06rem]"}
+            statusStyles={"text-purple-400"}
+          />
+        </div>
+
+        <div className="h-full w-full text-sm">
+          <div className="">
+            Your role: <span>{pendingDuoRequest.myRole}</span>
+          </div>  
+          <div>
+            {pendingDuoRequest.duoPlayer.name}'s role: <span>{pendingDuoRequest.duoRole}</span>
+          </div>
+        </div>
+        <div className="flex items-center gap-[0.4rem] mt-4">
+          <ButtonFszn
+            onClick={() => {
+              socket?.emit("duo-cancel")
+              setShowPendingDuoRequest(false)
+            }}
+            className="border-red-500 text-red-500 bg-black/20 w-full">
+            Cancel request
+          </ButtonFszn>
+        </div>  
+      </div>
+    </motion.div>
+  )
 }
 
 const DuoInvitePopup = ({ showDuoInvite, setShowDuoInvite, duoRequest }: DuoInviteModalProps) => {
