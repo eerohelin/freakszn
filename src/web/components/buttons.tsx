@@ -69,13 +69,7 @@ export function ButtonFszn({ children, className, type, onClick }: ButtonProps) 
         className,
       )}
     >
-      <span 
-        className={cn(
-          "",
-        )}
-      >
-        {children}
-      </span>
+      {children}
     </button>
   );
 }
