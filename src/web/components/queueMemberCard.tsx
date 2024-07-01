@@ -13,7 +13,8 @@ const QueueMemberCard = ({ className, player }: QueueMemberCardProps) => {
         )}>
         <div className='w-full h-full bg-card px-3 rounded-[0.23rem]'>
             <span className='truncate text-gray-50 font-thin text-lg font-beaufort'>
-              {player.name} {player?.duoTag && <span>[Team {player.duoTag}]</span>}
+              {player.name}
+              {player?.duoTag && <span>[Team {player.duoTag}]</span>}
             </span>
         </div>
     </div>
