@@ -1,5 +1,5 @@
 import { io, type Socket } from "socket.io-client";
-import { Button, ButtonFszn } from "./buttons";
+import { ButtonFszn } from "./buttons";
 import QueueMemberCard from "./queueMemberCard";
 
 interface QueueProps extends React.HTMLAttributes<HTMLDivElement> {

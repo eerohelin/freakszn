@@ -4,7 +4,7 @@ import { motion, AnimatePresence, useIsPresent } from "framer-motion";
 import { SocketProviderContext, useTheme } from "./providers";
 import { Minus, Square, X } from "@phosphor-icons/react";
 import { useRouter } from "@tanstack/react-router";
-import { THEMES } from "../lib/constants";
+import { DUO_INVITE_TITLES, THEMES } from "../lib/constants";
 import { ButtonFszn } from "./buttons";
 import { UserCard } from "./userCard";
 import QueuePop from "./queuePop";
@@ -194,15 +194,16 @@ interface DuoInviteModalProps {
 }
 
 const DuoInvitePopup = ({ showDuoInvite, setShowDuoInvite, duoRequest }: DuoInviteModalProps) => {
+  const title = DUO_INVITE_TITLES[Math.floor(Math.random() * DUO_INVITE_TITLES.length)]
   return (
     <AnimatePresence> 
-      { showDuoInvite && <DuoInvitePopupMotionDiv duoRequest={duoRequest} setShowDuoInvite={setShowDuoInvite} />}
+      { showDuoInvite && <DuoInvitePopupMotionDiv duoRequest={duoRequest} setShowDuoInvite={setShowDuoInvite} title={title} />}
     </AnimatePresence>
   )
 }
 
-function DuoInvitePopupMotionDiv (props: { duoRequest: DuoRequest, setShowDuoInvite: React.Dispatch<React.SetStateAction<boolean>> }) {
-  const { duoRequest, setShowDuoInvite } = props;
+function DuoInvitePopupMotionDiv (props: { duoRequest: DuoRequest, setShowDuoInvite: React.Dispatch<React.SetStateAction<boolean>>, title: string }) {
+  const { duoRequest, setShowDuoInvite, title } = props;
   const { socket } = useContext(SocketProviderContext)
   const isPresent = useIsPresent();
 
@@ -214,15 +215,15 @@ function DuoInvitePopupMotionDiv (props: { duoRequest: DuoRequest, setShowDuoInv
       animate={{ opacity: 1, bottom: 0 }}
       exit={{ opacity: 0, bottom: -12 }}
       transition={{ ease: "easeInOut" }}
-      className="flex items-center right-0 bg-card px-9 pt-5 pb-7 m-3 rounded-br-sm z-50"
+      className="flex items-center right-0 bg-gradient-to-tr from-gray-600 to-gray-500 p-[0.055rem] m-3 rounded-[0.3rem] z-50 w-full max-w-xs"
     >
-      <div>
+      <div className="w-full h-full bg-card p-5 rounded-[0.15rem]">
         <div className="h-full w-full">
           <p className="text-2xl font-beaufort">Duo invite from</p>
           <UserCard
             className="pointer-events-none"
             roundedIcon={false}
-            status="a certified freak 😈" 
+            status={title}
             user={duoRequest.requester}
             iconStyles={"from-purple-400 to-purple-500 p-[0.06rem]"}
             statusStyles={"text-purple-400"}

@@ -1,4 +1,3 @@
-import type { ClassValue } from "clsx";
 import { useSummonerIcon } from "../hooks/useSummonerIcon";
 import { cn } from "../lib/utils";
 interface UserCard extends React.HTMLAttributes<HTMLDivElement> {

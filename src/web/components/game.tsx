@@ -4,7 +4,7 @@ import PlayerCard from "./playercard";
 import { SocketProviderContext } from "./providers";
 import { ArrowSquareOut } from "@phosphor-icons/react";
 import { cn, getMulti } from "../lib/utils";
-import { Button } from "./buttons";
+import { Button, ButtonFszn } from "./buttons";
 
 interface GameProps
   extends React.DetailedHTMLProps<
@@ -111,16 +111,16 @@ const Game = ({ className, ...props }: GameProps) => {
         </div>
       </div>
       
-      <div className="w-full flex gap-2 justify-center items-center mt-6">
+      <div className="w-full flex gap-2 justify-center items-center mt-10">
         {/* <Button onClick={() => handleJoin()} className={cn("w-44", (game.me.availability === false || game.me.autoJoining === true) && 'grayscale pointer-events-none')} disabled={game.me.availability === false || game.me.autoJoining === true}>
           Join Lobby
         </Button> */}
         <div className="w-64 flex flex-col gap-2">
-          <Button onClick={() => handleReady()} className={cn("", 
+          <ButtonFszn onClick={() => handleReady()} className={cn("", 
             (game.me.availability === false || game.me.autoJoining === true) && 'grayscale pointer-events-none',
             game.me.ready && 'bg-gradient-to-b from-green-500 to-green-900'
-          )} disabled={game.me.availability === false || game.me.autoJoining === true}>Ready</Button>
-          <Button onClick={() => handleOpenDraft()}className="">Draft Link</Button>
+          )} disabled={game.me.availability === false || game.me.autoJoining === true}>Ready</ButtonFszn>
+          <ButtonFszn onClick={() => handleOpenDraft()}className="">Draft Link</ButtonFszn>
         </div>
       </div>
     </div>
