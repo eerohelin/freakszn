@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import type { Theme } from "../lib/types";
 import { motion, AnimatePresence, useIsPresent } from "framer-motion";
 import { SocketProviderContext, useTheme } from "./providers";
 import { Minus, Square, X } from "@phosphor-icons/react";
 import { useRouter } from "@tanstack/react-router";
 import { THEMES } from "../lib/constants";
+import { ButtonFszn } from "./buttons";
+import { UserCard } from "./userCard";
 import QueuePop from "./queuePop";
 import SideNav from "./sidenav";
 import t from "@shared/config";
@@ -35,7 +37,6 @@ const CustomTopBar = () => {
     socket?.off("join-lobby")
     socket?.on("join-lobby", (data): any => { window.electronAPI.joinLobby(data);});
     socket?.on("create-lobby", (data) => { window.electronAPI.createLobby(data);});
-    socket?.on("duo-request", (data) => {})
     window.electronAPI.offConnectionChange();
     window.electronAPI.onConnectionChange((value: any) => {
       window.electronAPI.didReceive();
@@ -112,11 +113,46 @@ const CustomTopBar = () => {
   );
 };
 
+interface DuoRequest {
+  requesterRole: string,
+  yourRole: string,
+  requester: {
+    name: string,
+    iconId: number,
+    summonerLevel: number,
+    tagline: string,
+    rankData: {
+      division: string,
+      lp: number,
+      rank: string
+    }
+  }
+}
+
 export default function Layout({ children }: LayoutProps) {
   const router = useRouter();
   const { socket } = React.useContext(SocketProviderContext);
   const [showDuoInvite, setShowDuoInvite] = React.useState<boolean>(false);
+  const [duoRequest, setDuoRequest] = React.useState<DuoRequest>({
+    requester: {
+        iconId: 5021,
+        name: "Kalevan Canyon",
+        rankData: {
+            division: "I",
+            lp: 26,
+            rank: "DIAMOND"
+        },
+        summonerLevel: 83,
+        tagline: "EUW"
+    },
+    requesterRole: "top",
+    yourRole: "jungle"
+})
 
+  socket?.on("duo-request", (duoRequest: DuoRequest) => {
+    setDuoRequest(duoRequest)
+    setShowDuoInvite(true)
+  })
   socket?.on("game-start", (game) => {
     router.navigate({
       to: "/game",
@@ -145,7 +181,7 @@ export default function Layout({ children }: LayoutProps) {
           onClick={() => setShowDuoInvite(!showDuoInvite)}>
             showDuoInvite
         </button>
-        <DuoInvitePopup show={showDuoInvite} />
+        <DuoInvitePopup showDuoInvite={showDuoInvite} setShowDuoInvite={setShowDuoInvite} duoRequest={duoRequest} />
         {children}
       </div>
     </>
@@ -153,24 +189,22 @@ export default function Layout({ children }: LayoutProps) {
 }
 
 interface DuoInviteModalProps {
-  show: boolean
+  duoRequest: DuoRequest
+  showDuoInvite: boolean
+  setShowDuoInvite: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-const DuoInvitePopup = ({ show }: DuoInviteModalProps) => {
+const DuoInvitePopup = ({ showDuoInvite, setShowDuoInvite, duoRequest }: DuoInviteModalProps) => {
   return (
-      <div
-        className="fixed inset-0 h-full w-full max-md flex pointer-events-none"
-      >
-        <AnimatePresence>
-          { show &&
-            <DuoInvitePopupMotionDiv />
-          }
-        </AnimatePresence>
-      </div>
+    <AnimatePresence> 
+      { showDuoInvite && <DuoInvitePopupMotionDiv duoRequest={duoRequest} setShowDuoInvite={setShowDuoInvite} />}
+    </AnimatePresence>
   )
 }
 
-function DuoInvitePopupMotionDiv () {
+function DuoInvitePopupMotionDiv (props: { duoRequest: DuoRequest, setShowDuoInvite: React.Dispatch<React.SetStateAction<boolean>> }) {
+  const { duoRequest, setShowDuoInvite } = props;
+  const { socket } = useContext(SocketProviderContext)
   const isPresent = useIsPresent();
 
   return (
@@ -181,8 +215,48 @@ function DuoInvitePopupMotionDiv () {
       animate={{ opacity: 1, bottom: 0 }}
       exit={{ opacity: 0, bottom: -12 }}
       transition={{ ease: "easeInOut" }}
-      className="flex items-center right-0 bg-card px-6 py-5 m-3 h-44 w-full max-w-md rounded-br-sm"
+      className="flex items-center right-0 bg-card px-9 pt-5 pb-7 m-3 rounded-br-sm z-50"
     >
+      <div>
+        <div className="h-full w-full">
+          <p className="text-2xl font-beaufort">Duo invite from</p>
+          <UserCard
+            className="pointer-events-none"
+            roundedIcon={false}
+            status="a certified freak 😈" 
+            user={duoRequest.requester}
+            iconStyles={"from-purple-400 to-purple-500 p-[0.06rem]"}
+            statusStyles={"text-purple-400"}
+          />
+        </div>
+
+        <div className="h-full w-full text-sm">
+          <div className="">
+            Your role: <span>{duoRequest.yourRole}</span>
+          </div>  
+          <div>
+            {duoRequest.requester.name}'s role: <span>{duoRequest.requesterRole}</span>
+          </div>
+        </div>
+        <div className="flex items-center gap-[0.4rem] mt-4">
+          <ButtonFszn
+            onClick={() => {
+              socket?.emit("duo-accept")
+              setShowDuoInvite(false)
+            }}
+            className="border-green-500 text-green-500 bg-black/20 w-full">
+            Accept
+          </ButtonFszn>
+          <ButtonFszn
+            onClick={() => {
+              socket?.emit("duo-decline")
+              setShowDuoInvite(false)
+            }}
+            className="border-red-500 text-red-500 bg-black/20 w-full">
+            Reject
+          </ButtonFszn>
+        </div>  
+      </div>
     </motion.div>
   )
 }
