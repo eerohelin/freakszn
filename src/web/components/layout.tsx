@@ -174,12 +174,12 @@ export default function Layout({ children }: LayoutProps) {
       <CustomTopBar />
       {/* <QueuePop /> */}
       <div className="w-full">
-        <SideNav />
         <ButtonFszn
-            className="ml-2 mb-1"
+            className="fixed ml-[40rem] mt-1"
             onClick={() => setShowDuoInvite(!showDuoInvite)}>
             showDuoInvite
         </ButtonFszn>
+        <SideNav />
         <DuoInvitePopup showDuoInvite={showDuoInvite} setShowDuoInvite={setShowDuoInvite} duoRequest={duoRequest} />
         {children}
       </div>
