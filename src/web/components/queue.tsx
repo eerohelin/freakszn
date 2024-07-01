@@ -1,5 +1,6 @@
 import { io, type Socket } from "socket.io-client";
-import { Button, Button2 } from "./buttons";
+import { Button, ButtonFszn } from "./buttons";
+import QueueMemberCard from "./queueMemberCard";
 
 interface QueueProps extends React.HTMLAttributes<HTMLDivElement> {
   socket: Socket | null;
@@ -24,7 +25,7 @@ export function Queue({ socket, state, className, ...props }: QueueProps) {
     );
     s?.emit("set-summoner-level", 300)
     s?.emit("set-summoner-rank", {rank: "Diamond", division: "1", lp: 80})
-    s?.emit("queue", "fill");
+    s?.emit("queue", ["top", "jungle", "mid", "adc", "support", "fill"][Math.floor(Math.random() * 6)]);
     s?.on("duo-request", (data) => {
       console.log('dataaa :D', data)
       s?.emit("duo-accept")
@@ -41,20 +42,28 @@ export function Queue({ socket, state, className, ...props }: QueueProps) {
   return (
     <div className={`${className} w-full flex`} {...props}>
       <div className="flex flex-col gap-2">
-        <Button2 onClick={() => handleMockQue()}>mockque</Button2>
-        <Button2 onClick={() => handleMockAcce()}>mockacce</Button2>
-        <Button2 onClick={() => handleDeQueue()}>Leave</Button2>
-        <Button2 onClick={() => handleJoin()}>join c:</Button2>
+        <div className="flex gap-2 text-xs">
+          <ButtonFszn className="" onClick={() => handleMockQue()}>mockque</ButtonFszn>
+          <ButtonFszn onClick={() => handleMockAcce()}>mockacce</ButtonFszn>
+          <ButtonFszn onClick={() => handleDeQueue()}>Leave</ButtonFszn>
+          <ButtonFszn onClick={() => handleJoin()}>join c:</ButtonFszn>
+        </div>
 
         {/** Map Queue buttons and queue members */}
         {Object.keys(state.state).map((role: string, idx: number) => (
-          <div key={role} className="flex items-center gap-2 w-[14rem]">
-            <Button2 onClick={() => handleQueue(role)} className="text-xs">
+          <div key={role} className="flex items-center w-full gap-2 h-9">
+            <ButtonFszn
+              onClick={() => handleQueue(role)}
+              className="text-xl w-24 h-8"
+            >
               {role}
-            </Button2>
-            <div className="w-full flex items-center gap-2">
+            </ButtonFszn>
+            <div className="flex items-center gap-3">
               {(state.state[role as any] as any).map((name: string) => (
-                <div key={name}>{name}</div>
+                <QueueMemberCard
+                  playerName={name}
+                  key={name}
+                />
               ))}
             </div>
           </div>
