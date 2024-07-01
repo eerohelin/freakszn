@@ -1,8 +1,8 @@
 import React, { useContext } from "react";
 import { SocketProviderContext } from "./providers";
 import { useSummonerIcon } from "../hooks/useSummonerIcon";
-import { Button } from "./buttons";
 import { ROLES } from "../lib/constants";
+import { Button } from "./buttons";
 import { cn } from "../lib/utils";
 
 interface UsersProps {
@@ -34,7 +34,11 @@ export function Users({ users }: UsersProps) {
               />
             ))}
           </div>
-          <PlayerModal show={showModal} setShow={setShowModal} player={modalUser} />
+          <PlayerModal
+            setShow={setShowModal}
+            player={modalUser} 
+            show={showModal}
+          />
         </div>
       </div>
     </>
@@ -52,11 +56,7 @@ function UserCard({ user, ...props }: UserCard) {
   return (
     <div {...props} className="flex gap-2 items-center px-[0.53rem] hover:bg-league-button py-2 cursor-pointer">
       <div className="flex items-center">
-        <div
-          className="bg-gradient-to-b from-league-border 
-
-        to-league-borderdarker p-[0.125rem] rounded-full"
-        >
+        <div className="bg-gradient-to-b from-league-border to-league-borderdarker p-[0.125rem] rounded-full">
           <img
             className="w-10 rounded-full"
             src={i.length > 1000 ? i : placeholder}
@@ -66,7 +66,9 @@ function UserCard({ user, ...props }: UserCard) {
       </div>
       <div>
         <p className="text-[#9f9a8b]">{user.name}</p>
-        <div className="text-[#029f3f] text-sm -mt-[0.25rem]">Online</div>
+        <div className="text-[#029f3f] text-sm -mt-[0.25rem]">
+          Online
+        </div>
       </div>
     </div>
   );
@@ -98,7 +100,6 @@ const PlayerModal = ({ player, show, setShow }: PlayerModalProps) => {
     <> { show &&
       <div className="fixed inset-0 w-full h-full flex flex-col items-center content-center justify-center bg-black backdrop-blur-sm bg-opacity-30 z-[1000]">
         <div className="w-full max-w-md bg-card p-6">
-
 
           {/** PLAYER INFO */}
           <div className="flex gap-2 items-center pb-4">

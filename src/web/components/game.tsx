@@ -69,7 +69,6 @@ const Game = ({ className, ...props }: GameProps) => {
           <div className="flex justify-between w-full px-1">
             {/* biome-ignore lint/a11y/useKeyWithClickEvents: <explanation> */}
             <div
-              // @ts-ignore
               onClick={() => window.electronAPI.openLink(getMulti(game.blue))}
               className="w-min truncate flex justify-start text-cyan-500 font-semibold items-center cursor-pointer hover:underline">
               Blue Team 
@@ -80,7 +79,6 @@ const Game = ({ className, ...props }: GameProps) => {
 
             {/* biome-ignore lint/a11y/useKeyWithClickEvents: <explanation> */}
             <div
-              // @ts-ignore
               onClick={() => window.electronAPI.openLink(getMulti(game.red))}
               className="w-min truncate flex justify-end text-red-500 font-semibold items-center cursor-pointer hover:underline">
               <span className="text-xs font-beaufort font-light mr-1 flex items-center">

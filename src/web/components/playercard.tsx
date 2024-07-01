@@ -131,7 +131,6 @@ function PlayerDetails({ player, side }: { player: Player, side: "blue" | "red" 
       {/* biome-ignore lint/a11y/useKeyWithClickEvents: <explanation> */}
       <p 
         className="text-2xl font-beaufort cursor-pointer hover:underline" 
-        // @ts-ignore
         onClick={() => window.electronAPI.openLink(getOPGG(player))}>{player.name}
       </p>
       <div className="text-sm w-full">

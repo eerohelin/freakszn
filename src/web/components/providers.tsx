@@ -1,9 +1,9 @@
 import React from "react";
+import t from "@src/shared/config";
 import { THEMES } from "../lib/constants";
 import { io, type Socket } from "socket.io-client";
-import type { Theme } from "../lib/types";
 import type { Summoner } from "@src/shared/db";
-import t from "@src/shared/config";
+import type { Theme } from "../lib/types";
 
 type ThemeProviderProps = {
   children: React.ReactNode;
@@ -96,6 +96,7 @@ export const SocketProviderContext = React.createContext<SocketProviderState>({
 });
 
 const s = io("ws://localhost:3000", { autoConnect: true, secure: false });
+
 export function SocketProvider({ children }: SocketProviderProps) {
   const { data: summoner } = t.lol.getSummoner.useQuery();
   const [windowHeight, setWindowHeight] = React.useState<number>(
@@ -127,64 +128,47 @@ export function SocketProvider({ children }: SocketProviderProps) {
     summoner?.division,
     summoner?.lp,
     summoner?.rank,
-    summoner?.summonerLevel
+    summoner?.summonerLevel,
+    summoner?.tagLine
   ]);
 
   React.useEffect(() => {
     addEventListener("resize", () => {
       setWindowHeight(window.innerHeight);
     });
-    // @ts-ignore
     window.electronAPI.offSendLobbyId();
-    // @ts-ignore
     window.electronAPI.offLobbyDidNotExist();
-    // @ts-ignore
     window.electronAPI.offCurrentLobbyName();
-    // @ts-ignore
     window.electronAPI.offUpdateInLobby();
-    // @ts-ignore
-    window.electronAPI.onSendLobbyId((value) => {
+
+    window.electronAPI.onSendLobbyId((value: any) => {
       socket?.emit("set-current-lobby-id", value);
-      // @ts-ignore
       window.electronAPI.onDidReceiveLobbyId()
     });
 
-    // @ts-ignore
-    window.electronAPI.onUpdateInLobby((value) => {
+    window.electronAPI.onUpdateInLobby((value: any) => {
       socket.emit("update-in-lobby", value)
     })
 
-    // @ts-ignore
-    window.electronAPI.onCurrentLobbyName((value) => {
+    window.electronAPI.onCurrentLobbyName((value: any) => {
       socket.emit("current-lobby-name", value)
     })
 
-    // @ts-ignore
-    window.electronAPI.onLobbyDidNotExist((value) => {
+    window.electronAPI.onLobbyDidNotExist((value: any) => {
       socket.emit("lobby-did-not-exist")
     })
 
   }, [socket?.emit]);
 
-  socket.on("state", (s) => {
-    setState(s);
-  });
-
-  socket.on("queue-pop", (qp) => {
-    SetQueuePop(qp)
-  })
-
+  socket.on("state", (s) => { setState(s)});
+  socket.on("queue-pop", (qp) => { SetQueuePop(qp)});
   socket.on("game-start", (game) => setGame(game));
   socket.on("game-update", (game) => setGame(game))
-  socket.off("open-draft")
-  // @ts-ignore
   socket.on("open-draft", (draft) => {window.electronAPI.openLink(draft)})
-
+  socket.off("open-draft")
 
   return (
-    <SocketProviderContext.Provider
-      value={{ socket, state, queuePop, summoner, game, windowHeight }}
-    >
+    <SocketProviderContext.Provider value={{ socket, state, queuePop, summoner, game, windowHeight }}>
       {children}
     </SocketProviderContext.Provider>
   );

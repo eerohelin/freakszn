@@ -1,62 +1,49 @@
 import React, { useState } from "react";
 import type { Theme } from "../lib/types";
+import { motion, AnimatePresence, useIsPresent } from "framer-motion";
+import { SocketProviderContext, useTheme } from "./providers";
 import { Minus, Square, X } from "@phosphor-icons/react";
 import { useRouter } from "@tanstack/react-router";
-import { SocketProviderContext, useTheme } from "./providers";
 import { THEMES } from "../lib/constants";
+import QueuePop from "./queuePop";
 import SideNav from "./sidenav";
 import t from "@shared/config";
-import QueuePop from "./queuePop";
 
 type LayoutProps = {
   children?: React.ReactNode;
 };
 
 const CustomTopBar = () => {
+  const { theme, setTheme } = useTheme();
   const { data: appVer } = t.version.useQuery();
   const { data: lcuExists } = t.lol.isClientOpen.useQuery();
   const { mutate: minimizeWindow } = t.window.minimize.useMutation();
   const { mutate: maximizeWindow } = t.window.maximize.useMutation();
   const { mutate: closeWindow } = t.window.closeWindow.useMutation();
-  const [isConnected, setIsConnected] = useState(lcuExists);
-  const { theme, setTheme } = useTheme();
   const { socket } = React.useContext(SocketProviderContext);
-  const [lobbyId, setLobbyId] = useState<number>(0);
+  const [isConnected, setIsConnected] = useState(lcuExists);
 
-  const { data: id } = t.lol.joinLobby.useQuery(
-    { id: lobbyId?.toString() },
-    { enabled: lobbyId !== 0 },
-  );
-  const { refetch } = t.lol.createLobby.useQuery(undefined, { enabled: false });
+  // const [lobbyId, setLobbyId] = useState<number>(0);
+  // const { data: id } = t.lol.joinLobby.useQuery(
+  //   { id: lobbyId?.toString() },
+  //   { enabled: lobbyId !== 0 },
+  // );
+  // const { refetch } = t.lol.createLobby.useQuery(undefined, { enabled: false });
 
   React.useEffect(() => {
-
     socket?.off("create-lobby")
-
     socket?.off("join-lobby")
-
-    socket?.on("join-lobby", (data): any => {
-      // @ts-ignore
-      window.electronAPI.joinLobby(data);
-    });
-  
-    socket?.on("create-lobby", (data) => {
-      // @ts-ignore
-      window.electronAPI.createLobby(data);
-    });
-
-    // @ts-ignore
+    socket?.on("join-lobby", (data): any => { window.electronAPI.joinLobby(data);});
+    socket?.on("create-lobby", (data) => { window.electronAPI.createLobby(data);});
+    socket?.on("duo-request", (data) => {})
     window.electronAPI.offConnectionChange();
-
-    // @ts-ignore
-    window.electronAPI.onConnectionChange((value) => {
-      // @ts-ignore
+    window.electronAPI.onConnectionChange((value: any) => {
       window.electronAPI.didReceive();
       setIsConnected(value);
       socket?.emit("set-client-open", value)
       console.log("connected");
     });
-  }, []);
+  }, [socket?.emit, socket?.off, socket?.on]);
 
   return (
     <div className="flex w-full min-h-10 h-10 items-center border-b border-border">
@@ -64,6 +51,7 @@ const CustomTopBar = () => {
         <span className="font-bold">
           😈Freakszn <span className="font-extralight text-sm">{appVer}</span>
         </span>
+
         <div className="flex gap-1 items-center ml-2">
           <div
             className={`w-3 h-3 rounded-full ${
@@ -75,6 +63,7 @@ const CustomTopBar = () => {
           {isConnected ? "Connected" : "Disconnected"}
         </div>
       </div>
+
       <div className="flex mr-2">
         <div className="flex items-center bg-card rounded-md pl-2 hover:bg-bgHover px-1 mr-2">
           <svg
@@ -126,6 +115,7 @@ const CustomTopBar = () => {
 export default function Layout({ children }: LayoutProps) {
   const router = useRouter();
   const { socket } = React.useContext(SocketProviderContext);
+  const [showDuoInvite, setShowDuoInvite] = React.useState<boolean>(false);
 
   socket?.on("game-start", (game) => {
     router.navigate({
@@ -149,8 +139,50 @@ export default function Layout({ children }: LayoutProps) {
       {/* <QueuePop /> */}
       <div className="w-full">
         <SideNav />
+        <button 
+          type="button" 
+          className="bg-red-100" 
+          onClick={() => setShowDuoInvite(!showDuoInvite)}>
+            showDuoInvite
+        </button>
+        <DuoInvitePopup show={showDuoInvite} />
         {children}
       </div>
     </>
   );
+}
+
+interface DuoInviteModalProps {
+  show: boolean
+}
+
+const DuoInvitePopup = ({ show }: DuoInviteModalProps) => {
+  return (
+      <div
+        className="fixed inset-0 h-full w-full max-md flex pointer-events-none"
+      >
+        <AnimatePresence>
+          { show &&
+            <DuoInvitePopupMotionDiv />
+          }
+        </AnimatePresence>
+      </div>
+  )
+}
+
+function DuoInvitePopupMotionDiv () {
+  const isPresent = useIsPresent();
+
+  return (
+    <motion.div
+      style={{ position: isPresent ? "absolute" : "absolute" }}
+      key={"duo-request-card"}
+      initial={{ opacity: 0, bottom: -12 }}
+      animate={{ opacity: 1, bottom: 0 }}
+      exit={{ opacity: 0, bottom: -12 }}
+      transition={{ ease: "easeInOut" }}
+      className="flex items-center right-0 bg-card px-6 py-5 m-3 h-44 w-full max-w-md rounded-br-sm"
+    >
+    </motion.div>
+  )
 }

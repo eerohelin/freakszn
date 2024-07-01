@@ -1,12 +1,12 @@
 import React from "react";
-import { createLazyFileRoute } from "@tanstack/react-router";
-import { SocketProviderContext } from "../components/providers";
 import { Queue } from "../components/queue";
 import { Users } from "../components/users";
-import QueuePop from "../components/queuePop";
-import { useSummonerSplash } from "../hooks/useSummonerSplash";
 import { motion, AnimatePresence } from "framer-motion"
+import { createLazyFileRoute } from "@tanstack/react-router";
+import { useSummonerSplash } from "../hooks/useSummonerSplash";
+import { SocketProviderContext } from "../components/providers";
 import useTransitionDirection from "../hooks/usePreviousRoute";
+import QueuePop from "../components/queuePop";
 
 export const Route = createLazyFileRoute("/" as never)({
   component: Index,

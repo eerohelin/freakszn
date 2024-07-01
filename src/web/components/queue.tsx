@@ -1,5 +1,5 @@
 import { io, type Socket } from "socket.io-client";
-import { Button } from "./buttons";
+import { Button, Button2 } from "./buttons";
 
 interface QueueProps extends React.HTMLAttributes<HTMLDivElement> {
   socket: Socket | null;
@@ -41,17 +41,17 @@ export function Queue({ socket, state, className, ...props }: QueueProps) {
   return (
     <div className={`${className} w-full flex`} {...props}>
       <div className="flex flex-col gap-2">
-        <Button onClick={() => handleMockQue()}>mockque</Button>
-        <Button onClick={() => handleMockAcce()}>mockacce</Button>
-        <Button onClick={() => handleDeQueue()}>Leave</Button>
-        <Button onClick={() => handleJoin()}>join c:</Button>
+        <Button2 onClick={() => handleMockQue()}>mockque</Button2>
+        <Button2 onClick={() => handleMockAcce()}>mockacce</Button2>
+        <Button2 onClick={() => handleDeQueue()}>Leave</Button2>
+        <Button2 onClick={() => handleJoin()}>join c:</Button2>
 
         {/** Map Queue buttons and queue members */}
         {Object.keys(state.state).map((role: string, idx: number) => (
           <div key={role} className="flex items-center gap-2 w-[14rem]">
-            <Button onClick={() => handleQueue(role)} className="text-xs">
+            <Button2 onClick={() => handleQueue(role)} className="text-xs">
               {role}
-            </Button>
+            </Button2>
             <div className="w-full flex items-center gap-2">
               {(state.state[role as any] as any).map((name: string) => (
                 <div key={name}>{name}</div>
