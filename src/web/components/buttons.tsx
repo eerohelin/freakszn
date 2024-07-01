@@ -58,3 +58,24 @@ export function Button2({ children, className, type, onClick }: ButtonProps) {
     </button>
   );
 }
+
+export function ButtonFszn({ children, className, type, onClick }: ButtonProps) {
+  return (
+    <button
+      onClick={onClick}
+      type={type || "button"}
+      className={cn(
+        "border-border border rounded-md px-2 bg-card hover:underline",
+        className,
+      )}
+    >
+      <span 
+        className={cn(
+          "",
+        )}
+      >
+        {children}
+      </span>
+    </button>
+  );
+}
