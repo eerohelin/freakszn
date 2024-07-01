@@ -6,15 +6,15 @@ interface UserCard extends React.HTMLAttributes<HTMLDivElement> {
     status?: string
     roundedIcon?: boolean
     iconStyles?: string,
-    statusStyles?: string,
+    statusStyles?: string,  
   }
 
-export function UserCard({ user, status = 'Online', roundedIcon = true, iconStyles, statusStyles, className, ...props }: UserCard) {
+export function UserCard({ user, status = 'online', roundedIcon = true, iconStyles, statusStyles, className, ...props }: UserCard) {
     const { i } = useSummonerIcon(Number(user.iconId));
     const { i: placeholder } = useSummonerIcon(29);
   
     return (
-      <div {...props} className={cn("flex gap-2 items-center hover:bg-league-button py-2 cursor-pointer", className)}>
+      <div {...props} className={cn("flex gap-2 items-center hover:bg-white/10 py-2 cursor-pointer", className)}>
         <div className="flex items-center">
           <div className={cn(
             "bg-gradient-to-b from-league-border to-league-borderdarker p-[0.125rem]", 

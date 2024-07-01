@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import { SocketProviderContext } from "./providers";
 import { useSummonerIcon } from "../hooks/useSummonerIcon";
 import { ROLES } from "../lib/constants";
-import { Button } from "./buttons";
+import { Button, ButtonFszn } from "./buttons";
 import { cn } from "../lib/utils";
 import { UserCard } from "./userCard";
 
@@ -18,11 +18,11 @@ export function Users({ users }: UsersProps) {
   return (
     <>
       <div className="mt-1">
-        <div className="font-beaufort-bold px-[0.9rem] text-lg -mb-1">Freaks</div>
+        <div className="font-beaufort-bold px-[0.9rem] text-lg -mb-1 mx-[0.15rem]">Freaks</div>
         <div className="relative">
           <div className="absolute w-full bg-gradient-to-t from-transparent from-[65%] to-background z-20 top-0 h-4" />
           <div
-            className="absolute overflow-y-scroll pb-28 px-3 w-full mt-1"
+            className="absolute overflow-y-scroll pb-64 px-[1rem] w-full mt-1"
             style={{ height: windowHeight - 100 }}
           >
             {users.length > 0 && users?.map((u) => (
@@ -70,8 +70,11 @@ const PlayerModal = ({ player, show, setShow }: PlayerModalProps) => {
 
   return (
     <> { show &&
-      <div className="fixed inset-0 w-full h-full flex flex-col items-center content-center justify-center bg-black backdrop-blur-sm bg-opacity-30 z-[1000]">
-        <div className="w-full max-w-md bg-card p-6">
+      <div className={cn(
+        "fixed inset-0 w-full h-full flex flex-col items-center content-center",
+        "justify-center bg-black backdrop-blur-sm bg-opacity-30 z-[1000]"
+      )}>
+        <div className="bg-card p-6">
 
           {/** PLAYER INFO */}
           <div className="flex gap-2 items-center pb-4">
@@ -94,62 +97,58 @@ const PlayerModal = ({ player, show, setShow }: PlayerModalProps) => {
           </div>
 
           <div className="pb-4 flex flex-col gap-2">
-            <Button
-              className={cn((showMyRolePicker || showHisRolePicker) && "hidden")}
+            <ButtonFszn
+              className={cn((showMyRolePicker || showHisRolePicker) && "hidden", "bg-white/20")}
               onClick={() => {
                 setShowHisRolePicker(false);
                 setShowMyRolePicker(true);
             }}>
               Your role ({myRole})
-            </Button>
+            </ButtonFszn>
             { showMyRolePicker &&
               <>
                 <span>Your role</span>
                 <div className="flex items-center gap-2">
                   {ROLES.map((r: string) => 
-                  // biome-ignore lint/a11y/useKeyWithClickEvents: <explanation>
-                  <div
+                  <ButtonFszn
                     key={r}
                     onClick={() => {
                       setMyRole(r.toLowerCase())
                       setShowMyRolePicker(false);
                     }}
                     className={cn(
-                    hisRole?.toLowerCase() === r.toLowerCase() && "pointer-events-none grayscale",
-                    "bg-league-button text-league-text border border-league-border px-2 cursor-pointer w-full text-center"
+                    hisRole?.toLowerCase() === r.toLowerCase() && "pointer-events-none grayscale", "bg-white/20"
                   )}>
                     {r}
-                  </div>)}
+                  </ButtonFszn>)}
                 </div>
               </>
             }
             
-            <Button
-              className={cn((showMyRolePicker || showHisRolePicker) && "hidden")}
+            <ButtonFszn
+              className={cn((showMyRolePicker || showHisRolePicker) && "hidden", "bg-white/20")}
               onClick={() => {
                 setShowMyRolePicker(false);
                 setShowHisRolePicker(true);
             }}>
               Your duos role ({hisRole})
-            </Button >
+            </ButtonFszn>
             { showHisRolePicker &&
               <>
                 <span>Your duos role</span>
                 <div className="flex items-center gap-2">
                   {ROLES.map((r: string) => 
-                  // biome-ignore lint/a11y/useKeyWithClickEvents: <explanation>
-                  <div
+                  <ButtonFszn
                     key={r}
                     onClick={() => {
                       setHisRole(r.toLowerCase())
                       setShowHisRolePicker(false);
                     }}
                     className={cn(
-                    myRole?.toLowerCase() === r.toLowerCase() && "pointer-events-none grayscale",
-                    "bg-league-button text-league-text border border-league-border px-2 cursor-pointer w-full text-center"
+                    myRole?.toLowerCase() === r.toLowerCase() && "pointer-events-none grayscale", "bg-white/20"
                   )}>
                     {r}
-                  </div>)}
+                  </ButtonFszn>)}
                 </div>
               </>
             }
@@ -157,9 +156,12 @@ const PlayerModal = ({ player, show, setShow }: PlayerModalProps) => {
 
           {/** BUTTONS ROW */}
           <div className="flex items-center gap-2 mt-6">
-            <Button
+            <ButtonFszn
               disabled={myRole === hisRole || myRole === undefined || hisRole === undefined}
-              className={cn((myRole === hisRole || myRole === undefined || hisRole === undefined) && "pointer-events-none grayscale")}
+              className={cn(
+                "bg-white/20",
+                (myRole === hisRole || myRole === undefined || hisRole === undefined) && "pointer-events-none bg-black/30 text-white/20",
+              )}
               onClick={() => {
                 socket?.emit("duo-queue", {
                   duoName: player.name,
@@ -171,13 +173,13 @@ const PlayerModal = ({ player, show, setShow }: PlayerModalProps) => {
                 setShow(false)
             }}>
               Ask to duo
-            </Button>
-            <Button onClick={() => {
+            </ButtonFszn>
+            <ButtonFszn className="bg-white/20" onClick={() => {
               clearFields()
               setShow(false)
             }}>
               Close
-            </Button>
+            </ButtonFszn>
           </div>
         </div>
       </div>
