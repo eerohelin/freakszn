@@ -14,6 +14,11 @@ export const theme = {
         border: "#c9a14a",
         borderdarker: "#564624",
         button: "#1e2328",
+
+        text2: "#a1c4c4",
+        border2 : "#04a2b8",
+        borderdarker2: "#017091",
+        button2: "#1e2328",
       }
     },
   },
