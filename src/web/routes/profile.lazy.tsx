@@ -1,6 +1,6 @@
 import t from "@src/shared/config";
 import { createLazyFileRoute } from "@tanstack/react-router";
-import { motion, AnimatePresence } from "framer-motion"
+import { motion, AnimatePresence } from "framer-motion";
 import useTransitionDirection from "../hooks/usePreviousRoute";
 
 export const Route = createLazyFileRoute("/profile" as never)({
@@ -10,7 +10,7 @@ export const Route = createLazyFileRoute("/profile" as never)({
 function Profile() {
   const utils = t.useUtils();
   const { data: s } = t.lol.getSummoner.useQuery();
-  const { transitionDirection } = useTransitionDirection()
+  const { transitionDirection } = useTransitionDirection();
   const { mutate: storeSummoner } = t.lol.setSummoner.useMutation({
     onSuccess: () => {
       utils.lol.getSummoner.invalidate();
@@ -46,6 +46,6 @@ function Profile() {
           </button>
         </div>
       </motion.div>
-    </AnimatePresence >
+    </AnimatePresence>
   );
 }

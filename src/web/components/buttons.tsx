@@ -46,7 +46,7 @@ export function Button2({ children, className, type, onClick }: ButtonProps) {
         className,
       )}
     >
-      <span 
+      <span
         className={cn(
           "font-beaufort-bold",
           `flex w-full items-center justify-center content-center border-b border-x border-black
@@ -59,7 +59,12 @@ export function Button2({ children, className, type, onClick }: ButtonProps) {
   );
 }
 
-export function ButtonFszn({ children, className, type, onClick }: ButtonProps) {
+export function ButtonFszn({
+  children,
+  className,
+  type,
+  onClick,
+}: ButtonProps) {
   return (
     <button
       onClick={onClick}

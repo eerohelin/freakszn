@@ -1,10 +1,12 @@
 import t from "@src/shared/config";
 
 export function useSummonerSplash(backgroundId = 1000) {
-  const { data: splash } = t.lol.getSummonerSplash.useQuery({ id: Number(backgroundId) || 1000 });
+  const { data: splash } = t.lol.getSummonerSplash.useQuery({
+    id: Number(backgroundId) || 1000,
+  });
 
   function arrayBufferToBase64(buffer: any) {
-    let binary = '';
+    let binary = "";
     const bytes = new Uint8Array(buffer);
     const len = bytes.byteLength;
     for (let i = 0; i < len; i++) {

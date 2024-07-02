@@ -10,12 +10,12 @@ export const lolRouter = router({
       return;
     }
     let summoner = await lcu.getCurrentSummoner();
-    const rankData = await lcu.getCurrentSummonerRank()
+    const rankData = await lcu.getCurrentSummonerRank();
 
     summoner = {
       ...summoner,
-      ...rankData
-    }
+      ...rankData,
+    };
     console.log("updating summoner with:", summoner);
     await updateSummoner({ ...summoner });
   }),
@@ -28,7 +28,7 @@ export const lolRouter = router({
   getSummonerIcon: publicProcedure
     .input(
       z.object({
-        id: z.number()
+        id: z.number(),
       }),
     )
     .query(async ({ ctx, input }) => {
@@ -40,10 +40,10 @@ export const lolRouter = router({
       const buffer = await lcu.getSummonerIcon(id);
       return buffer;
     }),
-    getSummonerSplash: publicProcedure
+  getSummonerSplash: publicProcedure
     .input(
       z.object({
-        id: z.number()
+        id: z.number(),
       }),
     )
     .query(async ({ ctx, input }) => {
@@ -60,12 +60,12 @@ export const lolRouter = router({
     .query(async ({ input }) => {
       const lcu = getLCU();
       await lcu?.joinLobby(Number(input.id), "");
-      return true
+      return true;
     }),
   createLobby: publicProcedure.query(async () => {
     const lcu = getLCU();
     await lcu?.createLobby("freakszn", "", 1);
-    return true
+    return true;
   }),
   isClientOpen: publicProcedure.query(async () => {
     return getLCU() !== undefined;

@@ -1,14 +1,14 @@
 import Game from "../components/game";
 import useTransitionDirection from "../hooks/usePreviousRoute";
 import { createLazyFileRoute } from "@tanstack/react-router";
-import { motion, AnimatePresence } from "framer-motion"
+import { motion, AnimatePresence } from "framer-motion";
 
 export const Route = createLazyFileRoute("/game" as never)({
   component: Component,
 });
 
 function Component() {
-  const { transitionDirection } = useTransitionDirection()
+  const { transitionDirection } = useTransitionDirection();
 
   return (
     <AnimatePresence>
@@ -23,7 +23,5 @@ function Component() {
         <Game />
       </motion.div>
     </AnimatePresence>
-  )
-  
-  ;
+  );
 }

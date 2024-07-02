@@ -1,14 +1,13 @@
 import { createLazyFileRoute } from "@tanstack/react-router";
-import { motion, AnimatePresence } from "framer-motion"
+import { motion, AnimatePresence } from "framer-motion";
 import useTransitionDirection from "../hooks/usePreviousRoute";
-
 
 export const Route = createLazyFileRoute("/" as never)({
   component: Component,
 });
 
 function Component() {
-  const { transitionDirection } = useTransitionDirection()
+  const { transitionDirection } = useTransitionDirection();
 
   return (
     <AnimatePresence>
@@ -23,5 +22,5 @@ function Component() {
         <div>Match History :)</div>
       </motion.div>
     </AnimatePresence>
-  )
+  );
 }

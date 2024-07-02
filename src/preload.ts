@@ -17,13 +17,20 @@ process.once("loaded", () => {
     onDidReceiveLobbyId: () => ipcRenderer.send("did-receive-lobby-id"),
     offSendLobbyId: (callback: any) =>
       ipcRenderer.removeAllListeners("send-lobby-id"),
-    onUpdateInLobby: (callback: any) => ipcRenderer.on("update-in-lobby", (_event, value) => callback(value)),
-    offUpdateInLobby: (callback: any) => ipcRenderer.removeAllListeners("update-in-lobby"),
-    onEndOfGame: (callback: any) => ipcRenderer.on("end-of-game", (_event, value) => callback(value)),
-    offEndOfGame: (callback: any) => ipcRenderer.removeAllListeners("end-of-game"),
-    onCurrentLobbyName: (callback: any) => ipcRenderer.on("current-lobby-name", (_event, value) => callback(value)),
-    offCurrentLobbyName: (callback: any) => ipcRenderer.removeAllListeners("current-lobby-name"),
-    onLobbyDidNotExist: (callback: any) => ipcRenderer.on("lobby-did-not-exist", (_event, value) => callback(value)),
+    onUpdateInLobby: (callback: any) =>
+      ipcRenderer.on("update-in-lobby", (_event, value) => callback(value)),
+    offUpdateInLobby: (callback: any) =>
+      ipcRenderer.removeAllListeners("update-in-lobby"),
+    onEndOfGame: (callback: any) =>
+      ipcRenderer.on("end-of-game", (_event, value) => callback(value)),
+    offEndOfGame: (callback: any) =>
+      ipcRenderer.removeAllListeners("end-of-game"),
+    onCurrentLobbyName: (callback: any) =>
+      ipcRenderer.on("current-lobby-name", (_event, value) => callback(value)),
+    offCurrentLobbyName: (callback: any) =>
+      ipcRenderer.removeAllListeners("current-lobby-name"),
+    onLobbyDidNotExist: (callback: any) =>
+      ipcRenderer.on("lobby-did-not-exist", (_event, value) => callback(value)),
     offLobbyDidNotExist: (callback: any) =>
       ipcRenderer.removeAllListeners("lobby-did-not-exist"),
     createLobby: (value: any) => ipcRenderer.send("create-lobby", value),

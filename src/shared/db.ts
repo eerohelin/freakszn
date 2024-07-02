@@ -8,9 +8,7 @@ const sqlite = new Database(`${app.getPath("userData")}/db.sqlite`);
 export const db = drizzle(sqlite, { schema });
 
 /** DB ACTIONS */
-export async function updateSummoner(
-  summoner: Summoner,
-): Promise<void> {
+export async function updateSummoner(summoner: Summoner): Promise<void> {
   try {
     await db
       .insert(schema.summoners)

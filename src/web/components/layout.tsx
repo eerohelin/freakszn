@@ -27,15 +27,19 @@ const CustomTopBar = () => {
   const [isConnected, setIsConnected] = useState(lcuExists);
 
   React.useEffect(() => {
-    socket?.off("create-lobby")
-    socket?.off("join-lobby")
-    socket?.on("join-lobby", (data): any => { window.electronAPI.joinLobby(data);});
-    socket?.on("create-lobby", (data) => { window.electronAPI.createLobby(data);});
+    socket?.off("create-lobby");
+    socket?.off("join-lobby");
+    socket?.on("join-lobby", (data): any => {
+      window.electronAPI.joinLobby(data);
+    });
+    socket?.on("create-lobby", (data) => {
+      window.electronAPI.createLobby(data);
+    });
     window.electronAPI.offConnectionChange();
     window.electronAPI.onConnectionChange((value: any) => {
       window.electronAPI.didReceive();
       setIsConnected(value);
-      socket?.emit("set-client-open", value)
+      socket?.emit("set-client-open", value);
       console.log("connected");
     });
   }, [socket?.emit, socket?.off, socket?.on]);
@@ -108,67 +112,69 @@ const CustomTopBar = () => {
 };
 
 interface DuoRequest {
-  requesterRole: string,
-  yourRole: string,
+  requesterRole: string;
+  yourRole: string;
   requester: {
-    name: string,
-    iconId: number,
-    summonerLevel: number,
-    tagline: string,
+    name: string;
+    iconId: number;
+    summonerLevel: number;
+    tagline: string;
     rankData: {
-      division: string,
-      lp: number,
-      rank: string
-    }
-  }
+      division: string;
+      lp: number;
+      rank: string;
+    };
+  };
 }
 
 interface PendingDuoRequest {
   duoPlayer: {
-    iconId: number,
-    name: string,
-    rankData: { rank: string, division: string, lp: number },
-    summonerLevel: number,
-    tagline: string
-  },
-  duoRole: string,
-  myRole: string,
+    iconId: number;
+    name: string;
+    rankData: { rank: string; division: string; lp: number };
+    summonerLevel: number;
+    tagline: string;
+  };
+  duoRole: string;
+  myRole: string;
 }
 
 export default function Layout({ children }: LayoutProps) {
   const router = useRouter();
   const { socket } = React.useContext(SocketProviderContext);
-  const [pendingDuoRequest, setPendingDuoRequest] = React.useState<PendingDuoRequest>()
-  const [showPendingDuoRequest, setShowPendingDuoRequest] = React.useState<boolean>(false)
+  const [pendingDuoRequest, setPendingDuoRequest] =
+    React.useState<PendingDuoRequest>();
+  const [showPendingDuoRequest, setShowPendingDuoRequest] =
+    React.useState<boolean>(false);
   const [showDuoInvite, setShowDuoInvite] = React.useState<boolean>(false);
   const [duoRequest, setDuoRequest] = React.useState<DuoRequest>({
     requester: {
-        iconId: 5021,
-        name: "Kalevan Canyon",
-        rankData: {
-            division: "I",
-            lp: 26,
-            rank: "DIAMOND"
-        },
-        summonerLevel: 83,
-        tagline: "EUW"
+      iconId: 5021,
+      name: "Kalevan Canyon",
+      rankData: {
+        division: "I",
+        lp: 26,
+        rank: "DIAMOND",
+      },
+      summonerLevel: 83,
+      tagline: "EUW",
     },
     requesterRole: "top",
-    yourRole: "jungle"
-  })
+    yourRole: "jungle",
+  });
 
   socket?.on("duo-request", (duoRequest: DuoRequest) => {
-    setDuoRequest(duoRequest)
-    setShowDuoInvite(true)
-  })
+    setDuoRequest(duoRequest);
+    setShowDuoInvite(true);
+  });
   socket?.on("duo-request-sent", (pendingDuoRequest: PendingDuoRequest) => {
-    setPendingDuoRequest(pendingDuoRequest)
-    setShowPendingDuoRequest(true)
-  })
+    setPendingDuoRequest(pendingDuoRequest);
+    setShowPendingDuoRequest(true);
+  });
   socket?.on("game-start", (game) => {
     router.navigate({
       to: "/game",
-    }); 
+    });
   });
 
   React.useEffect(() => {
@@ -187,13 +193,22 @@ export default function Layout({ children }: LayoutProps) {
       {/* <QueuePop /> */}
       <div className="w-full">
         <ButtonFszn
-            className="fixed ml-[40rem] mt-1"
-            onClick={() => setShowDuoInvite(!showDuoInvite)}>
-            showDuoInvite
+          className="fixed ml-[40rem] mt-1"
+          onClick={() => setShowDuoInvite(!showDuoInvite)}
+        >
+          showDuoInvite
         </ButtonFszn>
         <SideNav />
-        <DuoInvitePopup showDuoInvite={showDuoInvite} setShowDuoInvite={setShowDuoInvite} duoRequest={duoRequest} />
-        <PendingDuoRequestPopup pendingDuoRequest={pendingDuoRequest} showPendingDuoRequest={showPendingDuoRequest} setShowPendingDuoRequest={setShowPendingDuoRequest} />
+        <DuoInvitePopup
+          showDuoInvite={showDuoInvite}
+          setShowDuoInvite={setShowDuoInvite}
+          duoRequest={duoRequest}
+        />
+        <PendingDuoRequestPopup
+          pendingDuoRequest={pendingDuoRequest}
+          showPendingDuoRequest={showPendingDuoRequest}
+          setShowPendingDuoRequest={setShowPendingDuoRequest}
+        />
         {children}
       </div>
     </>
@@ -201,22 +216,38 @@ export default function Layout({ children }: LayoutProps) {
 }
 
 interface DuoInviteModalProps {
-  duoRequest: DuoRequest 
-  showDuoInvite: boolean
-  setShowDuoInvite: React.Dispatch<React.SetStateAction<boolean>>
+  duoRequest: DuoRequest;
+  showDuoInvite: boolean;
+  setShowDuoInvite: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const PendingDuoRequestPopup = ({ pendingDuoRequest, showPendingDuoRequest, setShowPendingDuoRequest }: { pendingDuoRequest?: PendingDuoRequest, showPendingDuoRequest: boolean, setShowPendingDuoRequest: React.Dispatch<React.SetStateAction<boolean>> }) => {
+const PendingDuoRequestPopup = ({
+  pendingDuoRequest,
+  showPendingDuoRequest,
+  setShowPendingDuoRequest,
+}: {
+  pendingDuoRequest?: PendingDuoRequest;
+  showPendingDuoRequest: boolean;
+  setShowPendingDuoRequest: React.Dispatch<React.SetStateAction<boolean>>;
+}) => {
   return (
     <AnimatePresence>
-      {showPendingDuoRequest && pendingDuoRequest && <PendingDuoRequestPopupMotionDiv pendingDuoRequest={pendingDuoRequest} setShowPendingDuoRequest={setShowPendingDuoRequest} />}
+      {showPendingDuoRequest && pendingDuoRequest && (
+        <PendingDuoRequestPopupMotionDiv
+          pendingDuoRequest={pendingDuoRequest}
+          setShowPendingDuoRequest={setShowPendingDuoRequest}
+        />
+      )}
     </AnimatePresence>
-  )
-}
+  );
+};
 
-function PendingDuoRequestPopupMotionDiv (props: { pendingDuoRequest: PendingDuoRequest, setShowPendingDuoRequest: React.Dispatch<React.SetStateAction<boolean>> }) {
+function PendingDuoRequestPopupMotionDiv(props: {
+  pendingDuoRequest: PendingDuoRequest;
+  setShowPendingDuoRequest: React.Dispatch<React.SetStateAction<boolean>>;
+}) {
   const { pendingDuoRequest, setShowPendingDuoRequest } = props;
-  const { socket } = useContext(SocketProviderContext)
+  const { socket } = useContext(SocketProviderContext);
   const isPresent = useIsPresent();
 
   return (
@@ -231,7 +262,9 @@ function PendingDuoRequestPopupMotionDiv (props: { pendingDuoRequest: PendingDuo
     >
       <div className="w-full h-full bg-card p-5 rounded-[0.15rem]">
         <div className="h-full w-full">
-          <p className="text-2xl font-beaufort flex items-center">Duo request pending <LoadingDots className="mt-1 ml-1" /></p>
+          <p className="text-2xl font-beaufort flex items-center">
+            Duo request pending <LoadingDots className="mt-1 ml-1" />
+          </p>
           <UserCard
             className="pointer-events-none"
             roundedIcon={false}
@@ -244,38 +277,55 @@ function PendingDuoRequestPopupMotionDiv (props: { pendingDuoRequest: PendingDuo
         <div className="h-full w-full text-sm">
           <div className="">
             Your role: <span>{pendingDuoRequest.myRole}</span>
-          </div>  
+          </div>
           <div>
-            {pendingDuoRequest.duoPlayer.name}'s role: <span>{pendingDuoRequest.duoRole}</span>
+            {pendingDuoRequest.duoPlayer.name}'s role:{" "}
+            <span>{pendingDuoRequest.duoRole}</span>
           </div>
         </div>
         <div className="flex items-center gap-[0.4rem] mt-4">
           <ButtonFszn
             onClick={() => {
-              socket?.emit("duo-cancel")
-              setShowPendingDuoRequest(false)
+              socket?.emit("duo-cancel");
+              setShowPendingDuoRequest(false);
             }}
-            className="border-red-500 text-red-500 bg-black/20 w-full">
+            className="border-red-500 text-red-500 bg-black/20 w-full"
+          >
             Cancel request
           </ButtonFszn>
-        </div>  
+        </div>
       </div>
     </motion.div>
-  )
+  );
 }
 
-const DuoInvitePopup = ({ showDuoInvite, setShowDuoInvite, duoRequest }: DuoInviteModalProps) => {
-  const title = DUO_INVITE_TITLES[Math.floor(Math.random() * DUO_INVITE_TITLES.length)]
+const DuoInvitePopup = ({
+  showDuoInvite,
+  setShowDuoInvite,
+  duoRequest,
+}: DuoInviteModalProps) => {
+  const title =
+    DUO_INVITE_TITLES[Math.floor(Math.random() * DUO_INVITE_TITLES.length)];
   return (
-    <AnimatePresence> 
-      { showDuoInvite && <DuoInvitePopupMotionDiv duoRequest={duoRequest} setShowDuoInvite={setShowDuoInvite} title={title} />}
+    <AnimatePresence>
+      {showDuoInvite && (
+        <DuoInvitePopupMotionDiv
+          duoRequest={duoRequest}
+          setShowDuoInvite={setShowDuoInvite}
+          title={title}
+        />
+      )}
     </AnimatePresence>
-  )
-}
+  );
+};
 
-function DuoInvitePopupMotionDiv (props: { duoRequest: DuoRequest, setShowDuoInvite: React.Dispatch<React.SetStateAction<boolean>>, title: string }) {
+function DuoInvitePopupMotionDiv(props: {
+  duoRequest: DuoRequest;
+  setShowDuoInvite: React.Dispatch<React.SetStateAction<boolean>>;
+  title: string;
+}) {
   const { duoRequest, setShowDuoInvite, title } = props;
-  const { socket } = useContext(SocketProviderContext)
+  const { socket } = useContext(SocketProviderContext);
   const isPresent = useIsPresent();
 
   return (
@@ -304,30 +354,33 @@ function DuoInvitePopupMotionDiv (props: { duoRequest: DuoRequest, setShowDuoInv
         <div className="h-full w-full text-sm">
           <div className="">
             Your role: <span>{duoRequest.yourRole}</span>
-          </div>  
+          </div>
           <div>
-            {duoRequest.requester.name}'s role: <span>{duoRequest.requesterRole}</span>
+            {duoRequest.requester.name}'s role:{" "}
+            <span>{duoRequest.requesterRole}</span>
           </div>
         </div>
         <div className="flex items-center gap-[0.4rem] mt-4">
           <ButtonFszn
             onClick={() => {
-              socket?.emit("duo-accept")
-              setShowDuoInvite(false)
+              socket?.emit("duo-accept");
+              setShowDuoInvite(false);
             }}
-            className="border-green-500 text-green-500 bg-black/20 w-full">
+            className="border-green-500 text-green-500 bg-black/20 w-full"
+          >
             Accept
           </ButtonFszn>
           <ButtonFszn
             onClick={() => {
-              socket?.emit("duo-decline")
-              setShowDuoInvite(false)
+              socket?.emit("duo-decline");
+              setShowDuoInvite(false);
             }}
-            className="border-red-500 text-red-500 bg-black/20 w-full">
+            className="border-red-500 text-red-500 bg-black/20 w-full"
+          >
             Reject
           </ButtonFszn>
-        </div>  
+        </div>
       </div>
     </motion.div>
-  )
+  );
 }

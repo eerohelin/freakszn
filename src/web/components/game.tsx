@@ -14,15 +14,15 @@ interface GameProps
 
 const Game = ({ className, ...props }: GameProps) => {
   const { game, state, socket } = React.useContext(SocketProviderContext);
-  const [ready, setReady] = React.useState<boolean>(game?.me?.ready)
+  const [ready, setReady] = React.useState<boolean>(game?.me?.ready);
 
   React.useEffect(() => {
-    if(game !== undefined){
-      setReady(game?.me?.ready)
+    if (game !== undefined) {
+      setReady(game?.me?.ready);
     }
-  }, [game])
+  }, [game]);
 
-  function getHowManyNeeded(){
+  function getHowManyNeeded() {
     let howManyNeeded = 10;
     for (const role of Object.keys(state.state)) {
       const arr = state.state[role];
@@ -30,9 +30,15 @@ const Game = ({ className, ...props }: GameProps) => {
     }
     return howManyNeeded;
   }
-  function handleReady(){ socket?.emit("set-ready", !ready)}
-  function handleOpenDraft() { socket?.emit("open-draft");}
-  function handleJoin() { socket?.emit("join-lobby");}
+  function handleReady() {
+    socket?.emit("set-ready", !ready);
+  }
+  function handleOpenDraft() {
+    socket?.emit("open-draft");
+  }
+  function handleJoin() {
+    socket?.emit("join-lobby");
+  }
 
   if (game === undefined || Object.keys(game).length < 1) {
     return (
@@ -45,10 +51,7 @@ const Game = ({ className, ...props }: GameProps) => {
   }
 
   return (
-    <div
-      {...props}
-      className={cn(className, "h-full")}
-    >
+    <div {...props} className={cn(className, "h-full")}>
       <div className="w-full flex flex-col content-center items-center justify-center h-[4rem] px-2">
         <div className="w-full flex justify-center max-w-xl">
           <StatusBar statusMessages={game?.statusMessages} />
@@ -61,8 +64,9 @@ const Game = ({ className, ...props }: GameProps) => {
             {/* biome-ignore lint/a11y/useKeyWithClickEvents: <explanation> */}
             <div
               onClick={() => window.electronAPI.openLink(getMulti(game.blue))}
-              className="w-min truncate flex justify-start text-cyan-500 font-semibold items-center cursor-pointer hover:underline">
-              Blue Team 
+              className="w-min truncate flex justify-start text-cyan-500 font-semibold items-center cursor-pointer hover:underline"
+            >
+              Blue Team
               <span className="text-xs font-beaufort font-light ml-1 flex items-center">
                 multi <ArrowSquareOut size={12} />
               </span>
@@ -71,10 +75,11 @@ const Game = ({ className, ...props }: GameProps) => {
             {/* biome-ignore lint/a11y/useKeyWithClickEvents: <explanation> */}
             <div
               onClick={() => window.electronAPI.openLink(getMulti(game.red))}
-              className="w-min truncate flex justify-end text-red-500 font-semibold items-center cursor-pointer hover:underline">
+              className="w-min truncate flex justify-end text-red-500 font-semibold items-center cursor-pointer hover:underline"
+            >
               <span className="text-xs font-beaufort font-light mr-1 flex items-center">
                 multi <ArrowSquareOut size={12} />
-              </span> 
+              </span>
               Red Team
             </div>
           </div>
@@ -110,17 +115,30 @@ const Game = ({ className, ...props }: GameProps) => {
           </div>
         </div>
       </div>
-      
+
       <div className="w-full flex gap-2 justify-center items-center mt-10">
         {/* <Button onClick={() => handleJoin()} className={cn("w-44", (game.me.availability === false || game.me.autoJoining === true) && 'grayscale pointer-events-none')} disabled={game.me.availability === false || game.me.autoJoining === true}>
           Join Lobby
         </Button> */}
         <div className="w-64 flex flex-col gap-2">
-          <ButtonFszn onClick={() => handleReady()} className={cn("", 
-            (game.me.availability === false || game.me.autoJoining === true) && 'grayscale pointer-events-none',
-            game.me.ready && 'bg-gradient-to-b from-green-500 to-green-900'
-          )} disabled={game.me.availability === false || game.me.autoJoining === true}>Ready</ButtonFszn>
-          <ButtonFszn onClick={() => handleOpenDraft()}className="">Draft Link</ButtonFszn>
+          <ButtonFszn
+            onClick={() => handleReady()}
+            className={cn(
+              "",
+              (game.me.availability === false ||
+                game.me.autoJoining === true) &&
+                "grayscale pointer-events-none",
+              game.me.ready && "bg-gradient-to-b from-green-500 to-green-900",
+            )}
+            disabled={
+              game.me.availability === false || game.me.autoJoining === true
+            }
+          >
+            Ready
+          </ButtonFszn>
+          <ButtonFszn onClick={() => handleOpenDraft()} className="">
+            Draft Link
+          </ButtonFszn>
         </div>
       </div>
     </div>

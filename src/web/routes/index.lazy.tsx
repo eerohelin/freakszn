@@ -1,7 +1,7 @@
 import React from "react";
 import { Queue } from "../components/queue";
 import { Users } from "../components/users";
-import { motion, AnimatePresence } from "framer-motion"
+import { motion, AnimatePresence } from "framer-motion";
 import { createLazyFileRoute } from "@tanstack/react-router";
 import { useSummonerSplash } from "../hooks/useSummonerSplash";
 import { SocketProviderContext } from "../components/providers";
@@ -13,9 +13,11 @@ export const Route = createLazyFileRoute("/" as never)({
 });
 
 function Index() {
-  const { socket, state, queuePop, summoner } = React.useContext(SocketProviderContext);
+  const { socket, state, queuePop, summoner } = React.useContext(
+    SocketProviderContext,
+  );
   const { i } = useSummonerSplash(Number(summoner?.backgroundSkinId));
-  const { transitionDirection } = useTransitionDirection()
+  const { transitionDirection } = useTransitionDirection();
 
   return (
     <AnimatePresence>

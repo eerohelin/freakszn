@@ -1,7 +1,7 @@
 declare global {
-    interface Window {
-        electronAPI: any
-    }
+  interface Window {
+    electronAPI: any;
+  }
 }
 
 // custom type definitions can live here

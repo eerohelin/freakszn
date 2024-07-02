@@ -105,8 +105,7 @@ export function SocketProvider({ children }: SocketProviderProps) {
   const [socket, setSocket] = React.useState<Socket>(s);
   const [state, setState] = React.useState<any>();
   const [game, setGame] = React.useState({});
-  const [queuePop, SetQueuePop] = React.useState()
-
+  const [queuePop, SetQueuePop] = React.useState();
 
   React.useEffect(() => {
     if (socket.connected) {
@@ -117,8 +116,8 @@ export function SocketProvider({ children }: SocketProviderProps) {
       socket.emit("set-summoner-rank", {
         rank: summoner?.rank,
         division: summoner?.division,
-        lp: summoner?.lp
-      })
+        lp: summoner?.lp,
+      });
     }
   }, [
     socket.connected,
@@ -129,7 +128,7 @@ export function SocketProvider({ children }: SocketProviderProps) {
     summoner?.lp,
     summoner?.rank,
     summoner?.summonerLevel,
-    summoner?.tagLine
+    summoner?.tagLine,
   ]);
 
   React.useEffect(() => {
@@ -144,36 +143,43 @@ export function SocketProvider({ children }: SocketProviderProps) {
 
     window.electronAPI.onSendLobbyId((value: any) => {
       socket?.emit("set-current-lobby-id", value);
-      window.electronAPI.onDidReceiveLobbyId()
+      window.electronAPI.onDidReceiveLobbyId();
     });
 
     window.electronAPI.onUpdateInLobby((value: any) => {
-      socket.emit("update-in-lobby", value)
-    })
+      socket.emit("update-in-lobby", value);
+    });
 
     window.electronAPI.onEndOfGame((value: any) => {
-      socket.emit("end-of-game", value)
-    })
+      socket.emit("end-of-game", value);
+    });
 
     window.electronAPI.onCurrentLobbyName((value: any) => {
-      socket.emit("current-lobby-name", value)
-    })
+      socket.emit("current-lobby-name", value);
+    });
 
     window.electronAPI.onLobbyDidNotExist((value: any) => {
-      socket.emit("lobby-did-not-exist")
-    })
-
+      socket.emit("lobby-did-not-exist");
+    });
   }, [socket?.emit]);
 
-  socket.on("state", (s) => { setState(s)});
-  socket.on("queue-pop", (qp) => { SetQueuePop(qp)});
+  socket.on("state", (s) => {
+    setState(s);
+  });
+  socket.on("queue-pop", (qp) => {
+    SetQueuePop(qp);
+  });
   socket.on("game-start", (game) => setGame(game));
-  socket.on("game-update", (game) => setGame(game))
-  socket.on("open-draft", (draft) => {window.electronAPI.openLink(draft)})
-  socket.off("open-draft")
+  socket.on("game-update", (game) => setGame(game));
+  socket.on("open-draft", (draft) => {
+    window.electronAPI.openLink(draft);
+  });
+  socket.off("open-draft");
 
   return (
-    <SocketProviderContext.Provider value={{ socket, state, queuePop, summoner, game, windowHeight }}>
+    <SocketProviderContext.Provider
+      value={{ socket, state, queuePop, summoner, game, windowHeight }}
+    >
       {children}
     </SocketProviderContext.Provider>
   );

@@ -90,20 +90,24 @@ function loaded(mainWindow: BrowserWindow) {
   });
 
   ipcMain.on("create-lobby", (_, data) => {
-    const lcu = getLCU()
-    if (!lcu) { return }
-    lcu.createLobby(data as string, "freakszn", 1)
-  })
+    const lcu = getLCU();
+    if (!lcu) {
+      return;
+    }
+    lcu.createLobby(data as string, "freakszn", 1);
+  });
 
   ipcMain.on("join-lobby", (_, data) => {
-    const lcu = getLCU()
-    if (!lcu) { return }
-    lcu.joinLobby(data, "")
-  })
+    const lcu = getLCU();
+    if (!lcu) {
+      return;
+    }
+    lcu.joinLobby(data, "");
+  });
 
   ipcMain.on("open-link", (_, link) => {
-    shell.openExternal(link)
-  })
+    shell.openExternal(link);
+  });
 
   const connectionDelay = setInterval(() => {
     if (uiLoaded) {

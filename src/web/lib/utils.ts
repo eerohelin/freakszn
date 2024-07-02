@@ -19,35 +19,41 @@ export function getProfileClashBannerUrl(
   return clashBannerUrl;
 }
 
-
-// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 export function getMulti(team: any) {
-  let multi = ""
+  let multi = "";
 
-  for(const player of Object.values(team)) {
+  for (const player of Object.values(team)) {
     // @ts-ignore
-    let tagline = player.tagline
-    if(tagline[0] !== "#"){ tagline = `#${tagline}`}
+    let tagline = player.tagline;
+    if (tagline[0] !== "#") {
+      tagline = `#${tagline}`;
+    }
     // @ts-ignore
-    multi += `${player.name}${tagline},`
+    multi += `${player.name}${tagline},`;
   }
 
-  const final = `https://www.op.gg/multisearch/euw?summoners=${encodeURIComponent(multi)}`;
-  console.log('finaalibro:', final);
-  return final
+  const final = `https://www.op.gg/multisearch/euw?summoners=${encodeURIComponent(
+    multi,
+  )}`;
+  console.log("finaalibro:", final);
+  return final;
 }
 
-// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 export function getOPGG(player: any) {
-  return `https://www.op.gg/summoners/euw/${player.name}-${player.tagline}`
+  return `https://www.op.gg/summoners/euw/${player.name}-${player.tagline}`;
 }
 
-export function getPageTransitionDirection(prevPathname?: string, pathname?: string): "left" | "right" {
-  if(!prevPathname || !pathname) {
+export function getPageTransitionDirection(
+  prevPathname?: string,
+  pathname?: string,
+): "left" | "right" {
+  if (!prevPathname || !pathname) {
     return "right";
   }
-  if(NAV_ITEMS_ORDER.indexOf(prevPathname) > NAV_ITEMS_ORDER.indexOf(pathname)) {
-    return "right"
+  if (
+    NAV_ITEMS_ORDER.indexOf(prevPathname) > NAV_ITEMS_ORDER.indexOf(pathname)
+  ) {
+    return "right";
   }
-  return "left"
+  return "left";
 }
