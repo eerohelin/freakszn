@@ -28,7 +28,7 @@ export function Queue({ socket, state, className, ...props }: QueueProps) {
     s?.emit("queue", ["top", "jungle", "mid", "adc", "support", "fill"][Math.floor(Math.random() * 6)]);
     s?.on("duo-request", (data) => {
       console.log('dataaa :D', data)
-      s?.emit("duo-accept")
+      //s?.emit("duo-accept")
     })
   }
   function handleMockAcce() {
@@ -38,6 +38,7 @@ export function Queue({ socket, state, className, ...props }: QueueProps) {
   function handleJoin() {
     socket?.emit("join-lobby");
   }
+  console.log(state.state)
 
   return (
     <div className={`${className} w-full flex`} {...props}>

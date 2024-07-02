@@ -173,3 +173,17 @@ export const DUO_INVITE_TITLES = [
     "the Aspect of Twilight",
     "Rise of the Thorns"
 ]
+
+export const TEAM_TAG_NAMES_COLORS: Record<string, string> = {
+    wolf: "text-teal-500",
+    krug: "text-orange-600",
+    raptor: "text-amber-500",
+    gromp: "text-violet-500",
+    brambleback: "text-red-500",
+    sentinel: "text-blue-500",
+    minion: "text-green-500",
+    herald: "text-indigo-500",
+    baron: "text-purple-500",
+    dragon: "text-emerald-500",
+
+}

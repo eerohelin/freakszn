@@ -4,6 +4,8 @@ import { useSummonerIcon } from "../hooks/useSummonerIcon";
 import { ButtonFszn } from "./buttons";
 import { ROLES } from "../lib/constants";
 import { cn } from "../lib/utils";
+import { AnimatePresence, useIsPresent, motion } from "framer-motion";
+import { UserCard } from "./userCard";
 
 interface DuoRequestModalProps {
     show: boolean
@@ -19,6 +21,7 @@ export const DuoRequestModal = ({ player, show, setShow }: DuoRequestModalProps)
     const [hisRole, setHisRole] = React.useState<string>()
     const [showMyRolePicker, setShowMyRolePicker] = React.useState(false);
     const [showHisRolePicker, setShowHisRolePicker] = React.useState(false);
+    const [showDuoInvitePendingPopup, setShowDuoInvitePendingPopup] = React.useState(false);
   
     function clearFields() {
       setMyRole(undefined)
@@ -59,6 +62,7 @@ export const DuoRequestModal = ({ player, show, setShow }: DuoRequestModalProps)
                     <ButtonFszn
                     className={cn((showMyRolePicker || showHisRolePicker) && "hidden", "bg-white/20 border-white/30")}
                     onClick={() => {
+                        setShowDuoInvitePendingPopup(true);
                         setShowHisRolePicker(false);
                         setShowMyRolePicker(true);
                     }}>

@@ -1,3 +1,4 @@
+import { TEAM_TAG_NAMES_COLORS } from '../lib/constants'
 import { cn } from '../lib/utils'
 
 interface QueueMemberCardProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -14,7 +15,7 @@ const QueueMemberCard = ({ className, player }: QueueMemberCardProps) => {
         <div className='w-full h-full bg-card px-3 rounded-[0.23rem]'>
             <span className='truncate text-gray-50 font-thin text-lg font-beaufort'>
               {player.name}
-              {player?.duoTag && <span>[Team {player.duoTag}]</span>}
+              {player?.duoTag && <span className={cn("ml-1 font-beaufort text-sm", TEAM_TAG_NAMES_COLORS[player.duoTag.toLowerCase()])}>[Duo {player.duoTag}]</span>}
             </span>
         </div>
     </div>
