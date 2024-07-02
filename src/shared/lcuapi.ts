@@ -189,6 +189,7 @@ export class LCUApi {
       let tempPlayerArray: any = []
       let tempTeam = {
         teamId: info["teams"][i]["teamId"],
+        isWinningTeam: info["teams"][i]["isWinningTeam"],
         players: []
       }
       for (const player of info["teams"][i]["players"]) {
