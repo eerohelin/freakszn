@@ -170,7 +170,101 @@ export class LCUApi {
       },
     );
 
-    return request.json();
+
+    const info = await request.json();
+    return info
+  }
+
+  public async generatePostScreenStats() {
+    let tempTeams: any = []
+    let data = {
+      gameLength: 0,
+      teams: []
+    }
+
+    const info = await this.getPostScreenStats()
+    data.gameLength = info["gameLength"]
+
+    for (let i = 0; i < info["teams"].length; i++) {
+      let tempPlayerArray: any = []
+      let tempTeam = {
+        teamId: info["teams"][i]["teamId"],
+        players: []
+      }
+      for (const player of info["teams"][i]["players"]) {
+        let tempPlayer = {
+          summonerName: await this.getSummonerNameById(player["summonerId"]),
+          championName: player["championName"],
+          items: player["items"],
+          skinSplashPath: player["skinSplashPath"],
+          stats: {
+            CHAMPIONS_KILLED: player["stats"]["CHAMPIONS_KILLED"],
+            NUM_DEATHS: player["stats"]["NUM_DEATHS"],
+            ASSISTS: player["stats"]["ASSISTS"],
+            LEVEL: player["stats"]["LEVEL"],
+            GOLD_EARNED: player["stats"]["GOLD_EARNED"],
+            MINIONS_KILLED: player["stats"]["MINIONS_KILLED"],
+            NEUTRAL_MINIONS_KILLED: player["stats"]["NEUTRAL_MINIONS_KILLED"],
+            TOTAL_DAMAGE_DEALT_TO_CHAMPIONS: player["stats"]["TOTAL_DAMAGE_DEALT_TO_CHAMPIONS"],
+            WIN: player["stats"]["WIN"],
+            PERK0: player["stats"]["PERK0"],
+            PERK0_VAR1: player["stats"]["PERK0_VAR1"],
+            PERK0_VAR2: player["stats"]["PERK0_VAR2"],
+            PERK0_VAR3: player["stats"]["PERK0_VAR3"],
+            PERK1: player["stats"]["PERK1"],
+            PERK1_VAR1: player["stats"]["PERK1_VAR1"],
+            PERK1_VAR2: player["stats"]["PERK1_VAR2"],
+            PERK1_VAR3: player["stats"]["PERK1_VAR3"],
+            PERK2: player["stats"]["PERK2"],
+            PERK2_VAR1: player["stats"]["PERK2_VAR1"],
+            PERK2_VAR2: player["stats"]["PERK2_VAR2"],
+            PERK2_VAR3: player["stats"]["PERK2_VAR3"],
+            PERK3: player["stats"]["PERK3"],
+            PERK3_VAR1: player["stats"]["PERK3_VAR1"],
+            PERK3_VAR2: player["stats"]["PERK3_VAR2"],
+            PERK3_VAR3: player["stats"]["PERK3_VAR3"],
+            PERK4: player["stats"]["PERK4"],
+            PERK4_VAR1: player["stats"]["PERK4_VAR1"],
+            PERK4_VAR2: player["stats"]["PERK4_VAR2"],
+            PERK4_VAR3: player["stats"]["PERK4_VAR3"],
+            PERK5: player["stats"]["PERK5"],
+            PERK5_VAR1: player["stats"]["PERK5_VAR1"],
+            PERK5_VAR2: player["stats"]["PERK5_VAR2"],
+            PERK5_VAR3: player["stats"]["PERK5_VAR3"],
+            PERK_PRIMARY_STYLE: player["stats"]["PERK_PRIMARY_STYLE"],
+            PERK_SUB_STYLE: player["stats"]["PERK_SUB_STYLE"],
+          },
+          spell1Id: player["spell1Id"],
+          spell2Id: player["spell2Id"],
+          teamId: player["teamId"],
+        }
+        tempPlayerArray.push(tempPlayer)
+      }
+      tempTeam.players = tempPlayerArray
+      tempTeams.push(tempTeam)
+    }
+
+    data.teams = tempTeams
+
+    return data
+  }
+
+  public async getSummonerNameById(id: string | number) {
+    const request = await fetch(
+      `${this.url()}/lol-summoner/v1/summoners/${id}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          accept: "application/json",
+          Authorization: `Basic ${Buffer.from(`riot:${this.password}`).toString(
+            "base64",
+          )}`,
+        },
+      },
+    );
+    const info = await request.json();
+    return info["gameName"]
   }
 
   public async getSummonerIcon(id: string | number) {
@@ -436,19 +530,38 @@ export class LCUApi {
       this.socket?.send(
         JSON.stringify([5, "OnJsonApiEvent_lol-lobby_v2_lobby"]),
       );
+      this.socket?.send(
+        JSON.stringify([5, "OnJsonApiEvent_lol-gameflow_v1_gameflow-phase"]),
+      );
     });
 
 
 
     this.socket.on("message", async (e) => {
-      if (await this.isCurrentlyInLobby()) {
-        this.mainWindow.webContents.send("update-in-lobby", true)
-        this.mainWindow.webContents.send("current-lobby-name", await this.getCurrentLobbyName())
-        this.isInLobby = true
-      } else {
-        this.mainWindow.webContents.send("update-in-lobby", false)
-        this.isInLobby = false
+      const data = JSON.parse(JSON.stringify(e.toString(), null, 2))
+      let messagePath = ""
+      try {
+        messagePath = JSON.parse(data)[1]
+      } catch (a) {
+        
       }
+      switch(messagePath) {
+        case "OnJsonApiEvent_lol-lobby_v2_lobby":
+          if (await this.isCurrentlyInLobby()) {
+            this.mainWindow.webContents.send("update-in-lobby", true)
+            this.mainWindow.webContents.send("current-lobby-name", await this.getCurrentLobbyName())
+            this.isInLobby = true
+          } else {
+            this.mainWindow.webContents.send("update-in-lobby", false)
+            this.isInLobby = false
+          }
+          break
+        case "OnJsonApiEvent_lol-gameflow_v1_gameflow-phase":
+          if (JSON.parse(data)[2]["data"] === "EndOfGame") {
+            this.mainWindow.webContents.send("end-of-game", await this.generatePostScreenStats())
+          }
+      }
+      
 
       return;
     });

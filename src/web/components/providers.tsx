@@ -140,6 +140,7 @@ export function SocketProvider({ children }: SocketProviderProps) {
     window.electronAPI.offLobbyDidNotExist();
     window.electronAPI.offCurrentLobbyName();
     window.electronAPI.offUpdateInLobby();
+    window.electronAPI.offEndOfGame();
 
     window.electronAPI.onSendLobbyId((value: any) => {
       socket?.emit("set-current-lobby-id", value);
@@ -148,6 +149,10 @@ export function SocketProvider({ children }: SocketProviderProps) {
 
     window.electronAPI.onUpdateInLobby((value: any) => {
       socket.emit("update-in-lobby", value)
+    })
+
+    window.electronAPI.onEndOfGame((value: any) => {
+      socket.emit("end-of-game", value)
     })
 
     window.electronAPI.onCurrentLobbyName((value: any) => {
